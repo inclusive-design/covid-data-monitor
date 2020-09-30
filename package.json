@@ -1,5 +1,5 @@
 {
-    "name": "fluid-covid-map-viz",
+    "name": "@amb26/fluid-covid-map-viz",
     "version": "1.0.0",
     "description": "Sketch visualisation of covid data as map and table",
     "main": "index.js",
