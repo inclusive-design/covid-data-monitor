@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="node_modules/infusion/src/lib/normalize/css/normalize.css" />
+        <link rel="stylesheet" href="node_modules/infusion/src/lib/jquery/ui/css/default-theme/jquery-ui.css"></script>
+        <link rel="stylesheet" type="text/css" href="node_modules/infusion/src/framework/core/css/fluid.css" />
+        <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+        <link rel="stylesheet" href="src/css/fluid-covid-map-viz.css" />
+
+        <script src="node_modules/infusion/src/lib/jquery/core/js/jquery.js"></script>
+        <script src="node_modules/infusion/src/lib/jquery/ui/js/version.js"></script>
+        <script src="node_modules/infusion/src/lib/jquery/ui/js/keycode.js"></script>
+
+        <script src="node_modules/infusion/src/lib/fastXmlPull/js/fastXmlPull.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/jquery.keyboard-a11y.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/Fluid.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/FluidPromises.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/FluidDebugging.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/FluidDocument.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/FluidIoC.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/DataBinding.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/ModelTransformation.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/ModelTransformationTransforms.js"></script>
+        <script src="node_modules/infusion/src/framework/enhancement/js/ContextAwareness.js"></script>
+        <script src="node_modules/infusion/src/framework/enhancement/js/ProgressiveEnhancement.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/FluidView.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/FluidView-browser.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/NewViewSupport.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/DataSource.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/ResourceLoader.js"></script>
+        <script src="node_modules/infusion/src/framework/core/js/ResourceLoader-browser.js"></script>
+        <script src="node_modules/infusion/src/framework/renderer/js/fluidParser.js"></script>
+
+        <script src="node_modules/infusion/src/components/tooltip/js/Tooltip.js"></script>
+
+        <script src="node_modules/leaflet/dist/leaflet.js"></script>
+        <script src="node_modules/papaparse/papaparse.js"></script>
+
+        <script src="src/js/colour.js"></script>
+        <script src="src/js/leafletMap.js"></script>
+        <script src="src/js/CSVResource.js"></script>
+        <script src="src/js/covidMap.js"></script>
+
+        <title>Rhetoric</title>
+    </head>
+
+    <body>
+        <h2>Rhetoric</h2>
+        <div class="fl-mapviz-container">
+            <div class="fld-mapviz-map-holder">
+                <div class="fld-mapviz-map">
+                </div>
+                <div class="fl-mapviz-queryheader">Query Covid Testing Centers</div>
+                <div>
+                <label for="distance">Within: </label><select class="fld-mapviz-distance" id="distance">
+                    <option value="1">Within 1 mile</option>
+                    <option value="3">Within 3 miles</option>                    
+                    <option value="5">Within 5 miles</option>
+                    <option value="10" selected="selected">Within 10 miles</option>                      
+                    <option value="20">Within 20 miles</option>
+                    <option value="50">Within 50 miles</option>
+                    <option value="100">Within 100 miles</option>
+                </select>
+                <label for="postcode">of Postcode </label><input class="fld-mapviz-postcode" id="postcode" type="text" value="M5T 1W1"/>
+                <label for="accessible">Show accessible centers only: </label><input class="fld-mapviz-accessible" type="checkbox" checked="checked"/>
+                </div>
+                <table class="fld-mapviz-table">
+                </table>
+            </div>
+        </div>
+        <script>
+            fluid.mapviz.covid.map(".fl-mapviz-container", {
+                dataUrl: "data/assessment_centre_locations.csv"
+            });
+        </script>
+    </body>
+</html>

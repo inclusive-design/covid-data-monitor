@@ -1,0 +1,52 @@
+body {
+    margin: 10px;
+    font-family: sans-serif;
+}
+
+.fld-mapviz-map {
+    width: 1024px;
+    height: 768px;
+}
+
+.fld-mapviz-map-tooltip {
+    z-index: 800;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 20rem;
+    font-size: 0.9rem;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.fld-mapviz-map-tooltip tr:nth-child(even) {
+    background: #eee;
+}
+
+.fld-mapviz-map-tooltip tr:nth-child(odd) {
+    background: #fff;
+}
+
+.fld-mapviz-map-tooltip table {
+    border-collapse: collapse;
+}
+
+.fl-mapviz-queryheader {
+    margin-top: 10px;
+    font-size: 1.5em;
+}
+
+.fld-mapviz-table {
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+.fld-mapviz-table td, .fld-mapviz-table th {
+    padding: 5px;
+    border: 1px solid #999;
+}
+
+.fld-mapviz-table th {
+    text-align: left;
+    background-color: #ccc;
+}

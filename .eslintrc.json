@@ -1,0 +1,11 @@
+{
+    "extends": "eslint-config-fluid",
+    "globals": {
+        "fluid_3_0_0": true
+    },
+    "rules": {
+        "strict": ["error", "global"],
+        "no-loop-func": 0,
+        "no-console": 0
+    }
+}

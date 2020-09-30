@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/fluid-covid-map-viz-all.css" />
+        <script src="js/fluid-covid-map-viz.js"></script>
+    <title>Built Rhetoric</title>
+    </head>
+
+    <body>
+        <h2>Built Rhetoric</h2>
+        <div class="fl-mapviz-container">
+        </div>
+    </body>
+    <script>
+        fluid.mapviz.covid.map(".fl-mapviz-container", {
+            dataUrl: "data/assessment_centre_locations.csv",
+            templateUrl: "html/template.html"
+        });
+    </script>
+</html>
