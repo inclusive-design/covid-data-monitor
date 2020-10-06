@@ -93,7 +93,7 @@ fluid.defaults("fluid.mapviz.covid.map", {
             accessibleOnly: true
         }
     },
-    // TODO: Allow resources to be defaulted in a civilized manner 
+    // TODO: Allow resources to be defaulted in a civilized manner
     templateUrl: null,
     resources: {
         template: {

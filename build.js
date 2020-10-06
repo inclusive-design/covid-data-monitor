@@ -2,6 +2,7 @@
 "use strict";
 
 var readline = require("readline"),
+    minimist = require("minimist"),
     fs = require("fs-extra");
 
 var fluid = require("infusion");
@@ -27,6 +28,13 @@ var buildIndex = {
     }]
 };
 
+var infusion_prefix = "node_modules/infusion";
+
+var parsedArgs = minimist(process.argv.slice(2));
+
+// minimist has a wierd undocumented pathway for options beginning "no" - https://github.com/substack/minimist/blob/master/index.js#L118
+// We accept the option "--no-infusion" in order to exclude Infusion's files from the build
+var noInfusion = parsedArgs.infusion === false;
 
 var readLines = function (filename) {
     var lines = [];
@@ -63,18 +71,21 @@ var computeAllFiles = function (buildIndex, nodeFiles) {
             return oneFile.indexOf(oneExclude) !== -1;
         });
     });
-    return withExcludes.concat(buildIndex.localSource);
+    var withInf = withExcludes.filter(function (oneFile) {
+        return !(noInfusion && oneFile.startsWith(infusion_prefix));
+    });
+    return withInf.concat(buildIndex.localSource);
 };
 
 var buildFromFiles = function (buildIndex, nodeFiles) {
     var allFiles = computeAllFiles(buildIndex, nodeFiles);
     nodeFiles.concat(buildIndex.localSource);
 
-    var jsHash = filesToContentHash(allFiles, ".js");
+    var jsHash = filesToContentHash(allFiles, ".js", noInfusion);
     var fullJsHash = fluid.extend({header: buildIndex.codeHeader}, jsHash, {footer: buildIndex.codeFooter});
     fluid.log("Minifying " + Object.keys(fullJsHash).length + " JS files ... ");
     console.log("Sizes", fluid.transform(fullJsHash, function (file) {
-        return file.length
+        return file.length;
     }));
     var minified = UglifyJS.minify(fullJsHash, {
         mangle: false,
@@ -88,7 +99,7 @@ var buildFromFiles = function (buildIndex, nodeFiles) {
     fs.writeFileSync("build/js/fluid-covid-map-viz.js", minified.code, "utf8");
     fs.writeFileSync("build/js/fluid-covid-map-viz.js.map", minified.map);
 
-    var cssHash = filesToContentHash(allFiles, ".css");
+    var cssHash = filesToContentHash(allFiles, ".css", noInfusion);
     var cssConcat = String.prototype.concat.apply("", Object.values(cssHash));
 
     fs.ensureDirSync("build/css");
