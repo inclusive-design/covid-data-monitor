@@ -13,17 +13,18 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 "use strict";
 
 module.exports = function (grunt) {
-    grunt.initConfig({
-        eslint: {
-            all: ["src/**/*.js", "tests/**/*.js", "demos/**/*.js", "examples/**/*.js", "*.js"]
-        },
-        jsonlint: {
-            all: ["*.json", "src/**/*.json", "tests/**/*.json", "demos/**/*.json", "!node_modules"]
+    grunt.config.init({
+        lintAll: {
+            sources: {
+                md: ["*.md"],
+                js: ["*.js"],
+                json: ["*.json"],
+                css: ["*.css"]
+            }
         }
     });
+    grunt.loadNpmTasks("fluid-grunt-lint-all");
+    grunt.registerTask("lint", "Perform all standard lint checks.", ["lint-all"]);
 
-    grunt.loadNpmTasks("fluid-grunt-eslint");
-    grunt.loadNpmTasks("grunt-jsonlint");
-
-    grunt.registerTask("lint", "Apply eslint and jsonlint", ["eslint", "jsonlint"]);
+    grunt.registerTask("default", ["lint"]);
 };

@@ -1,4 +1,4 @@
-/* global L, fluid */
+/* global L */
 
 "use strict";
 

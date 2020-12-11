@@ -31,7 +31,7 @@ var buildIndex = {
     }, {
         src: "data/assessment_centre_locations.csv",
         dest: "build/data/assessment_centre_locations.csv"
-    },]
+    }]
 };
 
 var infusion_prefix = "node_modules/infusion";
@@ -106,10 +106,10 @@ var buildFromFiles = function (buildIndex, nodeFiles) {
         fs.ensureDirSync("build/js");
         fs.writeFileSync("build/js/covid-data-monitor.js", minified.code, "utf8");
         fs.writeFileSync("build/js/covid-data-monitor.js.map", minified.map);
-    
+
         var cssHash = filesToContentHash(allFiles, ".css", noInfusion);
         var cssConcat = String.prototype.concat.apply("", Object.values(cssHash));
-    
+
         fs.ensureDirSync("build/css");
         fs.writeFileSync("build/css/covid-data-monitor-all.css", cssConcat);
         buildIndex.copy.forEach(function (oneCopy) {

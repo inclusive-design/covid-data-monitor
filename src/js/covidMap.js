@@ -1,4 +1,4 @@
-/* global fluid, L */
+/* global L */
 
 "use strict";
 
@@ -311,12 +311,11 @@ fluid.defaults("fluid.mapviz.covid.map.resultsPage", {
         resultList: ".fld-mapviz-search-result-list"
     },
     listeners: {
-         // TODO: eliminate this workflow when we move to real renderer
-/*         "onCreate.clear": {
-              "this": "{resultsPage}.dom.resultList",
-              method: "empty"
-         }
-*/
+        // TODO: eliminate this workflow when we move to real renderer
+        // "onCreate.clear": {
+        //      "this": "{resultsPage}.dom.resultList",
+        //      method: "empty"
+        // }
     },
     dynamicComponents: {
         searchResults: {
@@ -421,7 +420,7 @@ fluid.mapviz.covid.doQuery = function (rows, query, activeChecks, checks) {
 fluid.mapviz.covid.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
         var marker = that.model.selectedRows[index] ? that.markers.selected : (that.model.hoveredRows[index] ?
-             that.markers.hover : that.markers.standard);
+            that.markers.hover : that.markers.standard);
         that.rowMarkers[index].setIcon(marker);
     }
 };

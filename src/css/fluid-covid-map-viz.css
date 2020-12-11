@@ -1,46 +1,45 @@
 body {
-    margin: 10px;
     font-family: sans-serif;
+    margin: 10px;
 }
 
 .fld-mapviz-map-holder {
+    align-items: center;
     display: flex;
     flex-direction: column;
     position: relative;
-/*    justify-content: center;*/
-    align-items: center;
 }
 
 .flc-query-holder > * {
-     margin-top: 4px;
-     margin-bottom: 7px;
+    margin-bottom: 7px;
+    margin-top: 4px;
 }
 
 .fld-mapviz-query {
-    width: 700px;
-    height: 2rem;
-    border-radius: 20px;
-    border: 1px solid black;
     background-image: url(../img/Search.svg);
     background-position: 5px;
-    padding-left: 40px;
     background-repeat: no-repeat;
+    border: 1px solid black;
+    border-radius: 20px;
+    height: 2rem;
+    padding-left: 40px;
+    width: 700px;
 }
 
 .fld-mapviz-map {
-    width: 800px;
     height: 575px;
+    width: 800px;
 }
 
 .fld-mapviz-map-tooltip {
-    z-index: 800;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 20rem;
-    font-size: 0.9rem;
     background-color: white;
     border: 1px solid black;
+    font-size: 0.9rem;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 20rem;
+    z-index: 800;
 }
 
 .fld-mapviz-map-tooltip tr:nth-child(even) {
@@ -56,8 +55,8 @@ body {
 }
 
 .fl-mapviz-queryheader {
-    margin-top: 10px;
     font-size: 1.5em;
+    margin-top: 10px;
 }
 
 .fld-mapviz-table {
@@ -65,100 +64,99 @@ body {
     margin-top: 5px;
 }
 
-.fld-mapviz-table td, .fld-mapviz-table th {
-    padding: 5px;
+.fld-mapviz-table td,
+.fld-mapviz-table th {
     border: 1px solid #999;
+    padding: 5px;
 }
 
 .fld-mapviz-table th {
-    text-align: left;
     background-color: #ccc;
+    text-align: left;
 }
 
-
 .visually-hidden {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .fld-mapviz-filter-icon {
-    display: inline-block;
-    vertical-align: middle;
-    background-size: 49px 49px;
-    background-repeat: no-repeat;
     background-position: center;
-    width: 60px;
+    background-repeat: no-repeat;
+    background-size: 49px 49px;
+    display: inline-block;
     height: 60px;
     padding: 5px;
+    vertical-align: middle;
+    width: 60px;
 }
-
 
 .fl-mapviz-filter-icon-entrances {
     background-image: url(../img/Entrances.svg);
 }
 
 .fld-mapviz-filter-tooltip-icon {
-    display: inline-block;
-    width: 19px;
-    height: 20px;
     background-image: url(../img/Tooltip-icon.svg);
-    background-size: 19px 20px;
-    background-repeat: no-repeat;
     background-position: center;
-    margin-right: 7px;
+    background-repeat: no-repeat;
+    background-size: 19px 20px;
+    display: inline-block;
+    height: 20px;
     margin-bottom: 50px;
+    margin-right: 7px;
+    width: 19px;
 }
 
 .flc-mapviz-hoverable:hover {
-    outline: 1px solid #000000;
+    outline: 1px solid #000;
     outline-offset: 1px;
 }
 
 .fld-mapviz-filters {
     display: flex;
     flex-direction: column;
-    width: 21rem;
     margin-top: 76px;
+    width: 21rem;
 }
 
 .fld-mapviz-filter {
-    height: 106px;
-    display: flex;
     align-items: center;
+    display: flex;
     flex-direction: row;
+    height: 106px;
 }
 
 .fld-mapviz-filter-title {
     display: inline-block;
-    width: 12.5rem;
     font-family: Fira Sans, Arial Narrow, Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    font-stretch: condensed;
     font-style: normal;
     font-weight: 600;
-    font-stretch: condensed;
-    font-size: 24px;
     line-height: 29px;
     text-transform: uppercase;
     vertical-align: middle;
+    width: 12.5rem;
 }
 
 .flc-checkbox-holder span {
-    width: 31px;
-    height: 31px;
-    display: inline-block;
-    vertical-align: middle;
     background-image: url("../img/Checkbox-unselected.svg");
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 31px;
     margin-right: 4px;
+    vertical-align: middle;
+    width: 31px;
 }
 
 .flc-checkbox-holder span:hover {
-    outline: 1px solid #000000;
+    outline: 1px solid #000;
 }
 
 .flc-checkbox-holder input:checked + span {
@@ -166,32 +164,41 @@ body {
 }
 
 /** Preload all images **/
-body::after{
-   position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
-   content:url("../img/Checkbox-unselected.svg") url("../img/Checkbox-selected.svg")
-   url("../img/Marker.svg") url("../img/Marker-hover.svg") url("../img/Marker-selected.svg");
+body::after {
+    content:
+        url("../img/Checkbox-unselected.svg")
+        url("../img/Checkbox-selected.svg")
+        url("../img/Marker.svg")
+        url("../img/Marker-hover.svg")
+        url("../img/Marker-selected.svg");
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
+    z-index: -1;
 }
 
-
 .fl-mapviz-even-row {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
 }
 
 .fld-mapviz-filter-buttons {
     justify-content: space-evenly;
-    /** TODO: Same as fld-mapviz-filters**/
-    width: 21rem;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}   
 
-.fld-mapviz-apply-filters, .fld-mapviz-reset-filters {
+    /** TODO: Same as fld-mapviz-filters **/
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: 21rem;
+}
+
+.fld-mapviz-apply-filters,
+.fld-mapviz-reset-filters {
     display: inline-block;
-    width: 26px;
     height: 26px;
     margin: 8px;
+    width: 26px;
 }
 
 .fld-mapviz-apply-filters {
@@ -202,29 +209,28 @@ body::after{
     background-image: url("../img/ResetFilters.svg");
 }
 
-
 .fld-mapviz-search-results {
-    order: -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     margin-left: 10px;
     margin-right: 10px;
-    display: flex;
     max-width: 500px;
-    flex-direction: column;
-    justify-content: space-between; 
+    order: -1;
 }
 
 .fld-mapviz-search-result {
-    border-bottom: 1px solid #C4C4C4;
+    border-bottom: 1px solid #c4c4c4;
     padding: 10px;
 }
 
 .fl-mapviz-search-result-hover {
-    outline: 2px solid #55769F;
+    outline: 2px solid #55769f;
     outline-offset: -2px;
 }
 
 .fl-mapviz-search-result-selected {
-    background: #FBDC90;
+    background: #fbdc90;
 }
 
 .fl-mapviz-container {
@@ -237,45 +243,47 @@ body::after{
 }
 
 .fld-mapviz-search-result-pagination {
+    align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
-    user-select: none;
     padding: 10px;
+    user-select: none;
 }
 
 .fld-mapviz-page-left {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
     background-image: url(../img/Page-left.svg);
-    background-size: 38px 38px;
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: 38px 38px;
+    display: inline-block;
+    height: 40px;
+    width: 40px;
 }
 
 .fld-mapviz-page-right {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
     background-image: url(../img/Page-right.svg);
-    background-size: 38px 38px;
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: 38px 38px;
+    display: inline-block;
+    height: 40px;
+    width: 40px;
 }
 
 @media screen and (max-width: 1280px) {
     .fl-mapviz-container {
         flex-direction: column;
     }
+
     .fl-mapviz-filter-panel {
         order: 0;
     }
+
     .fld-mapviz-query {
+        margin-top: 20px;
         position: absolute;
         z-index: 999;
-        margin-top: 20px;
     }
 }
 
@@ -284,7 +292,7 @@ body::after{
 }
 
 .fld-mapviz-hospital-panel .fld-mapviz-hospital-title {
-    background: #FBDC90;
+    background: #fbdc90;
     font-size: 35px;
     padding: 10px;
 }
@@ -296,7 +304,7 @@ body::after{
 /** Styling for each filter row **/
 
 .fld-mapviz-filter-entrances {
-    background: #6796C8;
+    background: #6796c8;
 }
 
 .fld-mapviz-filter-entrances .fld-mapviz-filter-icon {
@@ -304,7 +312,7 @@ body::after{
 }
 
 .fld-mapviz-filter-washrooms {
-    background: #ACDEEB;
+    background: #acdeeb;
 }
 
 .fld-mapviz-filter-washrooms .fld-mapviz-filter-icon {
@@ -312,7 +320,7 @@ body::after{
 }
 
 .fld-mapviz-filter-parking {
-    background: #CEE6C5;
+    background: #cee6c5;
 }
 
 .fld-mapviz-filter-parking .fld-mapviz-filter-icon {
@@ -320,7 +328,7 @@ body::after{
 }
 
 .fld-mapviz-filter-individual {
-    background: #FBDC90;
+    background: #fbdc90;
 }
 
 .fld-mapviz-filter-individual .fld-mapviz-filter-icon {
@@ -328,10 +336,9 @@ body::after{
 }
 
 .fld-mapviz-filter-wait {
-    background: #FCB33F;
+    background: #fcb33f;
 }
 
 .fld-mapviz-filter-wait .fld-mapviz-filter-icon {
     background-image: url(../img/Wait.svg);
 }
-

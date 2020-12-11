@@ -1,4 +1,4 @@
-/* global Papa, fluid */
+/* global Papa */
 
 "use strict";
 
