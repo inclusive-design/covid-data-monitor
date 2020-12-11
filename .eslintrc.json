@@ -3,6 +3,9 @@
     "globals": {
         "fluid_3_0_0": true
     },
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
     "rules": {
         "strict": ["error", "global"],
         "no-loop-func": 0,

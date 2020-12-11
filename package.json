@@ -22,7 +22,8 @@
         "url": "https://https://issues.fluidproject.org/"
     },
     "dependencies": {
-        "infusion": "3.0.0-dev.20200930T151056Z.d0b9e348d.FLUID-6145",
+        "infusion": "amb26/infusion#FLUID-6580",
+        "new-renderer-demo": "amb26/new-renderer-demo#FLUID-5047",
         "minimist": "1.2.5",
         "papaparse": "5.2.0",
         "leaflet": "1.7.1"

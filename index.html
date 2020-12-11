@@ -12,7 +12,7 @@
         <script src="node_modules/infusion/src/lib/jquery/ui/js/version.js"></script>
         <script src="node_modules/infusion/src/lib/jquery/ui/js/keycode.js"></script>
 
-        <script src="node_modules/infusion/src/lib/fastXmlPull/js/fastXmlPull.js"></script>
+        <!-- <script src="node_modules/infusion/src/lib/fastXmlPull/js/fastXmlPull.js"></script> -->
         <script src="node_modules/infusion/src/framework/core/js/jquery.keyboard-a11y.js"></script>
         <script src="node_modules/infusion/src/framework/core/js/Fluid.js"></script>
         <script src="node_modules/infusion/src/framework/core/js/FluidPromises.js"></script>
@@ -31,6 +31,17 @@
         <script src="node_modules/infusion/src/framework/core/js/ResourceLoader.js"></script>
         <script src="node_modules/infusion/src/framework/core/js/ResourceLoader-browser.js"></script>
         <script src="node_modules/infusion/src/framework/renderer/js/fluidParser.js"></script>
+        <script src="node_modules/infusion/src/components/pager/js/Pager.js"></script>
+
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/jquery.standalone.renderer.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/fastXmlPull.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/fluidView-template.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/fluidNewRenderer.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/fluidNewRendererComponents.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/htmlParser.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/core/ResourceRewriter.js"></script>
+    <script type="text/javascript" src="node_modules/new-renderer-demo/src/js/client/ClientRenderer.js"></script>
+
 
         <script src="node_modules/infusion/src/components/tooltip/js/Tooltip.js"></script>
 
@@ -47,12 +58,119 @@
 
     <body>
         <h2>Rhetoric</h2>
+        <div class="fl-mapviz-outer-container">
         <div class="fl-mapviz-container">
             <div class="fld-mapviz-map-holder">
+                <div class="flc-query-holder">
+                    <div>Search by postal code or city</div>
+                    <input type="text" class="fld-mapviz-query"/>
+                </div>
                 <div class="fld-mapviz-map">
                 </div>
-                <div class="fl-mapviz-queryheader">Query Covid Testing Centers</div>
-                <div>
+            </div>
+            <div class="fl-mapviz-filter-panel">
+                <div class="fld-mapviz-filters">
+                   <div class="fld-mapviz-filter fld-mapviz-filter-entrances">
+                       <span class="fld-mapviz-filter-icon"></span>
+                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                       <span class="fld-mapviz-filter-tooltip"></span>
+                       <label class="fld-mapviz-filter-title" for="toggle-1">Accessible Entrances</label>
+                       <label class="flc-checkbox-holder">
+                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-1" type="checkbox"/>
+                           <span></span>
+                       </label>
+                   </div>
+                   <div class="fld-mapviz-filter fld-mapviz-filter-washrooms">
+                       <span class="fld-mapviz-filter-icon"></span>
+                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                       <span class="fld-mapviz-filter-tooltip"></span>
+                       <label class="fld-mapviz-filter-title" for="toggle-2">Accessible Washrooms</label>
+                       <label class="flc-checkbox-holder">
+                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-2" type="checkbox"/>
+                           <span></span>
+                       </label>
+                   </div>
+                   <div class="fld-mapviz-filter fld-mapviz-filter-parking">
+                       <span class="fld-mapviz-filter-icon"></span>
+                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                       <span class="fld-mapviz-filter-tooltip"></span>
+                       <label class="fld-mapviz-filter-title" for="toggle-3">Accessible Parking</label>
+                       <label class="flc-checkbox-holder">
+                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-3" type="checkbox"/>
+                           <span></span>
+                       </label>
+                   </div>
+                   <div class="fld-mapviz-filter fld-mapviz-filter-individual">
+                       <span class="fld-mapviz-filter-icon"></span>
+                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                       <span class="fld-mapviz-filter-tooltip"></span>
+                       <label class="fld-mapviz-filter-title" for="toggle-4">Individual Service</label>
+                       <label class="flc-checkbox-holder">
+                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-4" type="checkbox"/>
+                           <span></span>
+                       </label>
+                   </div>
+                   <div class="fld-mapviz-filter fld-mapviz-filter-wait">
+                       <span class="fld-mapviz-filter-icon"></span>
+                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                       <span class="fld-mapviz-filter-tooltip"></span>
+                       <label class="fld-mapviz-filter-title" for="toggle-5">Wait Accommodations</label>
+                       <label class="flc-checkbox-holder">
+                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-6" type="checkbox"/>
+                           <span></span>
+                       </label>
+                   </div>
+                </div>
+                <div class="fld-mapviz-filter-buttons fl-mapviz-even-row">
+                   <span class="fl-mapviz-even-row">
+                       <a class="fld-mapviz-apply-filters flc-mapviz-hoverable" id="apply-button"></a>
+                       <label for="apply-button">Apply Filters</label>
+                   </span>
+                   <span class="fl-mapviz-even-row">
+                       <a class="fld-mapviz-reset-filters flc-mapviz-hoverable" id="reset-button"></a>
+                       <label for="reset-button">Reset Filters</label>
+                   </span>
+                </div>
+            </div>
+            <div class="fld-mapviz-search-results">
+                <div class="fld-mapviz-search-result-list"><!--
+	                <div class="fld-mapviz-search-result">
+	                    <div class="fld-mapviz-hospital-title">Hospital 8</div>
+	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+	                </div>
+	                <div class="fld-mapviz-search-result">
+	                    <div class="fld-mapviz-hospital-title">Hospital 2</div>
+	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+	                </div>                
+	                <div class="fld-mapviz-search-result">
+	                    <div class="fld-mapviz-hospital-title">Hospital 6</div>
+	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+	                </div>
+	                <div class="fld-mapviz-search-result">
+	                    <div class="fld-mapviz-hospital-title">Hospital 12</div>
+	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+	                </div>-->
+                </div>
+                <div class="fld-mapviz-search-result-pagination">
+                    <span class="fld-mapviz-pagination-summary">Showing results 1-20 of 143</span>
+                    <span class="fld-mapviz-pagination-buttons">
+                        <a class="fld-mapviz-page-left flc-mapviz-hoverable" aria-label="page-left"></a>
+	                    <a class="fld-mapviz-page-right flc-mapviz-hoverable" aria-label="page-right"></a>
+                    </span>
+                </div>
+            </div>
+            
+<!--
+            <div class="fl-mapviz-queryheader">Query Covid Testing Centers</div>
+            <div>
                 <label for="distance">Within: </label><select class="fld-mapviz-distance" id="distance">
                     <option value="1">Within 1 mile</option>
                     <option value="3">Within 3 miles</option>                    
@@ -65,13 +183,28 @@
                 <label for="postcode">of Postcode </label><input class="fld-mapviz-postcode" id="postcode" type="text" value="M5T 1W1"/>
                 <label for="accessible">Show accessible centers only: </label><input class="fld-mapviz-accessible" type="checkbox" checked="checked"/>
                 </div>
-                <table class="fld-mapviz-table">
-                </table>
+            <table class="fld-mapviz-table">
+            </table>
+-->
+        </div>
+            <div class="fld-mapviz-hospital-panel" style="display: none;">
+                <div class="fld-mapviz-hospital-title">
+                    Hospital 2
+                </div>
+                <div><b>Hours:</b> <span class="fld-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span> 
+                </div>
+                <div><b>Location</b></div>
+                <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON M5G 1X5</div>
+                <div class="fld-mapviz-hospital-phone">+1 416-586-5054</div>
+                <div class="fld-mapviz-hospital-website">www.mountsinai.on.ca</div>
+                    
             </div>
         </div>
+
         <script>
-            fluid.mapviz.covid.map(".fl-mapviz-container", {
-                dataUrl: "data/assessment_centre_locations.csv"
+            fluid.mapviz.covid.map(".fl-mapviz-outer-container", {
+                dataUrl: "data/assessment_centre_locations.csv",
+                searchResultTemplateUrl: "src/html/searchResult.html"
             });
         </script>
     </body>

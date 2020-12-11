@@ -26,9 +26,6 @@ fluid.defaults("hortis.leafletMap", {
         // tileUrl, tileAttribution
     },
     datasets: {},
-    model: {
-        mapBlockTooltipId: null
-    },
     markup: {
         tooltip: "<div class=\"fld-mapviz-tooltip\"></div>",
         tooltipHeader: "<table>",
@@ -62,12 +59,6 @@ hortis.leafletMap.createTooltip = function (that, markup) {
     var tooltip = $(markup.tooltip).appendTo(that.container);
     tooltip.hide();
     that.map.createPane("hortis-tooltip", tooltip[0]);
-    var container = that.map.getContainer();
-    $(container).on("click", function (event) {
-        if (event.target === container) {
-            that.applier.change("mapBlockTooltipId", null);
-        }
-    });
 };
 
 
@@ -77,13 +68,16 @@ fluid.defaults("hortis.CSVLeafletMap", {
     resources: {
         data: {
             url: "{that}.options.dataUrl",
-            dataType: "csv"
+            dataType: "csv",
+            immutableModelResource: true
         }
     },
     model: {
-        // Resource dependency to ensure that data is loaded before any component use.
-        // We make this light (headers only) since our crufty ChangeApplier will clone all the data on every model change
-        headers: "{that}.resources.data.parsed.headers"
+        rows: []
+    },
+    modelRelay: {
+        source: "{that}.resources.data.parsed.data",
+        target: "rows"
     }
 });
 
