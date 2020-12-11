@@ -5,7 +5,6 @@ src/css/fluid-covid-map-viz.css
 node_modules/infusion/src/lib/jquery/core/js/jquery.js
 node_modules/infusion/src/lib/jquery/ui/js/version.js
 node_modules/infusion/src/lib/jquery/ui/js/keycode.js
-node_modules/infusion/src/lib/fastXmlPull/js/fastXmlPull.js
 node_modules/infusion/src/framework/core/js/jquery.keyboard-a11y.js
 node_modules/infusion/src/framework/core/js/Fluid.js
 node_modules/infusion/src/framework/core/js/FluidPromises.js
@@ -24,7 +23,16 @@ node_modules/infusion/src/framework/core/js/DataSource.js
 node_modules/infusion/src/framework/core/js/ResourceLoader.js
 node_modules/infusion/src/framework/core/js/ResourceLoader-browser.js
 node_modules/infusion/src/framework/renderer/js/fluidParser.js
+node_modules/infusion/src/components/pager/js/Pager.js
 node_modules/infusion/src/components/tooltip/js/Tooltip.js
+node_modules/new-renderer-demo/src/js/core/jquery.standalone.renderer.js
+node_modules/new-renderer-demo/src/js/core/fastXmlPull.js
+node_modules/new-renderer-demo/src/js/core/fluidView-template.js
+node_modules/new-renderer-demo/src/js/core/fluidNewRenderer.js
+node_modules/new-renderer-demo/src/js/core/fluidNewRendererComponents.js
+node_modules/new-renderer-demo/src/js/core/htmlParser.js
+node_modules/new-renderer-demo/src/js/core/ResourceRewriter.js
+node_modules/new-renderer-demo/src/js/client/ClientRenderer.js
 node_modules/leaflet/dist/leaflet.js
 node_modules/papaparse/papaparse.js
 src/js/colour.js

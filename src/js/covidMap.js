@@ -159,6 +159,7 @@ fluid.defaults("fluid.mapviz.covid.map", {
     // TODO: Allow resources to be defaulted in a civilized manner
     templateUrl: null,
     searchResultTemplateUrl: null,
+    iconPrefix: "",
     resources: {
         template: {
             url: "{that}.options.templateUrl"
@@ -166,17 +167,17 @@ fluid.defaults("fluid.mapviz.covid.map", {
     },
     markers: {
         standard: {
-            iconUrl: "src/img/Marker.svg",
+            iconUrl: "img/Marker.svg",
             iconSize: [51, 65],
             iconAnchor: [25.5, 65]
         },
         hover: {
-            iconUrl: "src/img/Marker-hover.svg",
+            iconUrl: "img/Marker-hover.svg",
             iconSize: [61, 76],
             iconAnchor: [30.5, 70]
         },
         selected: {
-            iconUrl: "src/img/Marker-selected.svg",
+            iconUrl: "img/Marker-selected.svg",
             iconSize: [108, 108],
             iconAnchor: [54, 90]
         }
@@ -442,7 +443,10 @@ fluid.mapviz.covid.showPageForIndex = function (that, newIndex) {
 
 fluid.mapviz.covid.addMarkers = function (that) {
     that.markers = fluid.transform(that.options.markers, function (marker) {
-        return L.icon(marker);
+        var markerOptions = fluid.extend({}, marker, {
+            iconUrl: that.options.iconPrefix + marker.iconUrl
+        });
+        return L.icon(markerOptions);
     });
 
     $(that.container).on("click", function (event) {

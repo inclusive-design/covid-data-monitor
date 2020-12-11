@@ -6,7 +6,7 @@ var readline = require("readline"),
     fs = require("fs-extra");
 
 var fluid = require("infusion");
-var UglifyJS = require("uglify-js");
+var terser = require("terser");
 
 var buildIndex = {
     excludes: [
@@ -20,12 +20,18 @@ var buildIndex = {
         src: "src/html/template.html",
         dest: "build/html/template.html"
     }, {
+        src: "src/img/",
+        dest: "build/img/"
+    }, {
+        src: "src/html/searchResult.html",
+        dest: "build/html/searchResult.html"
+    }, {
         src: "src/buildTest/index.html",
         dest: "build/index.html"
     }, {
         src: "data/assessment_centre_locations.csv",
         dest: "build/data/assessment_centre_locations.csv"
-    }]
+    },]
 };
 
 var infusion_prefix = "node_modules/infusion";
@@ -87,27 +93,30 @@ var buildFromFiles = function (buildIndex, nodeFiles) {
     console.log("Sizes", fluid.transform(fullJsHash, function (file) {
         return file.length;
     }));
-    var minified = UglifyJS.minify(fullJsHash, {
+    var promise = terser.minify(fullJsHash, {
         mangle: false,
         sourceMap: {
-            filename: "fluid-covid-map-viz.js",
-            url: "fluid-covid-map-viz.js.map"
+            filename: "covid-data-monitor.js",
+            url: "covid-data-monitor.js.map",
+            root: "../../"
         }
     });
-    fs.removeSync("build");
-    fs.ensureDirSync("build/js");
-    fs.writeFileSync("build/js/fluid-covid-map-viz.js", minified.code, "utf8");
-    fs.writeFileSync("build/js/fluid-covid-map-viz.js.map", minified.map);
-
-    var cssHash = filesToContentHash(allFiles, ".css", noInfusion);
-    var cssConcat = String.prototype.concat.apply("", Object.values(cssHash));
-
-    fs.ensureDirSync("build/css");
-    fs.writeFileSync("build/css/fluid-covid-map-viz-all.css", cssConcat);
-    buildIndex.copy.forEach(function (oneCopy) {
-        fs.copySync(oneCopy.src, oneCopy.dest);
+    promise.then(function (minified) {
+        fs.removeSync("build");
+        fs.ensureDirSync("build/js");
+        fs.writeFileSync("build/js/covid-data-monitor.js", minified.code, "utf8");
+        fs.writeFileSync("build/js/covid-data-monitor.js.map", minified.map);
+    
+        var cssHash = filesToContentHash(allFiles, ".css", noInfusion);
+        var cssConcat = String.prototype.concat.apply("", Object.values(cssHash));
+    
+        fs.ensureDirSync("build/css");
+        fs.writeFileSync("build/css/covid-data-monitor-all.css", cssConcat);
+        buildIndex.copy.forEach(function (oneCopy) {
+            fs.copySync(oneCopy.src, oneCopy.dest);
+        });
+        fluid.log("Copied " + (buildIndex.copy.length + 3) + " files to " + fs.realpathSync("build"));
     });
-    fluid.log("Copied " + (buildIndex.copy.length + 3) + " files to " + fs.realpathSync("build"));
 };
 
 fluid.setLogging(true);
