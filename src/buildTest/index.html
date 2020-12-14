@@ -136,11 +136,11 @@
         </div>
     </body>
     <script>
-        fluid.mapviz.covid.map(".fl-mapviz-outer-container", {
+        fluid.covidMap.map(".fl-mapviz-outer-container", {
             dataUrl: "data/assessment_centre_locations.csv",
 //            templateUrl: "html/template.html",
 // Note that it is no longer possible to support loading this template at startup using containerRenderingView using the current
-// framework because the pager attempts to instantiate dynamic components sourced from the DOM
+// framework because of issue https://issues.fluidproject.org/browse/FLUID-6584
 // - we will need to reproduce the template inline until the new renderer is ready
             searchResultTemplateUrl: "html/searchResult.html"
         });

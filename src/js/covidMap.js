@@ -4,11 +4,11 @@
 
 fluid.setLogging(true);
 
-fluid.registerNamespace("fluid.mapviz.covid");
+fluid.registerNamespace("fluid.covidMap");
 
-fluid.mapviz.covid.metresInMile = 1609.34;
+fluid.covidMap.metresInMile = 1609.34;
 
-fluid.defaults("fluid.mapviz.covid.pagerBar", {
+fluid.defaults("fluid.covidMap.pagerBar", {
     gradeNames: "fluid.pager.pagerBar",
     components: {
         pageList: {
@@ -21,11 +21,11 @@ fluid.defaults("fluid.mapviz.covid.pagerBar", {
     }
 });
 
-fluid.defaults("fluid.mapviz.covid.pager", {
+fluid.defaults("fluid.covidMap.pager", {
     gradeNames: "fluid.pager",
     dynamicComponents: {
         pagerBar: {
-            type: "fluid.mapviz.covid.pagerBar"
+            type: "fluid.covidMap.pagerBar"
         },
         summary: {
             options: {
@@ -69,7 +69,7 @@ fluid.defaults("fluid.mapviz.covid.pager", {
     }
 });
 
-fluid.defaults("fluid.mapviz.covid.hospitalRenderer", {
+fluid.defaults("fluid.covidMap.hospitalRenderer", {
     gradeNames: "fluid.modelComponent",
     selectors: {
         hospitalTitle: ".fld-mapviz-hospital-title",
@@ -87,12 +87,12 @@ fluid.defaults("fluid.mapviz.covid.hospitalRenderer", {
         hospitalHours: {
             source: "row",
             target: "dom.hospitalHours.text",
-            func: "fluid.mapviz.covid.renderHours"
+            func: "fluid.covidMap.renderHours"
         },
         hospitalAddress: {
             source: "row",
             target: "dom.hospitalAddress.text",
-            func: "fluid.mapviz.covid.renderAddress"
+            func: "fluid.covidMap.renderAddress"
         },
         hospitalPhone: {
             source: {
@@ -104,7 +104,7 @@ fluid.defaults("fluid.mapviz.covid.hospitalRenderer", {
 });
 
 
-fluid.defaults("fluid.mapviz.covid.map", {
+fluid.defaults("fluid.covidMap.map", {
     gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
     colours: {
         accessible: "#0f0",
@@ -137,10 +137,10 @@ fluid.defaults("fluid.mapviz.covid.map", {
             column: "Queue accomodations"
         }
     },
-    unselectedChecks: "@expand:fluid.mapviz.covid.unselectedChecks({that}.options.accessibleChecks)",
+    unselectedChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.accessibleChecks)",
     parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
     listeners: {
-        "buildMap.addMarkers": "fluid.mapviz.covid.addMarkers({that}, {that}.options.parsedColours, {that}.options.markup)"
+        "buildMap.addMarkers": "fluid.covidMap.addMarkers({that}, {that}.options.parsedColours, {that}.options.markup)"
     },
     model: {
         query: "",
@@ -185,28 +185,28 @@ fluid.defaults("fluid.mapviz.covid.map", {
     modelListeners: {
         "selectedIndexMarkers": {
             path: "selectedIndex",
-            funcName: "fluid.mapviz.covid.updateMarkers",
+            funcName: "fluid.covidMap.updateMarkers",
             args: ["{that}", "{change}.value", "{change}.oldValue"]
         },
         "hoveredIndexMarkers": {
             path: "hoveredIndex",
-            funcName: "fluid.mapviz.covid.updateMarkers",
+            funcName: "fluid.covidMap.updateMarkers",
             args: ["{that}", "{change}.value", "{change}.oldValue"]
         },
         "selectedIndexPage": {
             path: "selectedIndex",
-            funcName: "fluid.mapviz.covid.showPageForIndex",
+            funcName: "fluid.covidMap.showPageForIndex",
             args: ["{that}", "{change}.value"]
         },
         "hoveredIndexPage": {
             path: "hoveredIndex",
-            funcName: "fluid.mapviz.covid.showPageForIndex",
+            funcName: "fluid.covidMap.showPageForIndex",
             args: ["{that}", "{change}.value"]
         }
     },
     components: {
         pager: {
-            type: "fluid.mapviz.covid.pager",
+            type: "fluid.covidMap.pager",
             container: "{that}.dom.pager",
             options: {
                 model: {
@@ -216,7 +216,7 @@ fluid.defaults("fluid.mapviz.covid.map", {
             }
         },
         resultsPage: {
-            type: "fluid.mapviz.covid.map.resultsPage",
+            type: "fluid.covidMap.map.resultsPage",
             container: "{that}.dom.resultsPage",
             options: {
                 model: {
@@ -225,7 +225,7 @@ fluid.defaults("fluid.mapviz.covid.map", {
             }
         },
         selectedHospitalPane: {
-            type: "fluid.mapviz.covid.hospitalRenderer",
+            type: "fluid.covidMap.hospitalRenderer",
             container: "{that}.dom.hospitalPanel",
             options: {
                 gradeNames: "fluid.viewComponent",
@@ -233,7 +233,7 @@ fluid.defaults("fluid.mapviz.covid.map", {
                     row: "{map}.model.selectedHospital"
                 },
                 selectors: {
-                    hospitalWebsite: ".fld-mapviz-hospital-website" // This field left over from fluid.mapviz.covid.hospitalRenderer
+                    hospitalWebsite: ".fld-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
                 },
                 modelRelay: {
                     hospitalWebsite: {
@@ -277,7 +277,7 @@ fluid.defaults("fluid.mapviz.covid.map", {
         // Query state
         matchedRows: {
             target: "matchedRows",
-            func: "fluid.mapviz.covid.doQuery",
+            func: "fluid.covidMap.doQuery",
             args: ["{that}.model.rows", "{that}.model.query", "{that}.model.activeChecks", "{that}.options.accessibleChecks"]
         },
         matchedRowIndices: {
@@ -302,7 +302,7 @@ fluid.transforms.indexToBooleans = function (rows, selectedIndex) {
     });
 };
 
-fluid.defaults("fluid.mapviz.covid.map.resultsPage", {
+fluid.defaults("fluid.covidMap.map.resultsPage", {
     gradeNames: "fluid.viewComponent",
     model: {
         // visiblePageIndices: []
@@ -320,7 +320,7 @@ fluid.defaults("fluid.mapviz.covid.map.resultsPage", {
     dynamicComponents: {
         searchResults: {
             sources: "{resultsPage}.model.visiblePageIndices",
-            type: "fluid.mapviz.covid.map.searchResult",
+            type: "fluid.covidMap.map.searchResult",
             options: {
                 parentContainer: "{resultsPage}.dom.resultList"
             }
@@ -328,8 +328,8 @@ fluid.defaults("fluid.mapviz.covid.map.resultsPage", {
     }
 });
 
-fluid.defaults("fluid.mapviz.covid.map.searchResult", {
-    gradeNames: ["fluid.mapviz.covid.hospitalRenderer", "fluid.templateRenderingView"],
+fluid.defaults("fluid.covidMap.map.searchResult", {
+    gradeNames: ["fluid.covidMap.hospitalRenderer", "fluid.templateRenderingView"],
     templateUrl: "{map}.options.searchResultTemplateUrl",
     model: {
         hospitalIndex: "{source}"
@@ -382,7 +382,7 @@ fluid.defaults("fluid.mapviz.covid.map.searchResult", {
     }
 });
 
-fluid.mapviz.covid.unselectedChecks = function (checks) {
+fluid.covidMap.unselectedChecks = function (checks) {
     return fluid.transform(checks, () => false);
 };
 
@@ -390,22 +390,22 @@ fluid.capitalize = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-fluid.mapviz.covid.renderHours = function (row) {
+fluid.covidMap.renderHours = function (row) {
     return ["monday", "tuesday", "wednesday", "thursday", "friday"].map(function (day) {
         return fluid.capitalize(day) + ": " + (row[day] || "closed");
     }).join(", ");
 };
 
-fluid.mapviz.covid.renderAddress = function (row) {
+fluid.covidMap.renderAddress = function (row) {
     return row.address + ", " + row.city + ", " + row.province + " " + row.postal_code;
 };
 
-fluid.mapviz.covid.doQuery = function (rows, query, activeChecks, checks) {
+fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
     var tokens = query.split(" ").map(s => s.trim()).filter(t => t);
     var noChecks = fluid.hashToArray(activeChecks).every(a => !a);
     // var checksActive = activeChecks.some(a => a) && activeChecks.some(a => !a);
     var selected = rows.map(function (row) {
-        var address = fluid.mapviz.covid.renderAddress(row);
+        var address = fluid.covidMap.renderAddress(row);
         var matchTokens = tokens.length ? tokens.some(t => address.contains(t)) : true;
         var checkMatches = fluid.transform(checks, function (record, key) {
             var value = row[record.column];
@@ -417,7 +417,7 @@ fluid.mapviz.covid.doQuery = function (rows, query, activeChecks, checks) {
     return selected;
 };
 
-fluid.mapviz.covid.updateMarker = function (that, index) {
+fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
         var marker = that.model.selectedRows[index] ? that.markers.selected : (that.model.hoveredRows[index] ?
             that.markers.hover : that.markers.standard);
@@ -425,12 +425,12 @@ fluid.mapviz.covid.updateMarker = function (that, index) {
     }
 };
 
-fluid.mapviz.covid.updateMarkers = function (that, index1, index2) {
-    fluid.mapviz.covid.updateMarker(that, index1);
-    fluid.mapviz.covid.updateMarker(that, index2);
+fluid.covidMap.updateMarkers = function (that, index1, index2) {
+    fluid.covidMap.updateMarker(that, index1);
+    fluid.covidMap.updateMarker(that, index2);
 };
 
-fluid.mapviz.covid.showPageForIndex = function (that, newIndex) {
+fluid.covidMap.showPageForIndex = function (that, newIndex) {
     if (Number.isInteger(newIndex)) {
         var filterIndex = that.model.matchedRowIndices.indexOf(newIndex);
         if (filterIndex !== -1) {
@@ -440,7 +440,7 @@ fluid.mapviz.covid.showPageForIndex = function (that, newIndex) {
     }
 };
 
-fluid.mapviz.covid.addMarkers = function (that) {
+fluid.covidMap.addMarkers = function (that) {
     that.markers = fluid.transform(that.options.markers, function (marker) {
         var markerOptions = fluid.extend({}, marker, {
             iconUrl: that.options.iconPrefix + marker.iconUrl
