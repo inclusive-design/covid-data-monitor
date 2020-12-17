@@ -51,132 +51,132 @@
         <script src="src/js/CSVResource.js"></script>
         <script src="src/js/covidMap.js"></script>
 
-        <title>Rhetoric</title>
+        <title>Accessibility Map for COVID-19 Assessment Centres</title>
     </head>
 
     <body>
-        <h2>Rhetoric</h2>
+        <h2>Accessibility Map for COVID-19 Assessment Centres</h2>
         <div class="fl-mapviz-outer-container">
-        <div class="fl-mapviz-container">
-            <div class="fld-mapviz-map-holder">
-                <div class="flc-query-holder">
-                    <div>Search by postal code or city</div>
-                    <input type="text" class="fld-mapviz-query"/>
+            <div class="fl-mapviz-container">
+                <div class="fld-mapviz-query-holder">
+                    <label class="fl-search-label" for="search-query">Search by postal code or city</label>
+                    <div class="flc-control-holder">
+                        <input type="text" class="fld-mapviz-query" id="search-query"/>
+                        <button class="fld-filter-control">0</button>
+                    </div>
                 </div>
-                <div class="fld-mapviz-map">
+                <div class="fl-mapviz-filter-panel">
+                    <div class="fld-mapviz-filters">
+                       <div class="fld-mapviz-filter fld-mapviz-filter-entrances">
+                           <span class="fld-mapviz-filter-icon"></span>
+                           <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                           <span class="fld-mapviz-filter-tooltip"></span>
+                           <label class="fld-mapviz-filter-title" for="toggle-1">Accessible Entrances</label>
+                           <label class="flc-checkbox-holder">
+                               <input class="fld-mapviz-checkbox visually-hidden" id="toggle-1" type="checkbox"/>
+                               <span></span>
+                           </label>
+                       </div>
+                       <div class="fld-mapviz-filter fld-mapviz-filter-washrooms">
+                           <span class="fld-mapviz-filter-icon"></span>
+                           <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                           <span class="fld-mapviz-filter-tooltip"></span>
+                           <label class="fld-mapviz-filter-title" for="toggle-2">Accessible Washrooms</label>
+                           <label class="flc-checkbox-holder">
+                               <input class="fld-mapviz-checkbox visually-hidden" id="toggle-2" type="checkbox"/>
+                               <span></span>
+                           </label>
+                       </div>
+                       <div class="fld-mapviz-filter fld-mapviz-filter-parking">
+                           <span class="fld-mapviz-filter-icon"></span>
+                           <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                           <span class="fld-mapviz-filter-tooltip"></span>
+                           <label class="fld-mapviz-filter-title" for="toggle-3">Accessible Parking</label>
+                           <label class="flc-checkbox-holder">
+                               <input class="fld-mapviz-checkbox visually-hidden" id="toggle-3" type="checkbox"/>
+                               <span></span>
+                           </label>
+                       </div>
+                       <div class="fld-mapviz-filter fld-mapviz-filter-individual">
+                           <span class="fld-mapviz-filter-icon"></span>
+                           <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                           <span class="fld-mapviz-filter-tooltip"></span>
+                           <label class="fld-mapviz-filter-title" for="toggle-4">Individual Service</label>
+                           <label class="flc-checkbox-holder">
+                               <input class="fld-mapviz-checkbox visually-hidden" id="toggle-4" type="checkbox"/>
+                               <span></span>
+                           </label>
+                       </div>
+                       <div class="fld-mapviz-filter fld-mapviz-filter-wait">
+                           <span class="fld-mapviz-filter-icon"></span>
+                           <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                           <span class="fld-mapviz-filter-tooltip"></span>
+                           <label class="fld-mapviz-filter-title" for="toggle-5">Wait Accommodations</label>
+                           <label class="flc-checkbox-holder">
+                               <input class="fld-mapviz-checkbox visually-hidden" id="toggle-6" type="checkbox"/>
+                               <span></span>
+                           </label>
+                       </div>
+                    </div>
+                    <div class="fld-mapviz-filter-buttons fl-mapviz-even-row">
+                       <span class="fl-mapviz-even-row">
+                           <a class="fld-mapviz-apply-filters flc-mapviz-hoverable" id="apply-button"></a>
+                           <label for="apply-button">Apply Filters</label>
+                       </span>
+                       <span class="fl-mapviz-even-row">
+                           <a class="fld-mapviz-reset-filters flc-mapviz-hoverable" id="reset-button"></a>
+                           <label for="reset-button">Reset Filters</label>
+                       </span>
+                    </div>
                 </div>
+                <div class="fld-mapviz-search-results">
+                    <div class="fld-mapviz-search-result-list"><!--
+                        <div class="fld-mapviz-search-result">
+                            <div class="fld-mapviz-hospital-title">Hospital 8</div>
+                            <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+                            <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                            <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+                        </div>
+                        <div class="fld-mapviz-search-result">
+                            <div class="fld-mapviz-hospital-title">Hospital 2</div>
+                            <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+                            <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                            <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+                        </div>
+                        <div class="fld-mapviz-search-result">
+                            <div class="fld-mapviz-hospital-title">Hospital 6</div>
+                            <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+                            <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                            <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+                        </div>
+                        <div class="fld-mapviz-search-result">
+                            <div class="fld-mapviz-hospital-title">Hospital 12</div>
+                            <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
+                            <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                            <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
+                        </div>-->
+                    </div>
+                    <div class="fld-mapviz-search-result-pagination">
+                        <span class="fld-mapviz-pagination-summary">Showing results 1-20 of 143</span>
+                        <span class="fld-mapviz-pagination-buttons">
+                            <a class="fld-mapviz-page-left flc-mapviz-hoverable" aria-label="page-left"></a>
+                            <a class="fld-mapviz-page-right flc-mapviz-hoverable" aria-label="page-right"></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="fld-mapviz-map"></div>
             </div>
-            <div class="fl-mapviz-filter-panel">
-                <div class="fld-mapviz-filters">
-                   <div class="fld-mapviz-filter fld-mapviz-filter-entrances">
-                       <span class="fld-mapviz-filter-icon"></span>
-                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                       <span class="fld-mapviz-filter-tooltip"></span>
-                       <label class="fld-mapviz-filter-title" for="toggle-1">Accessible Entrances</label>
-                       <label class="flc-checkbox-holder">
-                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-1" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fld-mapviz-filter fld-mapviz-filter-washrooms">
-                       <span class="fld-mapviz-filter-icon"></span>
-                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                       <span class="fld-mapviz-filter-tooltip"></span>
-                       <label class="fld-mapviz-filter-title" for="toggle-2">Accessible Washrooms</label>
-                       <label class="flc-checkbox-holder">
-                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-2" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fld-mapviz-filter fld-mapviz-filter-parking">
-                       <span class="fld-mapviz-filter-icon"></span>
-                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                       <span class="fld-mapviz-filter-tooltip"></span>
-                       <label class="fld-mapviz-filter-title" for="toggle-3">Accessible Parking</label>
-                       <label class="flc-checkbox-holder">
-                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-3" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fld-mapviz-filter fld-mapviz-filter-individual">
-                       <span class="fld-mapviz-filter-icon"></span>
-                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                       <span class="fld-mapviz-filter-tooltip"></span>
-                       <label class="fld-mapviz-filter-title" for="toggle-4">Individual Service</label>
-                       <label class="flc-checkbox-holder">
-                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-4" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fld-mapviz-filter fld-mapviz-filter-wait">
-                       <span class="fld-mapviz-filter-icon"></span>
-                       <span class="fld-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                       <span class="fld-mapviz-filter-tooltip"></span>
-                       <label class="fld-mapviz-filter-title" for="toggle-5">Wait Accommodations</label>
-                       <label class="flc-checkbox-holder">
-                           <input class="fld-mapviz-checkbox visually-hidden" id="toggle-6" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                </div>
-                <div class="fld-mapviz-filter-buttons fl-mapviz-even-row">
-                   <span class="fl-mapviz-even-row">
-                       <a class="fld-mapviz-apply-filters flc-mapviz-hoverable" id="apply-button"></a>
-                       <label for="apply-button">Apply Filters</label>
-                   </span>
-                   <span class="fl-mapviz-even-row">
-                       <a class="fld-mapviz-reset-filters flc-mapviz-hoverable" id="reset-button"></a>
-                       <label for="reset-button">Reset Filters</label>
-                   </span>
-                </div>
-            </div>
-            <div class="fld-mapviz-search-results">
-                <div class="fld-mapviz-search-result-list"><!--
-	                <div class="fld-mapviz-search-result">
-	                    <div class="fld-mapviz-hospital-title">Hospital 8</div>
-	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
-	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
-	                </div>
-	                <div class="fld-mapviz-search-result">
-	                    <div class="fld-mapviz-hospital-title">Hospital 2</div>
-	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
-	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
-	                </div>                
-	                <div class="fld-mapviz-search-result">
-	                    <div class="fld-mapviz-hospital-title">Hospital 6</div>
-	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
-	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
-	                </div>
-	                <div class="fld-mapviz-search-result">
-	                    <div class="fld-mapviz-hospital-title">Hospital 12</div>
-	                    <div class="fld-mapviz-hospital-hours">Opens at 8:00 am</div>
-	                    <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-	                    <div class="fld-mapviz-hospital-phone">+1-416-586-5054</div>
-	                </div>-->
-                </div>
-                <div class="fld-mapviz-search-result-pagination">
-                    <span class="fld-mapviz-pagination-summary">Showing results 1-20 of 143</span>
-                    <span class="fld-mapviz-pagination-buttons">
-                        <a class="fld-mapviz-page-left flc-mapviz-hoverable" aria-label="page-left"></a>
-	                    <a class="fld-mapviz-page-right flc-mapviz-hoverable" aria-label="page-right"></a>
-                    </span>
-                </div>
-            </div>
-        </div>
             <div class="fld-mapviz-hospital-panel" style="display: none;">
                 <div class="fld-mapviz-hospital-title">
                     Hospital 2
                 </div>
-                <div><b>Hours:</b> <span class="fld-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span> 
+                <div><b>Hours:</b> <span class="fld-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span>
                 </div>
                 <div><b>Location</b></div>
                 <div class="fld-mapviz-hospital-address">600 University Ave, Toronto, ON M5G 1X5</div>
                 <div class="fld-mapviz-hospital-phone">+1 416-586-5054</div>
                 <div class="fld-mapviz-hospital-website">www.mountsinai.on.ca</div>
-                    
+
             </div>
         </div>
 
