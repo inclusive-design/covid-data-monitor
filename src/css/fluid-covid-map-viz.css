@@ -54,27 +54,6 @@ body {
     border-collapse: collapse;
 }
 
-.fl-mapviz-queryheader {
-    font-size: 1.5em;
-    margin-top: 10px;
-}
-
-.fld-mapviz-table {
-    border-collapse: collapse;
-    margin-top: 5px;
-}
-
-.fld-mapviz-table td,
-.fld-mapviz-table th {
-    border: 1px solid #999;
-    padding: 5px;
-}
-
-.fld-mapviz-table th {
-    background-color: #ccc;
-    text-align: left;
-}
-
 .visually-hidden {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
@@ -94,10 +73,6 @@ body {
     padding: 5px;
     vertical-align: middle;
     width: 60px;
-}
-
-.fl-mapviz-filter-icon-entrances {
-    background-image: url(../img/Entrances.svg);
 }
 
 .fld-mapviz-filter-tooltip-icon {
@@ -269,6 +244,10 @@ body::after {
     display: inline-block;
     height: 40px;
     width: 40px;
+}
+
+.fl-mapviz-query-label {
+    display: block;
 }
 
 @media screen and (max-width: 1280px) {
