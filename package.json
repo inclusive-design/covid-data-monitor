@@ -23,7 +23,7 @@
         "url": "https://https://issues.fluidproject.org/"
     },
     "dependencies": {
-        "infusion": "3.0.0-dev.20201209T183559Z.f6eb5d63f.FLUID-6580",
+        "infusion": "3.0.0-dev.20201216T182440Z.7612c707b.FLUID-6580",
         "new-renderer-demo": "amb26/new-renderer-demo#FLUID-5047",
         "minimist": "1.2.5",
         "papaparse": "5.2.0",
