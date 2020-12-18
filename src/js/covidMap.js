@@ -249,7 +249,7 @@ fluid.defaults("fluid.covidMap.map", {
     selectors: {
         query: ".fld-mapviz-query",
         pager: ".fld-mapviz-search-result-pagination",
-        resultsPage: ".fld-mapviz-search-results",
+        resultsPage: ".fld-mapviz-city-and-results",
         hospitalPanel: ".fld-mapviz-hospital-panel"
     },
     modelRelay: {
@@ -308,7 +308,7 @@ fluid.defaults("fluid.covidMap.map.resultsPage", {
         // visiblePageIndices: []
     },
     selectors: {
-        resultList: ".fld-mapviz-search-result-list"
+        resultList: ".fld-mapviz-city-and-result-list"
     },
     listeners: {
         // TODO: eliminate this workflow when we move to real renderer
