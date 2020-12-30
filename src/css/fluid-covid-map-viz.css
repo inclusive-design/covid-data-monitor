@@ -1,6 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Redressed&display=swap');
+
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+html {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 body {
+    /* background-color: #55769f; */
     font-family: sans-serif;
     margin: 10px;
+}
+
+.head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Redressed', cursive;
 }
 
 .fld-mapviz-map-holder {
@@ -10,20 +32,24 @@ body {
     position: relative;
 }
 
-.flc-query-holder > * {
+.flc-query-holder>* {
     margin-bottom: 7px;
     margin-top: 4px;
 }
 
 .fld-mapviz-query {
     background-image: url(../img/Search.svg);
-    background-position: 5px;
     background-repeat: no-repeat;
     border: 1px solid black;
+    background-position: 7px 8px;
     border-radius: 1.5rem;
     height: 2rem;
     padding-left: 40px;
     width: 700px;
+}
+
+.fld-mapviz-query:focus {
+    outline: none;
 }
 
 .fld-mapviz-map {
@@ -87,36 +113,63 @@ body {
     width: 19px;
 }
 
-.flc-mapviz-hoverable:hover {
-    outline: 1px solid #000;
-    outline-offset: 1px;
-}
-
 .fld-mapviz-filters {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     margin-top: 76px;
-    width: 21rem;
+    /* width: 21rem; */
+    flex-wrap: wrap;
+}
+
+.separator {
+    display: flex;
+    padding: 2px;
+}
+
+.filter {
+    border-radius: 30px;
+    background-color: #39cd39e6;
+    padding: 6px;
+    margin: 2px;
+}
+
+.reset {
+    border-radius: 30px;
+    background-color: #0081dce0;
+    padding: 6px;
+    margin: 2px;
 }
 
 .fld-mapviz-filter {
     align-items: center;
     display: flex;
     flex-direction: row;
-    height: 106px;
+    height: 80px;
+    border-radius: 50px;
+    width: 300px;
+    margin: 3px;
+}
+
+.fld-mapviz-filter:hover {
+    box-shadow: 0px 0px 10px #2a2323;
 }
 
 .fld-mapviz-filter-title {
     display: inline-block;
     font-family: Fira Sans, Arial Narrow, Arial, Helvetica, sans-serif;
-    font-size: 24px;
+    font-size: 15px;
     font-stretch: condensed;
     font-style: normal;
     font-weight: 600;
     line-height: 29px;
     text-transform: uppercase;
     vertical-align: middle;
-    width: 12.5rem;
+    width: 9.5rem;
+}
+
+.flc-checkbox-holder {
+    display: flex;
+    align-items: center;
 }
 
 .flc-checkbox-holder span {
@@ -124,28 +177,25 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     display: inline-block;
-    height: 31px;
+    height: 25px;
     margin-right: 4px;
     vertical-align: middle;
-    width: 31px;
+    width: 25px;
 }
+
 
 .flc-checkbox-holder span:hover {
     outline: 1px solid #000;
 }
 
-.flc-checkbox-holder input:checked + span {
+.flc-checkbox-holder input:checked+span {
     background-image: url("../img/Checkbox-selected.svg");
 }
 
 /** Preload all images **/
 body::after {
     content:
-        url("../img/Checkbox-unselected.svg")
-        url("../img/Checkbox-selected.svg")
-        url("../img/Marker.svg")
-        url("../img/Marker-hover.svg")
-        url("../img/Marker-selected.svg");
+        url("../img/Checkbox-unselected.svg") url("../img/Checkbox-selected.svg") url("../img/Marker.svg") url("../img/Marker-hover.svg") url("../img/Marker-selected.svg");
     height: 0;
     overflow: hidden;
     position: absolute;
@@ -261,12 +311,16 @@ body::after {
 
     .fld-mapviz-query {
         margin-top: 20px;
-        position: absolute;
+        /* position: absolute; */
         z-index: 999;
+    }
+
+    .fld-mapviz-search-result-pagination {
+        width: 300px
     }
 }
 
-.fld-mapviz-hospital-panel > div {
+.fld-mapviz-hospital-panel>div {
     padding: 5px;
 }
 
