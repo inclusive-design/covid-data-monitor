@@ -103,6 +103,11 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
     }
 });
 
+fluid.covidMap.extractCities = function (rows, field) {
+    var cities = fluid.getMembers(rows, field);
+    var cityHash = fluid.arrayToHash(cities);
+    return Object.keys(cityHash);
+};
 
 fluid.defaults("fluid.covidMap.map", {
     gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
@@ -110,12 +115,14 @@ fluid.defaults("fluid.covidMap.map", {
         accessible: "#0f0",
         inaccessible: "#f00"
     },
+    smallMarkersBelowZoom: 9,
     fields: {
+        city: "city",
         name: "location_name",
         website: "website",
         phone: "phone"
     },
-    accessibleChecks: {
+    filters: {
         entrances: {
             selector: ".fld-mapviz-filter-entrances",
             column: "Wheelchair-accessible entrance"
@@ -137,16 +144,33 @@ fluid.defaults("fluid.covidMap.map", {
             column: "Queue accomodations"
         }
     },
-    unselectedChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.accessibleChecks)",
+    unselectedFilterChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.filters)",
     parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
+    selectors: {
+        query: ".fld-mapviz-query",
+        pager: ".fld-mapviz-search-result-pagination",
+        resultsPage: ".fld-mapviz-search-results",
+        hospitalPanel: ".fld-mapviz-hospital-panel",
+        attribution: ".leaflet-control-attribution",
+        resetButton: ".fld-mapviz-reset-filters",
+        applyButton: ".fld-mapviz-reset-filters",
+        filterPanel: ".fl-mapviz-filter-panel",
+        filterControl: ".fld-filter-control",
+        filterCount: ".fld-filter-count"
+    },
     listeners: {
-        "buildMap.addMarkers": "fluid.covidMap.addMarkers({that}, {that}.options.parsedColours, {that}.options.markup)"
+        "buildMap.addMarkers": {
+            funcName: "fluid.covidMap.addMarkers",
+            args: ["{that}", "{that}.options.parsedColours", "{that}.options.markup)"],
+            priority: "last"
+        }
     },
     model: {
+        cities: [],
         query: "",
         pageSize: 5,
-        activeChecks: "{that}.options.unselectedChecks",
-        uiChecks: "{that}.options.unselectedChecks",
+        activeFilterChecks: "{that}.options.unselectedFilterChecks",
+        uiFilterChecks: "{that}.options.unselectedFilterChecks",
         matchedRows: [], // Map of row indices to boolean
         matchedRowIndices: [], // The indices of the matched rows
         visiblePageIndices: [], // The indices, selected from matchedRowIndices, which are visible
@@ -155,6 +179,9 @@ fluid.defaults("fluid.covidMap.map", {
         selectedIndex: null,
         hoveredIndex: null
         // selectedHospital: null
+    },
+    members: {
+        rowMarkers: [] // an array of Leaflet.Marker constructed during buildMap.addMarkers
     },
     // TODO: Allow resources to be defaulted in a civilized manner
     templateUrl: null,
@@ -166,6 +193,11 @@ fluid.defaults("fluid.covidMap.map", {
         }
     },
     markers: {
+        unzoomed: {
+            iconUrl: "img/Marker-unzoomed.svg",
+            iconSize: [9, 13],
+            iconAnchor: [4.5, 13]
+        },
         standard: {
             iconUrl: "img/Marker.svg",
             iconSize: [51, 65],
@@ -182,77 +214,13 @@ fluid.defaults("fluid.covidMap.map", {
             iconAnchor: [54, 90]
         }
     },
-    modelListeners: {
-        "selectedIndexMarkers": {
-            path: "selectedIndex",
-            funcName: "fluid.covidMap.updateMarkers",
-            args: ["{that}", "{change}.value", "{change}.oldValue"]
-        },
-        "hoveredIndexMarkers": {
-            path: "hoveredIndex",
-            funcName: "fluid.covidMap.updateMarkers",
-            args: ["{that}", "{change}.value", "{change}.oldValue"]
-        },
-        "selectedIndexPage": {
-            path: "selectedIndex",
-            funcName: "fluid.covidMap.showPageForIndex",
-            args: ["{that}", "{change}.value"]
-        },
-        "hoveredIndexPage": {
-            path: "hoveredIndex",
-            funcName: "fluid.covidMap.showPageForIndex",
-            args: ["{that}", "{change}.value"]
-        }
-    },
-    components: {
-        pager: {
-            type: "fluid.covidMap.pager",
-            container: "{that}.dom.pager",
-            options: {
-                model: {
-                    totalRange: "{map}.model.matchedRowIndices.length",
-                    pageSize: "{map}.model.pageSize"
-                }
-            }
-        },
-        resultsPage: {
-            type: "fluid.covidMap.map.resultsPage",
-            container: "{that}.dom.resultsPage",
-            options: {
-                model: {
-                    visiblePageIndices: "{map}.model.visiblePageIndices"
-                }
-            }
-        },
-        selectedHospitalPane: {
-            type: "fluid.covidMap.hospitalRenderer",
-            container: "{that}.dom.hospitalPanel",
-            options: {
-                gradeNames: "fluid.viewComponent",
-                model: {
-                    row: "{map}.model.selectedHospital"
-                },
-                selectors: {
-                    hospitalWebsite: ".fld-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
-                },
-                modelRelay: {
-                    hospitalWebsite: {
-                        source: {
-                            segs: ["row", "{map}.options.fields.website"]
-                        },
-                        target: "dom.hospitalWebsite.text"
-                    }
-                }
-            }
-        }
-    },
-    selectors: {
-        query: ".fld-mapviz-query",
-        pager: ".fld-mapviz-search-result-pagination",
-        resultsPage: ".fld-mapviz-search-results",
-        hospitalPanel: ".fld-mapviz-hospital-panel"
-    },
     modelRelay: {
+        // Cities:
+        cities: {
+            target: "cities",
+            func: "fluid.covidMap.extractCities",
+            args: ["{that}.model.rows", "{that}.options.fields.city"]
+        },
         // Selection and hover state
         isHospitalSelected: {
             target: "dom.hospitalPanel.visible",
@@ -292,15 +260,279 @@ fluid.defaults("fluid.covidMap.map", {
                 return matchedRowIndices.slice(firstIndex - 1, lastIndex);
             },
             args: ["{that}.model.matchedRowIndices", "{pager}.model.firstIndex", "{pager}.model.lastIndex"]
+        },
+        // Marker size
+        smallMarkers: {
+            target: "smallMarkers",
+            func: function (zoom, zoomThresh) {
+                return zoom < zoomThresh;
+            },
+            args: ["{that}.model.zoom", "{that}.options.smallMarkersBelowZoom"]
+        }
+    },
+    modelListeners: {
+        // Ensure that freshly selected or hovered item is visible
+        "selectedIndexPage": {
+            path: "selectedIndex",
+            funcName: "fluid.covidMap.showPageForIndex",
+            args: ["{that}", "{change}.value"]
+        },
+        "hoveredIndexPage": {
+            path: "hoveredIndex",
+            funcName: "fluid.covidMap.showPageForIndex",
+            args: ["{that}", "{change}.value"]
+        },
+        // Update markers for selected or hovered items
+        "selectedIndexMarkers": {
+            path: "selectedIndex",
+            funcName: "fluid.covidMap.updateMarkers",
+            args: ["{that}", "{change}.value", "{change}.oldValue"]
+        },
+        "hoveredIndexMarkers": {
+            path: "hoveredIndex",
+            funcName: "fluid.covidMap.updateMarkers",
+            args: ["{that}", "{change}.value", "{change}.oldValue"]
+        },
+        // Update all markers if marker size changes
+        "smallMarkers": { // TODO: modelise marker choices
+            path: "smallMarkers",
+            excludeSource: "init",
+            func: function (that) {
+                that.rowMarkers.forEach(function (row, index) {
+                    fluid.covidMap.updateMarker(that, index);
+                });
+            },
+            args: "{that}"
+        },
+        // reset and apply buttons
+        "resetFilters": {
+            path: "{resetButton}.model.activate",
+            changePath: "{map}.model.uiFilterChecks",
+            value: "{that}.options.unselectedFilterChecks"
+        }
+    },
+    components: {
+        pager: {
+            type: "fluid.covidMap.pager",
+            container: "{that}.dom.pager",
+            options: {
+                model: {
+                    totalRange: "{map}.model.matchedRowIndices.length",
+                    pageSize: "{map}.model.pageSize"
+                }
+            }
+        },
+        resultsPage: {
+            type: "fluid.covidMap.map.resultsPage",
+            container: "{that}.dom.resultsPage",
+            options: {
+                model: {
+                    visiblePageIndices: "{map}.model.visiblePageIndices"
+                }
+            }
+        },
+        resetButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.resetButton"
+        },
+        applyButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.applyButton"
+        },
+        selectedHospitalPane: {
+            type: "fluid.covidMap.hospitalRenderer",
+            container: "{that}.dom.hospitalPanel",
+            options: {
+                gradeNames: "fluid.viewComponent",
+                model: {
+                    row: "{map}.model.selectedHospital"
+                },
+                selectors: {
+                    hospitalWebsite: ".fld-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
+                },
+                modelRelay: {
+                    hospitalWebsite: {
+                        source: {
+                            segs: ["row", "{map}.options.fields.website"]
+                        },
+                        target: "dom.hospitalWebsite.text"
+                    }
+                }
+            }
+        },
+        filterControl: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.filterControl",
+            options: {
+                model: {
+                    filterVisible: true
+                },
+                modelRelay: {
+                    toggle: {
+                        source: "activate",
+                        target: "filterVisible",
+                        singleTransform: "fluid.transforms.toggle"
+                    },
+                    expanded: {
+                        source: "filterVisible",
+                        target: "{that}.model.dom.container.attrs.aria-expanded"
+                    },
+                    filterVisible: {
+                        source: "filterVisible",
+                        target: "{map}.model.dom.filterPanel.visible"
+                    }
+                }
+            }
+        },
+        filterCount: {
+            type: "fluid.viewComponent",
+            container: "{that}.dom.filterCount",
+            options: {
+                model: {
+                    // checkArray: Array
+                    // filterCount: Number
+                },
+                modelRelay: {
+                    checkArray: {
+                        source: "{map}.model.uiFilterChecks",
+                        target: "checkArray",
+                        func: checks => Object.values(checks)
+                    },
+                    filterCount: {
+                        source: "checkArray",
+                        target: "filterCount",
+                        func: checks => checks.reduce((acc, current) => acc + (+current), 0)
+                    },
+                    renderCount: {
+                        source: "filterCount",
+                        target: "dom.container.text"
+                    }
+                }
+            }
+        }
+    },
+    dynamicComponents: {
+        filterChecks: {
+            sources: "{that}.options.filters",
+            type: "fluid.covidMap.filter",
+            options: {
+                // Weird integration model whilst we don't render markup
+                container: "@expand:fluid.covidMap.findSelector({map}.container, {source}.selector)",
+                key: "{sourcePath}",
+                distributeOptions: {
+                    target: "{that styledCheckbox}.options.gradeNames",
+                    record: "fluid.covidMap.filterCheckboxInMap"
+                }
+            }
         }
     }
 });
 
+fluid.defaults("fluid.covidMap.filterCheckboxInMap", {
+    modelRelay: {
+        source: {
+            context: "map",
+            segs: ["uiFilterChecks", "{fluid.covidMap.filter}.options.key"]
+        },
+        target: "checked"
+    }
+});
+
+fluid.defaults("fluid.covidMap.filter", {
+    gradeNames: "fluid.viewComponent",
+    // key: String
+    selectors: {
+        checkbox: ".flc-checkbox-holder",
+        tooltipIcon: ".fld-mapviz-filter-tooltip-icon",
+        tooltip: ".fld-mapviz-filter-tooltip",
+        title: ".fld-mapviz-filter-title" // currently unused
+    },
+    components: {
+        checkbox: {
+            type: "fluid.styledCheckbox",
+            container: "{filter}.dom.checkbox"
+        }
+    }
+});
+
+// Stupid utility to compensate for lack of this-ism in expander resolution
+fluid.covidMap.findSelector = function (scope, selector) {
+    return scope.find(selector);
+};
+
+/** Maps an array and an index number to an array of booleans with `true` at the selected index
+ * @param {Array} rows - An array of any type - only the length will be used
+ * @param {Integer} selectedIndex - An index into the array
+ * @return {Boolean[]} An array of booleans of the same length as `rows` with `true` at the index `selectedIndex` and
+ * `false` at all other positions
+ */
 fluid.transforms.indexToBooleans = function (rows, selectedIndex) {
     return rows.map(function (row, index) {
         return index === selectedIndex;
     });
 };
+
+fluid.defaults("fluid.activatableComponent", {
+    gradeNames: "fluid.viewComponent",
+    model: {
+        activate: 0
+    },
+    // These options will be forwarded to fluid.activatable applied to the container
+    activatableOptions: {
+    },
+    invokers: {
+        // This invoker only necessary as an integration artefact until fluid.activatable is made integral
+        activate: {
+            changePath: "activate",
+            func: x => x + 1,
+            args: "{that}.model.activate"
+        }
+    },
+    listeners: {
+        "onCreate.makeActivatable": {
+            funcName: "fluid.activatable",
+            args: ["{that}.container", "{that}.activate", "{that}.options.activatableOptions"]
+        }
+    }
+});
+
+fluid.defaults("fluid.styledCheckbox", {
+    gradeNames: "fluid.activatableComponent",
+    selectors: {
+        control: ".fld-mapviz-checkbox"
+    },
+    model: {
+        // checked: Boolean
+    },
+    modelRelay: {
+        toggleChecked: {
+            target: "checked",
+            source: "activate",
+            singleTransform: "fluid.transforms.toggle"
+        },
+        checked: {
+            target: "checked",
+            source: "{that}.model.dom.control.value"
+        }
+    },
+
+    markup: {
+        container: "<label class=\"flc-checkbox-holder\" tabindex=\"0\"><input class=\"fld-mapviz-checkbox visually-hidden\" tabindex=\"-1\" type=\"checkbox\"><span></span></label>"
+    }
+});
+
+fluid.defaults("fluid.styledButton", {
+    gradeNames: "fluid.activatableComponent",
+    markup: {
+        container: "<a class=\"fld-mapviz-apply-filters flc-mapviz-hoverable\" tabindex=\"0\"></a>"
+    },
+    modelRelay: {
+        clickToActivate: {
+            target: "activate",
+            source: "{that}.model.dom.container.click"
+        }
+    }
+});
 
 fluid.defaults("fluid.covidMap.map.resultsPage", {
     gradeNames: "fluid.viewComponent",
@@ -419,9 +651,14 @@ fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
 
 fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
-        var marker = that.model.selectedRows[index] ? that.markers.selected : (that.model.hoveredRows[index] ?
-            that.markers.hover : that.markers.standard);
-        that.rowMarkers[index].setIcon(marker);
+        var markerIcon = that.model.selectedRows[index] ? that.markers.selected :
+            (that.model.hoveredRows[index] ? that.markers.hover : that.markers.standard);
+        if (that.model.smallMarkers) {
+            markerIcon = that.markers.unzoomed;
+        }
+        var marker = that.rowMarkers[index];
+        marker.setIcon(markerIcon);
+        marker._icon.removeAttribute("tabindex");
     }
 };
 
@@ -453,14 +690,18 @@ fluid.covidMap.addMarkers = function (that) {
             that.applier.change("selectedIndex", null);
         }
     });
+    that.locate("attribution").find("a").attr("tabindex", -1);
     var data = that.resources.data.parsed.data;
-    that.rowMarkers = data.map(function (row, index) {
+    that.rowMarkers = [];
+    data.forEach(function (row, index) {
         if (!row.latitude || !row.longitude) {
             fluid.log("Warning, ignoring row ", row, " which does not have valid coordinates");
         } else {
             var marker = L.marker([row.latitude, row.longitude], {
                 icon: that.markers.standard
             }).addTo(that.map);
+            that.rowMarkers[index] = marker;
+            fluid.covidMap.updateMarker(that, index);
             marker.on("mouseover", function () {
                 that.applier.change("hoveredIndex", index);
             });

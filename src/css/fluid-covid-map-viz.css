@@ -1,8 +1,3 @@
-body {
-    font-family: sans-serif;
-    margin: 10px;
-}
-
 .fld-mapviz-map-holder {
     align-items: center;
     display: flex;
@@ -10,9 +5,46 @@ body {
     position: relative;
 }
 
-.flc-query-holder > * {
+.flc-query-holder {
+    width: 100%;
+}
+
+.flc-control-holder > * {
     margin-bottom: 7px;
+    margin-left: 1rem;
+    margin-right: 1rem;
     margin-top: 4px;
+}
+
+/* Contains both the search input box and the filter control button */
+.flc-control-holder {
+    display: grid;
+    grid-template-columns: auto 6rem;
+}
+
+.fl-filter-control-holder {
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.fld-filter-control {
+    height: 2rem;
+    margin-left: 0.7rem;
+    margin-right: 0.7rem;
+    width: 100%;
+}
+
+.fld-filter-control svg {
+    height: 32px;
+    width: 23px;
+}
+
+.fl-filter-control-holder .fld-filter-count {
+    margin-right: 0.5rem;
 }
 
 .fld-mapviz-query {
@@ -22,8 +54,7 @@ body {
     border: 1px solid black;
     border-radius: 1.5rem;
     height: 2rem;
-    padding-left: 40px;
-    width: 700px;
+    padding-left: 2rem;
 }
 
 .fld-mapviz-map {
@@ -141,6 +172,8 @@ body {
 /** Preload all images **/
 body::after {
     content:
+        url("../img/ApplyFilters.svg")
+        url("../img/ResetFilters.svg")
         url("../img/Checkbox-unselected.svg")
         url("../img/Checkbox-selected.svg")
         url("../img/Marker.svg")
@@ -171,9 +204,9 @@ body::after {
 .fld-mapviz-apply-filters,
 .fld-mapviz-reset-filters {
     display: inline-block;
-    height: 26px;
+    height: 46px;
     margin: 8px;
-    width: 26px;
+    width: 45px;
 }
 
 .fld-mapviz-apply-filters {

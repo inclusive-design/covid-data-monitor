@@ -33,6 +33,7 @@ node_modules/new-renderer-demo/src/js/core/fluidNewRendererComponents.js
 node_modules/new-renderer-demo/src/js/core/htmlParser.js
 node_modules/new-renderer-demo/src/js/core/ResourceRewriter.js
 node_modules/new-renderer-demo/src/js/client/ClientRenderer.js
+node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js
 node_modules/leaflet/dist/leaflet.js
 node_modules/papaparse/papaparse.js
 src/js/colour.js

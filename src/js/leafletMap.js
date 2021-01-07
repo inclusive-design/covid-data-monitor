@@ -34,9 +34,17 @@ fluid.defaults("hortis.leafletMap", {
     },
     fitBounds: [[41.6,-95.2],[56.9,-74.3]],
     listeners: {
-        "buildMap.fitBounds": "hortis.leafletMap.fitBounds({that}.map, {that}.options.fitBounds)",
+        "buildMap.bindZoom": "hortis.leafletMap.bindZoom",
+        "buildMap.fitBounds": "hortis.leafletMap.fitBounds({that}, {that}.options.fitBounds)",
         "buildMap.createTooltip": "hortis.leafletMap.createTooltip({that}, {that}.options.markup)",
         "buildMap.addTiles": "hortis.leafletMap.addTileLayer({that}.map, {that}.options.tileOptions)"
+    },
+    model: {
+        // zoom: Number (0 - whole world -> 18 - maximal zoom)
+    },
+    invokers: {
+        // Perhaps this will one day be a "materialiser registration" and we will instead call applier.pullModel("zoom")
+        acquireZoom: "hortis.leafletMap.acquireZoom({that})"
     },
     modelListeners: {
         "": {
@@ -48,10 +56,22 @@ fluid.defaults("hortis.leafletMap", {
     }
 });
 
+hortis.leafletMap.acquireZoom = function (map) {
+    map.applier.change("zoom", map.map.getZoom());
+};
+
+hortis.leafletMap.bindZoom = function (map) {
+    var leafletMap = map.map;
+    // Note that we can't apply the change at startup because of FLUID-5498
+    leafletMap.on("zoomend", function () {
+        map.acquireZoom();
+    });
+};
 
 hortis.leafletMap.fitBounds = function (map, fitBounds) {
     if (fitBounds) {
-        map.fitBounds(fitBounds);
+        map.map.fitBounds(fitBounds);
+        map.acquireZoom();
     }
 };
 

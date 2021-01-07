@@ -4,13 +4,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/covid-data-monitor-all.css" />
+        <link rel="stylesheet" href="../src/css/demo.css" />
         <script src="../node_modules/infusion/dist/infusion-uio.js"></script>
         <script src="js/covid-data-monitor.js"></script>
     <title>Build Test - Accessibility Map for COVID-19 assessment centres</title>
     </head>
 
     <body>
-        <h2>Built Test - Accessibility Map for COVID-19 assessment centres</h2>
+        <h1>Built Test - Accessibility Map for COVID-19 assessment centres</h1>
         <div class="fl-mapviz-outer-container">
         </div>
     </body>
@@ -18,9 +19,6 @@
         fluid.covidMap.map(".fl-mapviz-outer-container", {
             dataUrl: "data/assessment_centre_locations.csv",
             templateUrl: "html/template.html",
-// Note that it is no longer possible to support loading this template at startup using containerRenderingView using the current
-// framework because of issue https://issues.fluidproject.org/browse/FLUID-6584
-// - we will need to reproduce the template inline until the new renderer is ready
             searchResultTemplateUrl: "html/searchResult.html"
         });
     </script>
