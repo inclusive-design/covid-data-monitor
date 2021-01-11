@@ -1,15 +1,15 @@
-.fld-mapviz-map-holder {
+.fl-mapviz-map-holder {
     align-items: center;
     display: flex;
     flex-direction: column;
     position: relative;
 }
 
-.flc-query-holder {
+.fl-mapviz-query-and-control-holder {
     width: 100%;
 }
 
-.flc-control-holder > * {
+.fl-mapviz-control-holder > * {
     margin-bottom: 7px;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -17,12 +17,12 @@
 }
 
 /* Contains both the search input box and the filter control button */
-.flc-control-holder {
+.fl-mapviz-control-holder {
     display: grid;
     grid-template-columns: auto 6rem;
 }
 
-.fl-filter-control-holder {
+.fl-mapviz-filter-control-holder {
     align-items: center;
     background-color: white;
     border: 1px solid black;
@@ -31,23 +31,35 @@
     flex-direction: row;
 }
 
-.fld-filter-control {
+.fl-mapviz-filter-control {
     height: 2rem;
     margin-left: 0.7rem;
     margin-right: 0.7rem;
     width: 100%;
 }
 
-.fld-filter-control svg {
+.fl-mapviz-filter-control svg {
     height: 32px;
     width: 23px;
 }
 
-.fl-filter-control-holder .fld-filter-count {
+.fl-mapviz-filter-control-holder .fl-mapviz-filter-count {
     margin-right: 0.5rem;
 }
 
-.fld-mapviz-query {
+.fl-mapviz-query-reset-holder {
+    position: relative;
+}
+
+.fl-mapviz-query-reset {
+    height: 1rem;
+    position: absolute;
+    right: 0.6rem;
+    top: 0.5rem;
+    z-index: 900;
+}
+
+.fl-mapviz-query-holder input {
     background-image: url(../img/Search.svg);
     background-position: 5px;
     background-repeat: no-repeat;
@@ -55,14 +67,27 @@
     border-radius: 1.5rem;
     height: 2rem;
     padding-left: 2rem;
+    width: 100%;
 }
 
-.fld-mapviz-map {
+/** This markup is injected by the autocomplete widget **/
+.fl-mapviz-query-holder ul {
+    margin-block-end: 0;
+    margin-block-start: 0;
+}
+
+/** Override this from leaflet.css so that the autocomplete dropdown doesn't pop behind it **/
+
+.leaflet-pane {
+    z-index: 0;
+}
+
+.fl-mapviz-map {
     height: 575px;
     width: 800px;
 }
 
-.fld-mapviz-map-tooltip {
+.fl-mapviz-map-tooltip {
     background-color: white;
     border: 1px solid black;
     font-size: 0.9rem;
@@ -73,15 +98,15 @@
     z-index: 800;
 }
 
-.fld-mapviz-map-tooltip tr:nth-child(even) {
+.fl-mapviz-map-tooltip tr:nth-child(even) {
     background: #eee;
 }
 
-.fld-mapviz-map-tooltip tr:nth-child(odd) {
+.fl-mapviz-map-tooltip tr:nth-child(odd) {
     background: #fff;
 }
 
-.fld-mapviz-map-tooltip table {
+.fl-mapviz-map-tooltip table {
     border-collapse: collapse;
 }
 
@@ -95,7 +120,7 @@
     width: 1px;
 }
 
-.fld-mapviz-filter-icon {
+.fl-mapviz-filter-icon {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 49px 49px;
@@ -106,7 +131,7 @@
     width: 60px;
 }
 
-.fld-mapviz-filter-tooltip-icon {
+.fl-mapviz-filter-tooltip-icon {
     background-image: url(../img/Tooltip-icon.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -118,26 +143,26 @@
     width: 19px;
 }
 
-.flc-mapviz-hoverable:hover {
+.fl-mapviz-hoverable:hover {
     outline: 1px solid #000;
     outline-offset: 1px;
 }
 
-.fld-mapviz-filters {
+.fl-mapviz-filters {
     display: flex;
     flex-direction: column;
     margin-top: 76px;
     width: 21rem;
 }
 
-.fld-mapviz-filter {
+.fl-mapviz-filter {
     align-items: center;
     display: flex;
     flex-direction: row;
     height: 106px;
 }
 
-.fld-mapviz-filter-title {
+.fl-mapviz-filter-title {
     display: inline-block;
     font-family: Fira Sans, Arial Narrow, Arial, Helvetica, sans-serif;
     font-size: 24px;
@@ -150,7 +175,7 @@
     width: 12.5rem;
 }
 
-.flc-checkbox-holder span {
+.fl-checkbox-holder span {
     background-image: url("../img/Checkbox-unselected.svg");
     background-position: center;
     background-repeat: no-repeat;
@@ -161,11 +186,11 @@
     width: 31px;
 }
 
-.flc-checkbox-holder span:hover {
+.fl-checkbox-holder span:hover {
     outline: 1px solid #000;
 }
 
-.flc-checkbox-holder input:checked + span {
+.fl-checkbox-holder input:checked + span {
     background-image: url("../img/Checkbox-selected.svg");
 }
 
@@ -192,32 +217,32 @@ body::after {
     flex-direction: row;
 }
 
-.fld-mapviz-filter-buttons {
+.fl-mapviz-filter-buttons {
     justify-content: space-evenly;
 
-    /** TODO: Same as fld-mapviz-filters **/
+    /** TODO: Same as fl-mapviz-filters **/
     margin-bottom: 5px;
     margin-top: 5px;
     width: 21rem;
 }
 
-.fld-mapviz-apply-filters,
-.fld-mapviz-reset-filters {
+.fl-mapviz-apply-filters,
+.fl-mapviz-reset-filters {
     display: inline-block;
     height: 46px;
     margin: 8px;
     width: 45px;
 }
 
-.fld-mapviz-apply-filters {
+.fl-mapviz-apply-filters {
     background-image: url("../img/ApplyFilters.svg");
 }
 
-.fld-mapviz-reset-filters {
+.fl-mapviz-reset-filters {
     background-image: url("../img/ResetFilters.svg");
 }
 
-.fld-mapviz-search-results {
+.fl-mapviz-search-results {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -227,7 +252,7 @@ body::after {
     order: -1;
 }
 
-.fld-mapviz-search-result {
+.fl-mapviz-search-result {
     border-bottom: 1px solid #c4c4c4;
     padding: 10px;
 }
@@ -250,7 +275,7 @@ body::after {
     order: 2;
 }
 
-.fld-mapviz-search-result-pagination {
+.fl-mapviz-search-result-pagination {
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -259,7 +284,7 @@ body::after {
     user-select: none;
 }
 
-.fld-mapviz-page-left {
+.fl-mapviz-page-left {
     background-image: url(../img/Page-left.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -269,7 +294,7 @@ body::after {
     width: 40px;
 }
 
-.fld-mapviz-page-right {
+.fl-mapviz-page-right {
     background-image: url(../img/Page-right.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -292,65 +317,65 @@ body::after {
         order: 0;
     }
 
-    .fld-mapviz-query {
+    .fl-mapviz-query {
         margin-top: 20px;
         position: absolute;
         z-index: 999;
     }
 }
 
-.fld-mapviz-hospital-panel > div {
+.fl-mapviz-hospital-panel > div {
     padding: 5px;
 }
 
-.fld-mapviz-hospital-panel .fld-mapviz-hospital-title {
+.fl-mapviz-hospital-panel .fl-mapviz-hospital-title {
     background: #fbdc90;
     font-size: 35px;
     padding: 10px;
 }
 
-.fld-mapviz-search-results .fld-mapviz-hospital-title {
+.fl-mapviz-search-results .fl-mapviz-hospital-title {
     font-weight: 700;
 }
 
 /** Styling for each filter row **/
 
-.fld-mapviz-filter-entrances {
+.fl-mapviz-filter-entrances {
     background: #6796c8;
 }
 
-.fld-mapviz-filter-entrances .fld-mapviz-filter-icon {
+.fl-mapviz-filter-entrances .fl-mapviz-filter-icon {
     background-image: url(../img/Entrances.svg);
 }
 
-.fld-mapviz-filter-washrooms {
+.fl-mapviz-filter-washrooms {
     background: #acdeeb;
 }
 
-.fld-mapviz-filter-washrooms .fld-mapviz-filter-icon {
+.fl-mapviz-filter-washrooms .fl-mapviz-filter-icon {
     background-image: url(../img/Washrooms.svg);
 }
 
-.fld-mapviz-filter-parking {
+.fl-mapviz-filter-parking {
     background: #cee6c5;
 }
 
-.fld-mapviz-filter-parking .fld-mapviz-filter-icon {
+.fl-mapviz-filter-parking .fl-mapviz-filter-icon {
     background-image: url(../img/Parking.svg);
 }
 
-.fld-mapviz-filter-individual {
+.fl-mapviz-filter-individual {
     background: #fbdc90;
 }
 
-.fld-mapviz-filter-individual .fld-mapviz-filter-icon {
+.fl-mapviz-filter-individual .fl-mapviz-filter-icon {
     background-image: url(../img/Individual.svg);
 }
 
-.fld-mapviz-filter-wait {
+.fl-mapviz-filter-wait {
     background: #fcb33f;
 }
 
-.fld-mapviz-filter-wait .fld-mapviz-filter-icon {
+.fl-mapviz-filter-wait .fl-mapviz-filter-icon {
     background-image: url(../img/Wait.svg);
 }

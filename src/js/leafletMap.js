@@ -10,8 +10,8 @@ var hortis = fluid.registerNamespace("hortis");
 fluid.defaults("hortis.leafletMap", {
     gradeNames: "fluid.viewComponent",
     selectors: {
-        map: ".fld-mapviz-map",
-        tooltip: ".fld-mapviz-map-tooltip"
+        map: ".fl-mapviz-map",
+        tooltip: ".fl-mapviz-map-tooltip"
     },
     members: {
         map: "@expand:L.map({that}.dom.map.0, {that}.options.mapOptions)"
@@ -19,6 +19,7 @@ fluid.defaults("hortis.leafletMap", {
     events: {
         buildMap: null
     },
+    zoomDuration: 2, // Animation duration in seconds
     mapOptions: {
         zoomSnap: 0.1
     },
@@ -27,15 +28,16 @@ fluid.defaults("hortis.leafletMap", {
     },
     datasets: {},
     markup: {
-        tooltip: "<div class=\"fld-mapviz-tooltip\"></div>",
+        tooltip: "<div class=\"fl-mapviz-tooltip\"></div>",
         tooltipHeader: "<table>",
         tooltipRow: "<tr><td class=\"fl-tooltip-key\">%key: </td><td class=\"fl-tooltip-value\">%value</td>",
         tooltipFooter: "</table>"
     },
-    fitBounds: [[41.6,-95.2],[56.9,-74.3]],
+    // We can't default this because of https://issues.fluidproject.org/browse/FLUID-6587
+    // outerBounds: "@expand:fluid.geom.emptyBounds()",
     listeners: {
         "buildMap.bindZoom": "hortis.leafletMap.bindZoom",
-        "buildMap.fitBounds": "hortis.leafletMap.fitBounds({that}, {that}.options.fitBounds)",
+        "buildMap.fitBounds": "{that}.fitBounds({that}.options.outerBounds)",
         "buildMap.createTooltip": "hortis.leafletMap.createTooltip({that}, {that}.options.markup)",
         "buildMap.addTiles": "hortis.leafletMap.addTileLayer({that}.map, {that}.options.tileOptions)"
     },
@@ -44,7 +46,8 @@ fluid.defaults("hortis.leafletMap", {
     },
     invokers: {
         // Perhaps this will one day be a "materialiser registration" and we will instead call applier.pullModel("zoom")
-        acquireZoom: "hortis.leafletMap.acquireZoom({that})"
+        acquireZoom: "hortis.leafletMap.acquireZoom({that})",
+        fitBounds: "hortis.leafletMap.fitBounds({that}, {arguments}.0, {arguments}.1)"
     },
     modelListeners: {
         "": {
@@ -55,6 +58,18 @@ fluid.defaults("hortis.leafletMap", {
         }
     }
 });
+
+hortis.leafletMap.boundsToLeaflet = function (bounds) {
+    return [
+        hortis.leafletMap.leafletPoint(bounds.min),
+        hortis.leafletMap.leafletPoint(bounds.max)
+    ];
+};
+
+// Leaflet breaks with consensus and accepts coordinates in the opposite order - https://macwright.com/lonlat/
+hortis.leafletMap.leafletPoint = function (point) {
+    return [point[1], point[0]];
+};
 
 hortis.leafletMap.acquireZoom = function (map) {
     map.applier.change("zoom", map.map.getZoom());
@@ -68,9 +83,9 @@ hortis.leafletMap.bindZoom = function (map) {
     });
 };
 
-hortis.leafletMap.fitBounds = function (map, fitBounds) {
+hortis.leafletMap.fitBounds = function (map, fitBounds, fly) {
     if (fitBounds) {
-        map.map.fitBounds(fitBounds);
+        map.map[fly ? "flyToBounds" : "fitBounds"](hortis.leafletMap.boundsToLeaflet(fitBounds), {duration: map.options.zoomDuration});
         map.acquireZoom();
     }
 };

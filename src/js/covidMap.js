@@ -16,8 +16,8 @@ fluid.defaults("fluid.covidMap.pagerBar", {
         }
     },
     selectors: {
-        previous: ".fld-mapviz-page-left",
-        next: ".fld-mapviz-page-right"
+        previous: ".fl-mapviz-page-left",
+        next: ".fl-mapviz-page-right"
     }
 });
 
@@ -49,7 +49,7 @@ fluid.defaults("fluid.covidMap.pager", {
         }
     },
     selectors: {
-        summary: ".fld-mapviz-pagination-summary",
+        summary: ".fl-mapviz-pagination-summary",
         // Note that we just about get away with the Pager's notion of a "pager bar" since we created a container for its
         // buttons - but how would we accommodate, e.g., a model where the user wanted the summary duplicated etc.?
         // Note that the pager has an interesting model of "duplicated but not repeating" components. This can't be accommodated
@@ -58,7 +58,7 @@ fluid.defaults("fluid.covidMap.pager", {
         // so that a boolean lensed component or unlensed component could duplicate itself into multiple containers - but still, this would
         // imply a mismatch in cardinality of the model source and the number of instantiated components. We would better turn these into
         // distinct subcomponents with distinct DOM binder selectors and linked models.
-        pagerBar: ".fld-mapviz-pagination-buttons"
+        pagerBar: ".fl-mapviz-pagination-buttons"
     },
     invokers: {
         acquireDefaultRange: { // TODO: Totally absurd integration model for Pager
@@ -72,10 +72,10 @@ fluid.defaults("fluid.covidMap.pager", {
 fluid.defaults("fluid.covidMap.hospitalRenderer", {
     gradeNames: "fluid.modelComponent",
     selectors: {
-        hospitalTitle: ".fld-mapviz-hospital-title",
-        hospitalHours: ".fld-mapviz-hospital-hours",
-        hospitalAddress: ".fld-mapviz-hospital-address",
-        hospitalPhone:  ".fld-mapviz-hospital-phone"
+        hospitalTitle: ".fl-mapviz-hospital-title",
+        hospitalHours: ".fl-mapviz-hospital-hours",
+        hospitalAddress: ".fl-mapviz-hospital-address",
+        hospitalPhone:  ".fl-mapviz-hospital-phone"
     },
     modelRelay: {
         hospitalTitle: {
@@ -106,16 +106,23 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
 fluid.covidMap.extractCities = function (rows, field) {
     var cities = fluid.getMembers(rows, field);
     var cityHash = fluid.arrayToHash(cities);
-    return Object.keys(cityHash);
+    return Object.keys(cityHash).sort();
 };
 
 fluid.defaults("fluid.covidMap.map", {
     gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
+    // Colours currently unused, may be again when we inline SVG markers
     colours: {
         accessible: "#0f0",
         inaccessible: "#f00"
     },
+    parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
     smallMarkersBelowZoom: 9,
+    outerBounds: {
+        min: [-95.2, 41.6],
+        max: [-74.3, 56.9]
+    },
+    boundsBuffer: 0.01,
     fields: {
         city: "city",
         name: "location_name",
@@ -124,44 +131,49 @@ fluid.defaults("fluid.covidMap.map", {
     },
     filters: {
         entrances: {
-            selector: ".fld-mapviz-filter-entrances",
+            selector: ".fl-mapviz-filter-entrances",
             column: "Wheelchair-accessible entrance"
         },
         washroom: {
-            selector: ".fld-mapviz-filter-washrooms",
+            selector: ".fl-mapviz-filter-washrooms",
             column: "Wheelchair-accessible bathrooms"
         },
         parking: {
-            selector: ".fld-mapviz-filter-parking",
+            selector: ".fl-mapviz-filter-parking",
             column: "Accessible parking"
         },
         individual: {
-            selector: ".fld-mapviz-filter-individual",
+            selector: ".fl-mapviz-filter-individual",
             column: "Personalized or individual service is offered"
         },
         wait: {
-            selector: ".fld-mapviz-filter-wait",
+            selector: ".fl-mapviz-filter-wait",
             column: "Queue accomodations"
         }
     },
     unselectedFilterChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.filters)",
-    parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
     selectors: {
-        query: ".fld-mapviz-query",
-        pager: ".fld-mapviz-search-result-pagination",
-        resultsPage: ".fld-mapviz-search-results",
-        hospitalPanel: ".fld-mapviz-hospital-panel",
+        query: ".fl-mapviz-query",
+        pager: ".fl-mapviz-search-result-pagination",
+        resultsPage: ".fl-mapviz-search-results",
+        hospitalPanel: ".fl-mapviz-hospital-panel",
         attribution: ".leaflet-control-attribution",
-        resetButton: ".fld-mapviz-reset-filters",
-        applyButton: ".fld-mapviz-reset-filters",
+        resetButton: ".fl-mapviz-reset-filters",
+        applyButton: ".fl-mapviz-reset-filters",
         filterPanel: ".fl-mapviz-filter-panel",
-        filterControl: ".fld-filter-control",
-        filterCount: ".fld-filter-count"
+        filterControl: ".fl-mapviz-filter-control",
+        filterCount: ".fl-mapviz-filter-count",
+        queryHolder: ".fl-mapviz-query-holder",
+        queryReset: ".fl-mapviz-query-reset",
+        query: "#fl-search-query"
+    },
+    ids: {
+        searchQuery: "fl-search-query"
     },
     listeners: {
         "buildMap.addMarkers": {
             funcName: "fluid.covidMap.addMarkers",
-            args: ["{that}", "{that}.options.parsedColours", "{that}.options.markup)"],
+            args: ["{that}"],
             priority: "last"
         }
     },
@@ -183,7 +195,6 @@ fluid.defaults("fluid.covidMap.map", {
     members: {
         rowMarkers: [] // an array of Leaflet.Marker constructed during buildMap.addMarkers
     },
-    // TODO: Allow resources to be defaulted in a civilized manner
     templateUrl: null,
     searchResultTemplateUrl: null,
     iconPrefix: "",
@@ -243,6 +254,10 @@ fluid.defaults("fluid.covidMap.map", {
             func: "fluid.transforms.indexToBooleans"
         },
         // Query state
+        query: {
+            target: "query",
+            source: "dom.query.value"
+        },
         matchedRows: {
             target: "matchedRows",
             func: "fluid.covidMap.doQuery",
@@ -252,6 +267,12 @@ fluid.defaults("fluid.covidMap.map", {
             target: "matchedRowIndices",
             source: "matchedRows",
             func: "fluid.transforms.setMembershipToArray"
+        },
+        // Query reset visibility
+        queryResetVisible: {
+            source: "query",
+            target: "dom.queryReset.visible",
+            func: query => !!query
         },
         // Paging state
         visiblePageIndices: {
@@ -304,11 +325,12 @@ fluid.defaults("fluid.covidMap.map", {
             },
             args: "{that}"
         },
-        // reset and apply buttons
-        "resetFilters": {
-            path: "{resetButton}.model.activate",
-            changePath: "{map}.model.uiFilterChecks",
-            value: "{that}.options.unselectedFilterChecks"
+        // Marker visibility
+        "markerVisibility": {
+            path: "matchedRows",
+            excludeSource: "init",
+            funcName: "fluid.covidMap.updateMarkerVisibility",
+            args: ["{that}", "{change}.value"]
         }
     },
     components: {
@@ -333,11 +355,40 @@ fluid.defaults("fluid.covidMap.map", {
         },
         resetButton: {
             type: "fluid.styledButton",
-            container: "{that}.dom.resetButton"
+            container: "{that}.dom.resetButton",
+            options: {
+                modelListeners: {
+                    "resetFilters": {
+                        path: "activate",
+                        changePath: "{map}.model.uiFilterChecks",
+                        value: "{map}.options.unselectedFilterChecks"
+                    }
+                }
+            }
         },
         applyButton: {
             type: "fluid.styledButton",
             container: "{that}.dom.applyButton"
+        },
+        resetQueryButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.queryReset",
+            options: {
+                modelListeners: {
+                    "resetQuery": {
+                        path: "activate",
+                        changePath: "{map}.model.query",
+                        value: ""
+                    }
+                }
+            }
+        },
+        autocomplete: {
+            type: "fluid.covidMap.autocomplete",
+            container: "{that}.dom.queryHolder",
+            options: {
+                id: "{map}.options.ids.searchQuery"
+            }
         },
         selectedHospitalPane: {
             type: "fluid.covidMap.hospitalRenderer",
@@ -348,7 +399,7 @@ fluid.defaults("fluid.covidMap.map", {
                     row: "{map}.model.selectedHospital"
                 },
                 selectors: {
-                    hospitalWebsite: ".fld-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
+                    hospitalWebsite: ".fl-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
                 },
                 modelRelay: {
                     hospitalWebsite: {
@@ -442,10 +493,10 @@ fluid.defaults("fluid.covidMap.filter", {
     gradeNames: "fluid.viewComponent",
     // key: String
     selectors: {
-        checkbox: ".flc-checkbox-holder",
-        tooltipIcon: ".fld-mapviz-filter-tooltip-icon",
-        tooltip: ".fld-mapviz-filter-tooltip",
-        title: ".fld-mapviz-filter-title" // currently unused
+        checkbox: ".fl-checkbox-holder",
+        tooltipIcon: ".fl-mapviz-filter-tooltip-icon",
+        tooltip: ".fl-mapviz-filter-tooltip",
+        title: ".fl-mapviz-filter-title" // currently unused
     },
     components: {
         checkbox: {
@@ -454,6 +505,21 @@ fluid.defaults("fluid.covidMap.filter", {
         }
     }
 });
+
+fluid.defaults("fluid.covidMap.autocomplete", {
+    gradeNames: "hortis.autocomplete",
+    invokers: {
+        query: "fluid.covidMap.autocomplete.query({map}.model.cities, {arguments}.0, {arguments}.1)"
+    }
+});
+
+fluid.covidMap.autocomplete.query = function (cities, query, callback) {
+    var lower = query.trim().toLowerCase();
+    var queried = cities.filter(function (city) {
+        return city.toLowerCase().startsWith(lower);
+    });
+    callback(queried);
+};
 
 // Stupid utility to compensate for lack of this-ism in expander resolution
 fluid.covidMap.findSelector = function (scope, selector) {
@@ -499,7 +565,7 @@ fluid.defaults("fluid.activatableComponent", {
 fluid.defaults("fluid.styledCheckbox", {
     gradeNames: "fluid.activatableComponent",
     selectors: {
-        control: ".fld-mapviz-checkbox"
+        control: ".fl-mapviz-checkbox"
     },
     model: {
         // checked: Boolean
@@ -517,14 +583,14 @@ fluid.defaults("fluid.styledCheckbox", {
     },
 
     markup: {
-        container: "<label class=\"flc-checkbox-holder\" tabindex=\"0\"><input class=\"fld-mapviz-checkbox visually-hidden\" tabindex=\"-1\" type=\"checkbox\"><span></span></label>"
+        container: "<label class=\"fl-checkbox-holder\" tabindex=\"0\"><input class=\"fl-mapviz-checkbox visually-hidden\" tabindex=\"-1\" type=\"checkbox\"><span></span></label>"
     }
 });
 
 fluid.defaults("fluid.styledButton", {
     gradeNames: "fluid.activatableComponent",
     markup: {
-        container: "<a class=\"fld-mapviz-apply-filters flc-mapviz-hoverable\" tabindex=\"0\"></a>"
+        container: "<a class=\"fl-mapviz-apply-filters fl-mapviz-hoverable\" tabindex=\"0\"></a>"
     },
     modelRelay: {
         clickToActivate: {
@@ -540,7 +606,7 @@ fluid.defaults("fluid.covidMap.map.resultsPage", {
         // visiblePageIndices: []
     },
     selectors: {
-        resultList: ".fld-mapviz-search-result-list"
+        resultList: ".fl-mapviz-search-result-list"
     },
     listeners: {
         // TODO: eliminate this workflow when we move to real renderer
@@ -632,21 +698,31 @@ fluid.covidMap.renderAddress = function (row) {
     return row.address + ", " + row.city + ", " + row.province + " " + row.postal_code;
 };
 
+fluid.covidMap.isPostcodeStart = function (query) {
+    return query.match(/[a-z][a-z][0-9]/i);
+};
+
 fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
-    var tokens = query.split(" ").map(s => s.trim()).filter(t => t);
+    var normalised = query.trim();
+    var isPostcodeQuery = fluid.covidMap.isPostcodeStart(normalised);
     var noChecks = fluid.hashToArray(activeChecks).every(a => !a);
     // var checksActive = activeChecks.some(a => a) && activeChecks.some(a => !a);
-    var selected = rows.map(function (row) {
-        var address = fluid.covidMap.renderAddress(row);
-        var matchTokens = tokens.length ? tokens.some(t => address.contains(t)) : true;
+    var anyMatched = false;
+    var matched = rows.map(function (row) {
+        var matchQuery = (isPostcodeQuery ? row.postal_code : row.city).startsWith(query);
         var checkMatches = fluid.transform(checks, function (record, key) {
             var value = row[record.column];
             return !activeChecks[key] || value.contains("Yes");
         });
         var matchChecks = noChecks || fluid.hashToArray(checkMatches).every(a => a);
-        return matchTokens && matchChecks;
+        var match = matchQuery && matchChecks;
+        anyMatched = anyMatched || match;
+        return match;
     });
-    return selected;
+    if (!anyMatched) {
+        matched = fluid.generate(rows.length, true);
+    }
+    return matched;
 };
 
 fluid.covidMap.updateMarker = function (that, index) {
@@ -659,12 +735,40 @@ fluid.covidMap.updateMarker = function (that, index) {
         var marker = that.rowMarkers[index];
         marker.setIcon(markerIcon);
         marker._icon.removeAttribute("tabindex");
+        $(marker._icon).toggleClass("visually-hidden", !that.model.matchedRows[index]);
     }
 };
 
 fluid.covidMap.updateMarkers = function (that, index1, index2) {
     fluid.covidMap.updateMarker(that, index1);
     fluid.covidMap.updateMarker(that, index2);
+};
+
+fluid.covidMap.computeBounds = function (rows, matched, buffer) {
+    var bounds = fluid.geom.emptyBounds();
+    rows.forEach(function (row, index) {
+        if (matched[index]) {
+            fluid.geom.updateBounds(bounds, row.longitude, row.latitude);
+        }
+    });
+    if (!fluid.geom.isEmptyBounds(bounds)) {
+        fluid.geom.expandBounds(bounds, buffer);
+    }
+    return bounds;
+};
+
+fluid.covidMap.updateMarkerVisibility = function (that, matchedRows) {
+    var allMatched = true;
+    matchedRows.forEach(function (matched, index) {
+        var marker = that.rowMarkers[index];
+        if (marker) { // Some rows may not have valid coordinates and hence no markers
+            $(marker._icon).toggleClass("visually-hidden", !matched);
+        }
+        allMatched = allMatched && matched;
+    });
+    var matchedBounds = fluid.covidMap.computeBounds(that.model.rows, matchedRows, that.options.boundsBuffer);
+    var bounds = fluid.geom.isEmptyBounds(matchedBounds) || allMatched ? that.options.outerBounds : matchedBounds;
+    that.fitBounds(bounds, true);
 };
 
 fluid.covidMap.showPageForIndex = function (that, newIndex) {

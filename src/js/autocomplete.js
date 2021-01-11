@@ -16,9 +16,17 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 var hortis = fluid.registerNamespace("hortis");
 
 fluid.defaults("hortis.autocomplete", {
-    gradeNames: ["fluid.newViewComponent"],
-    listeners: {
-        "onCreate.render": "hortis.autocomplete.render"
+    gradeNames: ["fluid.viewComponent"],
+    members: {
+        widget: "@expand:hortis.autocomplete.render({that}, {that}.options.id, {that}.options.widgetOptions)"
+    },
+    selectors: {
+        input: {
+            expander: {
+                func: function (id) {return "#" + id;},
+                args: "{that}.options.id"
+            }
+        }
     },
     events: {
         onConfirm: null
@@ -27,6 +35,9 @@ fluid.defaults("hortis.autocomplete", {
         query: "hortis.autocomplete.emptyQuery",
         renderSuggestion: "fluid.identity",
         renderInputValue: "fluid.identity"
+    },
+    listeners: {
+        "onConfirm.update": "hortis.autocomplete.confirmToUpdate({that}, {arguments}.0)"
     },
     widgetOptions: {
         displayMenu: "overlay"
@@ -37,18 +48,25 @@ hortis.autocomplete.emptyQuery = function (query, callback) {
     callback("");
 };
 
-hortis.autocomplete.render = function (that) {
-    var widgetOptions = $.extend({
+hortis.autocomplete.confirmToUpdate = function (that, selectedOption) {
+    // Broken implementation of accessible-autocomplete calls the "onConfirm" callback before it calls its "setState".
+    // So we need to ensure that the value of the input is correct at the time we try to read it.
+    fluid.changeElementValue(that.locate("input"), selectedOption);
+};
+
+hortis.autocomplete.render = function (that, id, widgetOptions) {
+    var mergedWidgetOptions = $.extend({
         element: that.container[0],
-        id: that.options.id,
+        id: id,
         source: that.query,
         templates: {
             suggestion: that.renderSuggestion,
             inputValue: that.renderInputValue
         },
         onConfirm: that.events.onConfirm.fire
-    }, that.options.widgetOptions);
-    that.widget = accessibleAutocomplete(widgetOptions);
+    }, widgetOptions);
+    var togo = accessibleAutocomplete(mergedWidgetOptions);
     // TODO: another one for the bestiary of reuse failures
     $("input", that.container).attr("spellcheck", false);
+    return togo;
 };
