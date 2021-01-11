@@ -1,79 +1,93 @@
-        <div>
-        <div class="fl-mapviz-container">
-            <div class="fl-mapviz-map-holder">
-                <div class="fl-query-holder">
-                    <label class="fl-mapviz-query-label" for="search-query">Search by postal code or city</label>
-                    <input type="text" class="fl-mapviz-query" id="search-query"/>
+        <div class="fl-mapviz-outer-container">
+            <div class="fl-mapviz-container">
+                <div class="fl-mapviz-map-holder">
+                    <div class="fl-mapviz-query-and-control-holder">
+                        <label class="fl-mapviz-query-label" for="fl-search-query">Search by postal code or city</label>
+                        <div class="fl-mapviz-control-holder">
+                            <div class="fl-mapviz-query-holder">
+                                <div class="fl-mapviz-query-reset-holder">
+                                    <div class="fl-mapviz-query-reset fl-mapviz-hoverable" style="display: none" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Reset the query">
+                                        <svg height="1rem" width="1rem"><use xlink:href="#QueryReset" /></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fl-mapviz-filter-control-holder">
+                                <div class="fl-mapviz-filter-control fl-mapviz-hoverable" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Collapse the accessibility filter list">
+                                    <svg><use xlink:href="#FilterControl" /></svg>
+                                </div>
+                                <div class="fl-mapviz-filter-count">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fl-mapviz-map"></div>
                 </div>
-                <div class="fl-mapviz-map">
+                <div class="fl-mapviz-filter-panel">
+                    <div class="fl-mapviz-filters">
+                        <div class="fl-mapviz-filter fl-mapviz-filter-entrances">
+                            <span class="fl-mapviz-filter-icon"></span>
+                            <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
+                            <span class="fl-mapviz-filter-tooltip"></span>
+                            <label class="fl-mapviz-filter-title" for="toggle-1">Accessible Entrances</label>
+                            <label class="fl-checkbox-holder" tabindex="0">
+                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-1" type="checkbox" value="true" />
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="fl-mapviz-filter fl-mapviz-filter-washrooms">
+                            <span class="fl-mapviz-filter-icon"></span>
+                            <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
+                            <span class="fl-mapviz-filter-tooltip"></span>
+                            <label class="fl-mapviz-filter-title" for="toggle-2">Accessible Washrooms</label>
+                            <label class="fl-checkbox-holder" tabindex="0">
+                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-2" type="checkbox" value="true" />
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="fl-mapviz-filter fl-mapviz-filter-parking">
+                            <span class="fl-mapviz-filter-icon"></span>
+                            <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
+                            <span class="fl-mapviz-filter-tooltip"></span>
+                            <label class="fl-mapviz-filter-title" for="toggle-3">Accessible Parking</label>
+                            <label class="fl-checkbox-holder" tabindex="0">
+                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-3" type="checkbox" value="true" />
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="fl-mapviz-filter fl-mapviz-filter-individual">
+                            <span class="fl-mapviz-filter-icon"></span>
+                            <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
+                            <span class="fl-mapviz-filter-tooltip"></span>
+                            <label class="fl-mapviz-filter-title" for="toggle-4">Individual Service</label>
+                            <label class="fl-checkbox-holder" tabindex="0">
+                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-4" type="checkbox" value="true" />
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="fl-mapviz-filter fl-mapviz-filter-wait">
+                            <span class="fl-mapviz-filter-icon"></span>
+                            <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
+                            <span class="fl-mapviz-filter-tooltip"></span>
+                            <label class="fl-mapviz-filter-title" for="toggle-5">Wait Accommodations</label>
+                            <label class="fl-checkbox-holder" tabindex="0">
+                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-6" type="checkbox" value="true" />
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="fl-mapviz-filter-buttons fl-mapviz-even-row">
+                        <span class="fl-mapviz-even-row">
+                            <a class="fl-mapviz-reset-filters fl-mapviz-hoverable" tabindex="0" id="reset-button"></a>
+                            <label for="reset-button">Reset Filters</label>
+                        </span>
+                        <span class="fl-mapviz-even-row">
+                            <a class="fl-mapviz-apply-filters fl-mapviz-hoverable" tabindex="0" id="apply-button"></a>
+                            <label for="apply-button">Apply Filters</label>
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div class="fl-mapviz-filter-panel">
-                <div class="fl-mapviz-filters">
-                   <div class="fl-mapviz-filter fl-mapviz-filter-entrances">
-                       <span class="fl-mapviz-filter-icon"></span>
-                       <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
-                       <span class="fl-mapviz-filter-tooltip"></span>
-                       <label class="fl-mapviz-filter-title" for="toggle-1">Accessible Entrances</label>
-                       <label class="fl-checkbox-holder">
-                           <input class="fl-mapviz-checkbox visually-hidden" id="toggle-1" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fl-mapviz-filter fl-mapviz-filter-washrooms">
-                       <span class="fl-mapviz-filter-icon"></span>
-                       <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
-                       <span class="fl-mapviz-filter-tooltip"></span>
-                       <label class="fl-mapviz-filter-title" for="toggle-2">Accessible Washrooms</label>
-                       <label class="fl-checkbox-holder">
-                           <input class="fl-mapviz-checkbox visually-hidden" id="toggle-2" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fl-mapviz-filter fl-mapviz-filter-parking">
-                       <span class="fl-mapviz-filter-icon"></span>
-                       <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
-                       <span class="fl-mapviz-filter-tooltip"></span>
-                       <label class="fl-mapviz-filter-title" for="toggle-3">Accessible Parking</label>
-                       <label class="fl-checkbox-holder">
-                           <input class="fl-mapviz-checkbox visually-hidden" id="toggle-3" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fl-mapviz-filter fl-mapviz-filter-individual">
-                       <span class="fl-mapviz-filter-icon"></span>
-                       <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
-                       <span class="fl-mapviz-filter-tooltip"></span>
-                       <label class="fl-mapviz-filter-title" for="toggle-4">Individual Service</label>
-                       <label class="fl-checkbox-holder">
-                           <input class="fl-mapviz-checkbox visually-hidden" id="toggle-4" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                   <div class="fl-mapviz-filter fl-mapviz-filter-wait">
-                       <span class="fl-mapviz-filter-icon"></span>
-                       <span class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable"></span>
-                       <span class="fl-mapviz-filter-tooltip"></span>
-                       <label class="fl-mapviz-filter-title" for="toggle-5">Wait Accommodations</label>
-                       <label class="fl-checkbox-holder">
-                           <input class="fl-mapviz-checkbox visually-hidden" id="toggle-6" type="checkbox"/>
-                           <span></span>
-                       </label>
-                   </div>
-                </div>
-                <div class="fl-mapviz-filter-buttons fl-mapviz-even-row">
-                   <span class="fl-mapviz-even-row">
-                       <a class="fl-mapviz-apply-filters fl-mapviz-hoverable" id="apply-button"></a>
-                       <label for="apply-button">Apply Filters</label>
-                   </span>
-                   <span class="fl-mapviz-even-row">
-                       <a class="fl-mapviz-reset-filters fl-mapviz-hoverable" id="reset-button"></a>
-                       <label for="reset-button">Reset Filters</label>
-                   </span>
-                </div>
-            </div>
-            <div class="fl-mapviz-search-results">
-                <div class="fl-mapviz-search-result-list"><!--
+                <div class="fl-mapviz-search-results">
+                    <div class="fl-mapviz-search-result-list">
+                        <!--
                     <div class="fl-mapviz-search-result">
                         <div class="fl-mapviz-hospital-title">Hospital 8</div>
                         <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
@@ -98,26 +112,41 @@
                         <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
                         <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
                     </div>-->
-                </div>
-                <div class="fl-mapviz-search-result-pagination">
-                    <span class="fl-mapviz-pagination-summary">Showing results 1-20 of 143</span>
-                    <span class="fl-mapviz-pagination-buttons">
-                        <a class="fl-mapviz-page-left fl-mapviz-hoverable" aria-label="page-left"></a>
-                        <a class="fl-mapviz-page-right fl-mapviz-hoverable" aria-label="page-right"></a>
-                    </span>
+                    </div>
+                    <div class="fl-mapviz-search-result-pagination">
+                        <span class="fl-mapviz-pagination-summary">Showing results 1-20 of 143</span>
+                        <span class="fl-mapviz-pagination-buttons">
+                            <a class="fl-mapviz-page-left fl-mapviz-hoverable" aria-label="page-left"></a>
+                            <a class="fl-mapviz-page-right fl-mapviz-hoverable" aria-label="page-right"></a>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
             <div class="fl-mapviz-hospital-panel" style="display: none;">
                 <div class="fl-mapviz-hospital-title">
                     Hospital 2
                 </div>
-                <div><b>Hours:</b> <span class="fl-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span> 
-                </div>
+                <div><b>Hours:</b> <span class="fl-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span></div>
                 <div><b>Location</b></div>
                 <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON M5G 1X5</div>
                 <div class="fl-mapviz-hospital-phone">+1 416-586-5054</div>
                 <div class="fl-mapviz-hospital-website">www.mountsinai.on.ca</div>
-                    
             </div>
+
+            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <symbol id="FilterControl" viewBox="0 0 32 23">
+                    <path d="M4.00127 3.89875C4.05478 2.2889 5.37707 1 7 1C8.65732 1 10 2.34366 10 3.99936C10 5.65506 8.65732 7 7 7C5.34268 7 4 5.65634 4 3.99936C4 3.96625 4.00127 3.93186 4.00127 3.89875Z" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M25 14.5C26.6569 14.5 28 13.1569 28 11.5C28 9.84315 26.6569 8.5 25 8.5C23.3431 8.5 22 9.84315 22 11.5C22 13.1569 23.3431 14.5 25 14.5Z" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13 22C14.6569 22 16 20.6569 16 19C16 17.3431 14.6569 16 13 16C11.3431 16 10 17.3431 10 19C10 20.6569 11.3431 22 13 22Z" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 4H31" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 4H4" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M28 11.5H31" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 11.5H22" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 19H31" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M1 19H10" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                </symbol>
+                <symbol id="QueryReset" viewBox="0 0 96 96" enable-background="new 0 0 96 96" xml:space="preserve">
+                    <polygon fill="#AAAAAB" points="96,14 82,0 48,34 14,0 0,14 34,48 0,82 14,96 48,62 82,96 96,82 62,48 "/>
+                </symbol>
+            </svg>
         </div>

@@ -18,7 +18,8 @@ var hortis = fluid.registerNamespace("hortis");
 fluid.defaults("hortis.autocomplete", {
     gradeNames: ["fluid.viewComponent"],
     members: {
-        widget: "@expand:hortis.autocomplete.render({that}, {that}.options.id, {that}.options.widgetOptions)"
+        // widget: "@expand:hortis.autocomplete.render({that}, {that}.options.id, {that}.options.widgetOptions)",
+        container: "@expand:hortis.autocomplete.renderContainer({that}, {that}.options.container, {that}.options.id, {that}.options.widgetOptions)"
     },
     selectors: {
         input: {
@@ -54,9 +55,16 @@ hortis.autocomplete.confirmToUpdate = function (that, selectedOption) {
     fluid.changeElementValue(that.locate("input"), selectedOption);
 };
 
-hortis.autocomplete.render = function (that, id, widgetOptions) {
+// TODO: What on earth happened to generalised interception !!
+hortis.autocomplete.renderContainer = function (that, containerOption, id, widgetOptions) {
+    var container = fluid.containerForViewComponent(that, containerOption);
+    that.widget = hortis.autocomplete.render(that, container, id, widgetOptions);
+    return container;
+};
+
+hortis.autocomplete.render = function (that, container, id, widgetOptions) {
     var mergedWidgetOptions = $.extend({
-        element: that.container[0],
+        element: container[0],
         id: id,
         source: that.query,
         templates: {
@@ -67,6 +75,6 @@ hortis.autocomplete.render = function (that, id, widgetOptions) {
     }, widgetOptions);
     var togo = accessibleAutocomplete(mergedWidgetOptions);
     // TODO: another one for the bestiary of reuse failures
-    $("input", that.container).attr("spellcheck", false);
+    $("input", container).attr("spellcheck", false);
     return togo;
 };

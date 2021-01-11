@@ -103,10 +103,26 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
     }
 });
 
+// TODO: Needs to be be copied back into framework
+fluid.copyImmutableResource = function (tocopy) {
+    var newContainer = fluid.isArrayable(tocopy) ? new fluid.ImmutableArray() : new fluid.ImmutableObject();
+    Object.assign(newContainer, tocopy);
+    if (tocopy.length) {
+        newContainer.length = tocopy.length;
+    }
+    return newContainer;
+};
+
 fluid.covidMap.extractCities = function (rows, field) {
     var cities = fluid.getMembers(rows, field);
     var cityHash = fluid.arrayToHash(cities);
-    return Object.keys(cityHash).sort();
+    return fluid.copyImmutableResource(Object.keys(cityHash).sort());
+};
+
+fluid.covidMap.extractPostcodes = function (rows, field) {
+    var postcodes = fluid.getMembers(rows, field);
+    var postcodeHash = fluid.arrayToHash(postcodes);
+    return postcodeHash;
 };
 
 fluid.defaults("fluid.covidMap.map", {
@@ -127,7 +143,8 @@ fluid.defaults("fluid.covidMap.map", {
         city: "city",
         name: "location_name",
         website: "website",
-        phone: "phone"
+        phone: "phone",
+        postcode: "postal_code"
     },
     filters: {
         entrances: {
@@ -179,6 +196,7 @@ fluid.defaults("fluid.covidMap.map", {
     },
     model: {
         cities: [],
+        postcodes: {},
         query: "",
         pageSize: 5,
         activeFilterChecks: "{that}.options.unselectedFilterChecks",
@@ -226,11 +244,16 @@ fluid.defaults("fluid.covidMap.map", {
         }
     },
     modelRelay: {
-        // Cities:
+        // Data mapping:
         cities: {
             target: "cities",
             func: "fluid.covidMap.extractCities",
             args: ["{that}.model.rows", "{that}.options.fields.city"]
+        },
+        postcodes: {
+            target: "postcodes",
+            func: "fluid.covidMap.extractPostcodes",
+            args: ["{that}.model.rows", "{that}.options.fields.postcode"]
         },
         // Selection and hover state
         isHospitalSelected: {
@@ -252,11 +275,6 @@ fluid.defaults("fluid.covidMap.map", {
             target: "hoveredRows",
             args: ["{that}.model.rows", "{that}.model.hoveredIndex"],
             func: "fluid.transforms.indexToBooleans"
-        },
-        // Query state
-        query: {
-            target: "query",
-            source: "dom.query.value"
         },
         matchedRows: {
             target: "matchedRows",
@@ -383,11 +401,17 @@ fluid.defaults("fluid.covidMap.map", {
                 }
             }
         },
-        autocomplete: {
+        query: {
             type: "fluid.covidMap.autocomplete",
             container: "{that}.dom.queryHolder",
             options: {
-                id: "{map}.options.ids.searchQuery"
+                id: "{map}.options.ids.searchQuery",
+                modelRelay: {
+                    query: {
+                        target: "{map}.model.query",
+                        source: "dom.input.value"
+                    }
+                }
             }
         },
         selectedHospitalPane: {
@@ -509,15 +533,25 @@ fluid.defaults("fluid.covidMap.filter", {
 fluid.defaults("fluid.covidMap.autocomplete", {
     gradeNames: "hortis.autocomplete",
     invokers: {
-        query: "fluid.covidMap.autocomplete.query({map}.model.cities, {arguments}.0, {arguments}.1)"
+        query: "fluid.covidMap.autocomplete.query({map}.model.cities, {map}.model.postcodes, {arguments}.0, {arguments}.1)"
     }
 });
 
-fluid.covidMap.autocomplete.query = function (cities, query, callback) {
+fluid.covidMap.autocomplete.query = function (cities, postcodes, query, callback) {
+    var queried;
     var lower = query.trim().toLowerCase();
-    var queried = cities.filter(function (city) {
-        return city.toLowerCase().startsWith(lower);
-    });
+    if (fluid.covidMap.isPostcodeStart(lower)) {
+        var upper = lower.toUpperCase();
+        var codes = Object.keys(postcodes);
+        var matches = codes.filter(function (code) {
+            return code.startsWith(upper);
+        });
+        queried = matches;
+    } else {
+        queried = Array.prototype.filter.call(cities, function (city) {
+            return city.toLowerCase().startsWith(lower);
+        });
+    }
     callback(queried);
 };
 
@@ -699,7 +733,7 @@ fluid.covidMap.renderAddress = function (row) {
 };
 
 fluid.covidMap.isPostcodeStart = function (query) {
-    return query.match(/[a-z][a-z][0-9]/i);
+    return query.match(/[a-z][0-9]/i);
 };
 
 fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
