@@ -1,7 +1,3 @@
-body {
-    font-family: sans-serif;
-}
-
 /** Preload all images **/
 body::after {
     content:
@@ -18,13 +14,13 @@ body::after {
 }
 
 /******** The panel with the query label, the query input box and the filter control button **********/
-.fl-search-label {
+.fl-mapviz-query-label {
     display: none;
     font-size: 1.125rem;
 }
 
 /* Contains both the search label and control div */
-.fld-mapviz-query-holder {
+.fl-mapviz-control-wrapper {
     align-items: start;
     display: flex;
     flex-direction: column;
@@ -35,14 +31,78 @@ body::after {
 }
 
 /* Contains both the search input box and the filter control button */
-.flc-control-holder {
+.fl-mapviz-control-holder {
+    display: grid;
+    grid-template-columns: auto 6rem;
+}
+
+.fl-mapviz-filter-control-holder {
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.fl-mapviz-filter-control {
+    height: 2rem;
+    margin-left: 0.7rem;
+    margin-right: 0.7rem;
+    width: 100%;
+}
+
+.fl-mapviz-filter-control svg {
+    height: 32px;
+    width: 23px;
+}
+
+.fl-mapviz-filter-control-holder .fl-mapviz-filter-count {
+    margin-right: 0.5rem;
+}
+
+.fl-mapviz-query-reset-holder {
+    position: relative;
+}
+
+.fl-mapviz-query-reset {
+    height: 1rem;
+    position: absolute;
+    right: 0.6rem;
+    top: 0.5rem;
+    z-index: 900;
+}
+
+.fl-mapviz-query-holder input {
+    background-image: url(../img/Search.svg);
+    background-position: 5px;
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    border-radius: 1.5rem;
+    height: 2rem;
+    padding-left: 2rem;
+    width: 100%;
+}
+
+/** This markup is injected by the autocomplete widget **/
+.fl-mapviz-query-holder ul {
+    margin-block-end: 0;
+    margin-block-start: 0;
+}
+
+/** Override this from leaflet.css so that the autocomplete dropdown doesn't pop behind it **/
+
+.leaflet-pane {
+    z-index: 0;
+}
+
+/* .fl-mapviz-control-holder {
     display: grid;
     grid-template-columns: 80% 20%;
     width: 90%;
 }
 
-/* The query input box */
-.fld-mapviz-query {
+.fl-mapviz-query-holder input {
     background-image: url(../img/Search.svg);
     background-position: 0.3rem;
     background-repeat: no-repeat;
@@ -68,15 +128,15 @@ body::after {
 
 .fld-filter-control span {
     margin: 0.5rem 0 0 0.2rem;
-}
+} */
 
 /* The map */
-.fld-mapviz-map {
+.fl-mapviz-map {
     height: 100vh;
 }
 
 /* The map tooltip pane */
-.fld-mapviz-map-tooltip {
+.fl-mapviz-map-tooltip {
     background-color: white;
     border: 1px solid black;
     font-size: 0.9rem;
@@ -87,15 +147,15 @@ body::after {
     z-index: 800;
 }
 
-.fld-mapviz-map-tooltip tr:nth-child(even) {
+.fl-mapviz-map-tooltip tr:nth-child(even) {
     background: #eee;
 }
 
-.fld-mapviz-map-tooltip tr:nth-child(odd) {
+.fl-mapviz-map-tooltip tr:nth-child(odd) {
     background: #fff;
 }
 
-.fld-mapviz-map-tooltip table {
+.fl-mapviz-map-tooltip table {
     border-collapse: collapse;
 }
 
@@ -116,13 +176,13 @@ body::after {
 }
 
 /* All a11y feature list */
-.fld-mapviz-filters {
+.fl-mapviz-filters {
     display: flex;
     flex-direction: column;
 }
 
 /* Individual a11y feature */
-.fld-mapviz-filter {
+.fl-mapviz-filter {
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -130,7 +190,7 @@ body::after {
 }
 
 /* The title of each a11y feature */
-.fld-mapviz-filter-title {
+.fl-mapviz-filter-title {
     display: inline-block;
     font-family: Fira Sans, Arial Narrow, Arial, Helvetica, sans-serif;
     font-size: 1.5rem;
@@ -144,7 +204,7 @@ body::after {
 }
 
 /* The checkbox for each a11y feature */
-.flc-checkbox-holder span {
+.fl-checkbox-holder span {
     background-image: url("../img/Checkbox-unselected.svg");
     background-position: center;
     background-repeat: no-repeat;
@@ -155,16 +215,16 @@ body::after {
     width: 31px;
 }
 
-.flc-checkbox-holder span:hover {
+.fl-checkbox-holder span:hover {
     outline: 1px solid #000;
 }
 
-.flc-checkbox-holder input:checked + span {
+.fl-checkbox-holder input:checked + span {
     background-image: url("../img/Checkbox-selected.svg");
 }
 
 /* The icon for each a11y feature */
-.fld-mapviz-filter-icon {
+.fl-mapviz-filter-icon {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 3.125rem 3.125rem;
@@ -176,7 +236,7 @@ body::after {
 }
 
 /* The tooltip icon for each a11y feature */
-.fld-mapviz-filter-tooltip-icon {
+.fl-mapviz-filter-tooltip-icon {
     background-image: url(../img/Tooltip-icon.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -202,18 +262,18 @@ body::after {
 }
 
 /* The parent container of filter buttons */
-.fld-mapviz-filter-buttons {
+.fl-mapviz-filter-buttons {
     height: 5rem;
     justify-content: space-evenly;
 
-    /** TODO: Same as fld-mapviz-filters **/
+    /** TODO: Same as fl-mapviz-filters **/
     margin-bottom: 0.3rem;
     margin-top: 0.3rem;
 }
 
 /* "apply filters" and "reset filters" buttons */
-.fld-mapviz-apply-filters,
-.fld-mapviz-reset-filters {
+.fl-mapviz-apply-filters,
+.fl-mapviz-reset-filters {
     display: inline-block;
     height: 1.625rem;
     margin: 0.5rem;
@@ -221,19 +281,29 @@ body::after {
 }
 
 /* The "apply filters" button */
-.fld-mapviz-apply-filters {
+.fl-mapviz-apply-filters {
     background-image: url("../img/ApplyFilters.svg");
 }
 
 /* The "reset filters" button */
-.fld-mapviz-reset-filters {
+.fl-mapviz-reset-filters {
     background-image: url("../img/ResetFilters.svg");
 }
 
-/******** The panel for displaying cities or search results ********/
+/******** The city list panel ********/
+
+.fl-mapviz-city-list {
+    display: none;
+}
+
+.fl-mapviz-city-list-title h2 {
+    margin: 0;
+}
+
+/******** The search results panel ********/
 
 /* The main container */
-.fld-mapviz-city-and-results {
+.fl-mapviz-search-results {
     background-color: white;
     border-radius: 1rem 1rem 0 0;
     bottom: 0;
@@ -245,11 +315,11 @@ body::after {
     overflow-y: scroll;
     position: fixed;
     width: 100%;
-    z-index: 999;
+    z-index: 1;
 }
 
 /* The expand/collapse button and the panel heading */
-.fl-mapviz-city-and-results-expand-button {
+.fl-mapviz-expand-collapse-button-holder {
     align-self: center;
     background: none;
     border: none;
@@ -257,31 +327,30 @@ body::after {
     width: 4rem;
 }
 
-.fl-mapviz-city-and-results-expand-button svg {
+.fl-mapviz-expand-collapse-button-holder svg {
     fill: white;
     height: 0.7rem;
     width: 1.4rem;
 }
 
 /* When the city list/search results panel is collapsed, hide all relevant elements */
-.fl-mapviz-city-and-results-expand-button[aria-expanded="true"] > .fld-mapviz-expand-button,
-.fl-mapviz-city-and-results-expand-button[aria-expanded="false"] > .fld-mapviz-collapse-button,
-.fl-mapviz-city-and-results-expand-button[aria-expanded="false"] ~ .fld-mapviz-city-and-result-list,
-.fl-mapviz-city-and-results-expand-button[aria-expanded="false"] ~ .fld-mapviz-search-result-pagination {
+.fl-mapviz-expand-collapse-button-holder[aria-expanded="true"] > .fl-mapviz-expand-button,
+.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] > .fl-mapviz-collapse-button,
+.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-list,
+.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-pagination {
     display: none;
 }
 
-.fld-mapviz-city-and-results-title {
+.fl-mapviz-back-button-holder {
     align-self: center;
     display: inline-flex;
 }
 
-.fld-mapviz-city-and-results-title h2,
-.fld-mapviz-city-and-results-title h3 {
+.fl-mapviz-back-button-holder h3 {
     margin: 0;
 }
 
-.fld-mapviz-city-and-results-title svg {
+.fl-mapviz-back-button-holder svg {
     fill: white;
     height: 2rem;
     margin-right: 0.5rem;
@@ -295,7 +364,7 @@ body::after {
     padding: 0.5rem 0 0.5rem 0;
 }
 
-.fld-mapviz-search-result .fld-mapviz-hospital-title {
+.fld-mapviz-search-result .fl-mapviz-hospital-title {
     font-weight: 700;
 }
 
@@ -311,7 +380,7 @@ body::after {
 }
 
 /* The search result panel -> pagination container that holds the summary text and pagination buttons */
-.fld-mapviz-search-result-pagination {
+.fl-mapviz-search-result-pagination {
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -321,7 +390,7 @@ body::after {
 }
 
 /* The "go backward" pagination button */
-.fld-mapviz-page-left {
+.fl-mapviz-page-left {
     background-image: url(../img/Page-left.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -332,7 +401,7 @@ body::after {
 }
 
 /* The "go forward" pagination button */
-.fld-mapviz-page-right {
+.fl-mapviz-page-right {
     background-image: url(../img/Page-right.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -343,11 +412,11 @@ body::after {
 }
 
 /******** The hosptial description panel ********/
-.fld-mapviz-hospital-panel > div {
+.fl-mapviz-hospital-panel > div {
     padding: 0.3rem;
 }
 
-.fld-mapviz-hospital-panel .fld-mapviz-hospital-title {
+.fl-mapviz-hospital-panel .fl-mapviz-hospital-title {
     background: #fbdc90;
     font-size: 2.2rem;
     padding: 0.5rem;
@@ -355,52 +424,47 @@ body::after {
 
 /** Styling for each filter row **/
 
-.fld-mapviz-filter-entrances {
+.fl-mapviz-filter-entrances {
     background: #6796c8;
 }
 
-.fld-mapviz-filter-entrances .fld-mapviz-filter-icon {
+.fl-mapviz-filter-entrances .fl-mapviz-filter-icon {
     background-image: url(../img/Entrances.svg);
 }
 
-.fld-mapviz-filter-washrooms {
+.fl-mapviz-filter-washrooms {
     background: #acdeeb;
 }
 
-.fld-mapviz-filter-washrooms .fld-mapviz-filter-icon {
+.fl-mapviz-filter-washrooms .fl-mapviz-filter-icon {
     background-image: url(../img/Washrooms.svg);
 }
 
-.fld-mapviz-filter-parking {
+.fl-mapviz-filter-parking {
     background: #cee6c5;
 }
 
-.fld-mapviz-filter-parking .fld-mapviz-filter-icon {
+.fl-mapviz-filter-parking .fl-mapviz-filter-icon {
     background-image: url(../img/Parking.svg);
 }
 
-.fld-mapviz-filter-individual {
+.fl-mapviz-filter-individual {
     background: #fbdc90;
 }
 
-.fld-mapviz-filter-individual .fld-mapviz-filter-icon {
+.fl-mapviz-filter-individual .fl-mapviz-filter-icon {
     background-image: url(../img/Individual.svg);
 }
 
-.fld-mapviz-filter-wait {
+.fl-mapviz-filter-wait {
     background: #fcb33f;
 }
 
-.fld-mapviz-filter-wait .fld-mapviz-filter-icon {
+.fl-mapviz-filter-wait .fl-mapviz-filter-icon {
     background-image: url(../img/Wait.svg);
 }
 
 @media screen and (min-width: 1024px) {
-    /* TODO: "body" definition should be moved out of the map css file */
-    body {
-        margin: 0.5rem;
-    }
-
     /******** The main container holding all 3 panels: map, a11y feature list and search results ********/
 
     /* Start: arrange positions of sub containers */
@@ -410,7 +474,7 @@ body::after {
         height: 42rem;
     }
 
-    .fld-mapviz-query-holder {
+    .fl-mapviz-control-wrapper {
         grid-column-end: 3;
         grid-column-start: 1;
         grid-row-end: 2;
@@ -428,7 +492,7 @@ body::after {
         grid-row-start: 1;
     }
 
-    .fld-mapviz-city-and-results {
+    .fl-mapviz-search-results {
         border-radius: 0;
         grid-column-end: 2;
         grid-column-start: 1;
@@ -438,7 +502,7 @@ body::after {
         position: inherit;
     }
 
-    .fld-mapviz-map {
+    .fl-mapviz-map {
         grid-column-end: 3;
         grid-column-start: 2;
         grid-row-end: 3;
@@ -448,16 +512,16 @@ body::after {
 
     /* End: arrange positions of sub containers */
 
-    .flc-control-holder {
+    .fl-mapviz-control-holder {
         width: 90%;
     }
 
-    .fld-mapviz-query {
+    .fl-mapviz-query-holder input {
         margin-right: 2rem;
         margin-top: 1rem;
     }
 
-    .fld-filter-control {
+    /* .fld-filter-control {
         width: 4rem;
     }
 
@@ -468,19 +532,19 @@ body::after {
 
     .fld-filter-control span {
         margin: 0.5rem 0 0 0.6rem;
-    }
+    } */
 
     /******** The panel of the a11y feature filter list **********/
-    .fl-search-label {
+    .fl-mapviz-query-label {
         display: block;
     }
 
     /******** The panel for displaying cities and search results ********/
-    .fl-mapviz-city-and-results-expand-button {
+    .fl-mapviz-expand-collapse-button-holder {
         display: none;
     }
 
-    .fld-mapviz-city-and-results-title {
+    .fl-mapviz-city-list-title {
         align-self: auto;
     }
 
@@ -488,12 +552,12 @@ body::after {
         margin-right: 1rem;
     }
 
-    .fl-mapviz-city-and-results-expand-button[aria-expanded="false"] ~ .fld-mapviz-city-and-result-list {
+    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-list {
         display: block;
     }
 
     /******** The hosptial description panel ********/
-    .fld-mapviz-hospital-panel {
+    .fl-mapviz-hospital-panel {
         margin-top: 0.3rem;
     }
 }

@@ -1,14 +1,7 @@
 {
-    "name": "fluid-covid-map-viz",
-    "version": "0.0.2",
-    "description": "Sketch visualisation of covid data as map and table",
-    "main": "index.js",
-    "nyc": {
-        "exclude": [
-            "node_modules/**",
-            "tests/**"
-        ]
-    },
+    "name": "covid-data-monitor",
+    "version": "0.0.3",
+    "description": "We Count Data Monitor project visualising Ontario Covid test centre data as accessible map",
     "scripts": {
         "lint": "grunt lint",
         "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
@@ -23,11 +16,12 @@
         "url": "https://https://issues.fluidproject.org/"
     },
     "dependencies": {
-        "infusion": "3.0.0-dev.20201216T182440Z.7612c707b.FLUID-6580",
+        "infusion": "3.0.0-dev.20210111T161405Z.275661c19.FLUID-6580",
         "new-renderer-demo": "amb26/new-renderer-demo#FLUID-5047",
         "minimist": "1.2.5",
         "papaparse": "5.2.0",
-        "leaflet": "1.7.1"
+        "leaflet": "1.7.1",
+        "accessible-autocomplete": "2.0.3"
     },
     "devDependencies": {
         "node-jqunit": "1.1.8",
