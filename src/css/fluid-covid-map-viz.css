@@ -33,7 +33,7 @@ body::after {
 /* Contains both the search input box and the filter control button */
 .fl-mapviz-control-holder {
     display: grid;
-    grid-template-columns: auto 6rem;
+    grid-template-columns: auto 5rem;
 }
 
 .fl-mapviz-filter-control-holder {
@@ -43,13 +43,14 @@ body::after {
     border-radius: 1rem;
     display: flex;
     flex-direction: row;
+    margin-left: 1rem;
 }
 
 .fl-mapviz-filter-control {
     height: 2rem;
     margin-left: 0.7rem;
     margin-right: 0.7rem;
-    width: 100%;
+    width: 40%;
 }
 
 .fl-mapviz-filter-control svg {
@@ -65,15 +66,8 @@ body::after {
     position: relative;
 }
 
-.fl-mapviz-query-reset {
-    height: 1rem;
-    position: absolute;
-    right: 0.6rem;
-    top: 0.5rem;
-    z-index: 900;
-}
-
 .fl-mapviz-query-holder input {
+    background-color: white;
     background-image: url(../img/Search.svg);
     background-position: 5px;
     background-repeat: no-repeat;
@@ -90,45 +84,19 @@ body::after {
     margin-block-start: 0;
 }
 
+.fl-mapviz-query-reset {
+    height: 1rem;
+    position: absolute;
+    right: 0.6rem;
+    top: 0.5rem;
+    z-index: 900;
+}
+
 /** Override this from leaflet.css so that the autocomplete dropdown doesn't pop behind it **/
 
 .leaflet-pane {
     z-index: 0;
 }
-
-/* .fl-mapviz-control-holder {
-    display: grid;
-    grid-template-columns: 80% 20%;
-    width: 90%;
-}
-
-.fl-mapviz-query-holder input {
-    background-image: url(../img/Search.svg);
-    background-position: 0.3rem;
-    background-repeat: no-repeat;
-    border: 1px solid black;
-    border-radius: 1.5rem;
-    height: 2rem;
-    margin-right: 1rem;
-}
-
-.fld-filter-control {
-    align-self: end;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 1rem;
-    display: inline-flex;
-    height: 2.3rem;
-}
-
-.fld-filter-control svg {
-    height: 1.5rem;
-    margin-top: 0.3rem;
-}
-
-.fld-filter-control span {
-    margin: 0.5rem 0 0 0.2rem;
-} */
 
 /* The map */
 .fl-mapviz-map {
@@ -290,35 +258,7 @@ body::after {
     background-image: url("../img/ResetFilters.svg");
 }
 
-/******** The city list panel ********/
-
-.fl-mapviz-city-list {
-    display: none;
-}
-
-.fl-mapviz-city-list-title h2 {
-    margin: 0;
-}
-
-/******** The search results panel ********/
-
-/* The main container */
-.fl-mapviz-search-results {
-    background-color: white;
-    border-radius: 1rem 1rem 0 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    height: 60%;
-    justify-content: space-between;
-    margin: 0;
-    overflow-y: scroll;
-    position: fixed;
-    width: 100%;
-    z-index: 1;
-}
-
-/* The expand/collapse button and the panel heading */
+/******** Expand/collapse button for the city list and the search results panels ********/
 .fl-mapviz-expand-collapse-button-holder {
     align-self: center;
     background: none;
@@ -341,30 +281,69 @@ body::after {
     display: none;
 }
 
-.fl-mapviz-back-button-holder {
-    align-self: center;
-    display: inline-flex;
+/******** The city list panel ********/
+.fl-mapviz-city-list {
+    display: none;
 }
 
-.fl-mapviz-back-button-holder h3 {
+.fl-mapviz-city-list-title h2 {
     margin: 0;
 }
 
-.fl-mapviz-back-button-holder svg {
+/******** The search results panel ********/
+.fl-mapviz-search-results {
+    background-color: white;
+    border-radius: 1rem 1rem 0 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    /* height: 60%; */
+    justify-content: space-between;
+    margin: 0;
+    overflow-y: scroll;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+
+/* The expand/collapse button and the panel heading */
+.fl-mapviz-back-button {
+    align-self: center;
+    background-color: #ACDEEB;
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.fl-mapviz-back-button h2 {
+    align-self: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.8rem;
+    margin: 0;
+}
+
+.fl-mapviz-back-button svg {
     fill: white;
-    height: 2rem;
+    height: 2.3rem;
     margin-right: 0.5rem;
     padding: 0.7rem 0;
-    width: 2rem;
+    width: 2.3rem;
+}
+
+/* Search result list */
+.fl-mapviz-search-result-list {
+    /* This list takes up the remaining space whenever there's any */
+    flex-grow: 1;
 }
 
 /* For individual search result */
-.fld-mapviz-search-result {
+.fl-mapviz-search-result {
     border-bottom: 1px solid #c4c4c4;
-    padding: 0.5rem 0 0.5rem 0;
+    padding: 0.5rem 0.3rem;
 }
 
-.fld-mapviz-search-result .fl-mapviz-hospital-title {
+.fl-mapviz-search-result .fl-mapviz-hospital-title {
     font-weight: 700;
 }
 
@@ -470,7 +449,7 @@ body::after {
     /* Start: arrange positions of sub containers */
     .fl-mapviz-container {
         display: grid;
-        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-columns: 1fr 3fr auto;
         height: 42rem;
     }
 
@@ -492,6 +471,7 @@ body::after {
         grid-row-start: 1;
     }
 
+    .fl-mapviz-city-list,
     .fl-mapviz-search-results {
         border-radius: 0;
         grid-column-end: 2;
@@ -516,44 +496,33 @@ body::after {
         width: 90%;
     }
 
-    .fl-mapviz-query-holder input {
-        margin-right: 2rem;
-        margin-top: 1rem;
-    }
-
-    /* .fld-filter-control {
-        width: 4rem;
-    }
-
-    .fld-filter-control svg {
-        margin: 0.3rem 0 0 0;
-        width: 1.5rem;
-    }
-
-    .fld-filter-control span {
-        margin: 0.5rem 0 0 0.6rem;
-    } */
-
     /******** The panel of the a11y feature filter list **********/
     .fl-mapviz-query-label {
         display: block;
+        margin-bottom: 1rem;
     }
 
-    /******** The panel for displaying cities and search results ********/
+    /******** Expand/collapse button for the city list and the search results panels ********/
     .fl-mapviz-expand-collapse-button-holder {
         display: none;
     }
 
+    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-list {
+        display: block;
+    }
+
+    /******** The panel for displaying cities ********/
     .fl-mapviz-city-list-title {
         align-self: auto;
     }
 
-    .fld-mapviz-search-result {
+    /******** The panel for displaying search results ********/
+    .fl-mapviz-search-results {
         margin-right: 1rem;
     }
 
-    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-list {
-        display: block;
+    .fl-mapviz-back-button {
+        justify-content: left;
     }
 
     /******** The hosptial description panel ********/
