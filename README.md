@@ -26,6 +26,15 @@ To produce a build omitting the Infusion library, run
 The resulting build artefacts will be generated in directory `build`, together with a self-test for the build in
 `build/index.html`.
 
+## Regenerating SVG icon build
+
+To produce a fresh HTML build from a collection of SVG icon files held in `src/img`, indexed by the file `svgmap.json`, run
+
+    node buildSVG.js
+
+This will produce output in `buildSVG/svgIcons.html` which can be pasted into the demo markup in `index.html` and
+bundled template in `src/html/template.html`.
+
 ## Lint
 
 The project files may be linted by running `npm run lint`.
