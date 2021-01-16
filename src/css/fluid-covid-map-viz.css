@@ -13,6 +13,12 @@ body::after {
     z-index: -1;
 }
 
+/******** Shared classes ********/
+.fl-mapviz-hoverable:hover {
+    outline: 1px solid #000;
+    outline-offset: 1px;
+}
+
 /******** The panel with the query label, the query input box and the filter control button **********/
 .fl-mapviz-query-label {
     display: none;
@@ -222,40 +228,39 @@ body::after {
     outline-offset: 1px;
 }
 
-/* css applied to filter buttons and their parent container to ensure that the button labels align with their images in the row */
-.fl-mapviz-even-row {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-}
-
 /* The parent container of filter buttons */
 .fl-mapviz-filter-buttons {
-    height: 5rem;
+    display: flex;
+    /* height: 5rem; */
     justify-content: space-evenly;
-
-    /** TODO: Same as fl-mapviz-filters **/
-    margin-bottom: 0.3rem;
-    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 /* "apply filters" and "reset filters" buttons */
 .fl-mapviz-apply-filters,
 .fl-mapviz-reset-filters {
-    display: inline-block;
+    align-items: center;
+    background-color: transparent;
+    border-style: none;
+    display: inline-flex;
     height: 1.625rem;
     margin: 0.5rem;
-    width: 1.625rem;
+    width: 10rem;
 }
 
-/* The "apply filters" button */
-.fl-mapviz-apply-filters {
-    background-image: url("../img/ApplyFilters.svg");
+.fl-mapviz-apply-filters svg,
+.fl-mapviz-reset-filters svg {
+    fill: none;
+    height: 2rem;
+    margin-right: 0.1875rem;
+    padding: 0.1875rem;
+    width: 2rem;
 }
 
-/* The "reset filters" button */
-.fl-mapviz-reset-filters {
-    background-image: url("../img/ResetFilters.svg");
+.fl-mapviz-apply-filters span,
+.fl-mapviz-reset-filters span {
+    display: inline-flex;
 }
 
 /******** Expand/collapse button for the city list and the search results panels ********/
@@ -300,7 +305,6 @@ body::after {
     /* height: 60%; */
     justify-content: space-between;
     margin: 0;
-    overflow-y: scroll;
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -335,12 +339,14 @@ body::after {
 .fl-mapviz-search-result-list {
     /* This list takes up the remaining space whenever there's any */
     flex-grow: 1;
+    overflow-y: scroll;
 }
 
 /* For individual search result */
 .fl-mapviz-search-result {
     border-bottom: 1px solid #c4c4c4;
-    padding: 0.5rem 0.3rem;
+    margin-left: 0.5rem;
+    padding: 0.5rem 0.5rem;
 }
 
 .fl-mapviz-search-result .fl-mapviz-hospital-title {
@@ -492,6 +498,11 @@ body::after {
 
     /* End: arrange positions of sub containers */
 
+    /******** The panel with the query label, the query input box and the filter control button **********/
+    .fl-mapviz-control-wrapper {
+        height: 5rem;
+    }
+
     .fl-mapviz-control-holder {
         width: 90%;
     }
@@ -518,11 +529,13 @@ body::after {
 
     /******** The panel for displaying search results ********/
     .fl-mapviz-search-results {
+        height: 36rem;
         margin-right: 1rem;
     }
 
     .fl-mapviz-back-button {
         justify-content: left;
+        padding-left: 1rem;
     }
 
     /******** The hosptial description panel ********/
