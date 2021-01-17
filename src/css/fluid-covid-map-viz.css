@@ -231,7 +231,6 @@ body::after {
 /* The parent container of filter buttons */
 .fl-mapviz-filter-buttons {
     display: flex;
-    /* height: 5rem; */
     justify-content: space-evenly;
     margin-bottom: 1rem;
     margin-top: 1rem;
@@ -302,7 +301,7 @@ body::after {
     bottom: 0;
     display: flex;
     flex-direction: column;
-    /* height: 60%; */
+    height: 60%;
     justify-content: space-between;
     margin: 0;
     position: fixed;
@@ -313,7 +312,7 @@ body::after {
 /* The expand/collapse button and the panel heading */
 .fl-mapviz-back-button {
     align-self: center;
-    background-color: #ACDEEB;
+    background-color: #acdeeb;
     display: inline-flex;
     justify-content: center;
     width: 100%;
@@ -397,6 +396,11 @@ body::after {
 }
 
 /******** The hosptial description panel ********/
+.fl-mapviz-hospital-panel {
+    /* hide the hospital description panel at the page load */
+    display: none;
+}
+
 .fl-mapviz-hospital-panel > div {
     padding: 0.3rem;
 }
@@ -464,6 +468,7 @@ body::after {
         grid-column-start: 1;
         grid-row-end: 2;
         grid-row-start: 1;
+        height: 5rem;
         margin: 0.5rem 2rem;
         position: relative;
         width: 100%;
@@ -499,10 +504,6 @@ body::after {
     /* End: arrange positions of sub containers */
 
     /******** The panel with the query label, the query input box and the filter control button **********/
-    .fl-mapviz-control-wrapper {
-        height: 5rem;
-    }
-
     .fl-mapviz-control-holder {
         width: 90%;
     }
