@@ -490,6 +490,7 @@ body::after {
         grid-row-end: 3;
         grid-row-start: 2;
         height: inherit;
+        max-height: 100%;
         position: inherit;
     }
 
