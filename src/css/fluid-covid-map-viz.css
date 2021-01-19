@@ -243,7 +243,7 @@ body::after {
     background-color: transparent;
     border-style: none;
     display: inline-flex;
-    height: 1.625rem;
+    height: 3rem;
     margin: 0.5rem;
     width: 10rem;
 }
@@ -537,7 +537,6 @@ body::after {
 
     .fl-mapviz-back-button {
         justify-content: left;
-        padding-left: 1rem;
     }
 
     /******** The hosptial description panel ********/
