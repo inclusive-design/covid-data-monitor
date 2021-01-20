@@ -13,10 +13,21 @@ body::after {
     z-index: -1;
 }
 
-/******** Shared classes ********/
+/******** Shared selectors ********/
 .fl-mapviz-hoverable:hover {
     outline: 1px solid #000;
     outline-offset: 1px;
+}
+
+.fl-mapviz-icon-shadow {
+    align-items: center;
+    border-radius:50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    height: 2rem;
+    justify-content: center;
+    margin-right: 0.7rem;
+    width: 2rem;
 }
 
 /******** The panel with the query label, the query input box and the filter control button **********/
@@ -251,10 +262,8 @@ body::after {
 .fl-mapviz-apply-filters svg,
 .fl-mapviz-reset-filters svg {
     fill: none;
-    height: 2rem;
-    margin-right: 0.1875rem;
-    padding: 0.1875rem;
-    width: 2rem;
+    height: 1rem;
+    width: 1rem;
 }
 
 .fl-mapviz-apply-filters span,
@@ -310,12 +319,23 @@ body::after {
 }
 
 /* The expand/collapse button and the panel heading */
+.fl-mapviz-back-button-wrapper {
+    background-color: #acdeeb;
+}
+
 .fl-mapviz-back-button {
     align-self: center;
     background-color: #acdeeb;
+    border: none;
     display: inline-flex;
     justify-content: center;
+    padding: 0.5rem 0 0.5rem 0.5rem;
     width: 100%;
+}
+
+.fl-mapviz-back-button svg {
+    height: 1rem;
+    width: 1rem;
 }
 
 .fl-mapviz-back-button h2 {
@@ -324,14 +344,6 @@ body::after {
     font-weight: 500;
     line-height: 1.8rem;
     margin: 0;
-}
-
-.fl-mapviz-back-button svg {
-    fill: white;
-    height: 2.3rem;
-    margin-right: 0.5rem;
-    padding: 0.7rem 0;
-    width: 2.3rem;
 }
 
 /* Search result list */

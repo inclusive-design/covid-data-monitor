@@ -76,10 +76,16 @@
             </div>
             <div class="fl-mapviz-filter-buttons">
                 <button class="fl-mapviz-reset-filters fl-mapviz-hoverable" type="button">
-                    <svg><use xlink:href="#ResetFilters" /></svg><span>Reset Filters</span>
+                    <div class="fl-mapviz-icon-shadow">
+                        <svg><use xlink:href="#ResetFilters" /></svg>
+                    </div>
+                    <span>Reset Filters</span>
                 </button>
                 <button class="fl-mapviz-apply-filters fl-mapviz-hoverable" type="button">
-                    <svg><use xlink:href="#ApplyFilters" /></svg><span>Apply Filters</span>
+                    <div class="fl-mapviz-icon-shadow">
+                        <svg><use xlink:href="#ApplyFilters" /></svg>
+                    </div>
+                    <span>Apply Filters</span>
                 </button>
             </div>
         </div>
@@ -102,9 +108,13 @@
                 <svg class="fl-mapviz-collapse-button"><use xlink:href="#ArrowDown" /></svg>
                 <svg class="fl-mapviz-expand-button"><use xlink:href="#ArrowUp" /></svg>
             </button>
-            <div class="fl-mapviz-back-button">
-                <svg><use xlink:href="#Back" /></svg>
-                <h2>Back to locations</h2>
+            <div class="fl-mapviz-back-button-wrapper">
+                <button class="fl-mapviz-back-button" type="button">
+                    <div class="fl-mapviz-icon-shadow">
+                        <svg><use xlink:href="#Back" /></svg>
+                    </div>
+                    <h2>Back to locations</h2>
+                </button>
             </div>
             <div class="fl-mapviz-search-result-list">
                 <!--<div class="fl-mapviz-search-result">
@@ -141,22 +151,8 @@
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="ApplyFilters" viewbox="0 0 45 46" fill="none">
-            <g filter="url(#filter0_d)">
-                <ellipse cx="22.5" cy="22.9845" rx="18.5" ry="18.9845" fill="white"></ellipse>
-            </g>
-            <path d="M12 25.481C13.5624 27.0467 15.1257 28.6117 16.6881 30.1775C21.8377 25.1183 26.9872 20.0592 32.1368 15" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
-            <defs>
-                <filter id="filter0_d" x="0" y="0" width="45" height="45.969" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
-                    <feOffset></feOffset>
-                    <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
-                </filter>
-            </defs>
+        <symbol id="ApplyFilters" viewbox="0 0 23 18" fill="none">
+            <path d="M1 11.481C2.56244 13.0467 4.12567 14.6117 5.68812 16.1775C10.8377 11.1183 15.9872 6.05917 21.1368 1" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
         </symbol>
         <symbol id="ArrowDown" viewbox="0 0 24 13" fill="none">
             <path d="M1 1L12 12L23 1" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -164,22 +160,8 @@
         <symbol id="ArrowUp" viewbox="0 0 24 13" fill="none">
             <path d="M23 12L12 1L1 12" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </symbol>
-        <symbol id="Back" viewbox="0 0 35 35" fill="none">
-            <g filter="url(#filter0_d)">
-                <ellipse cx="17.5002" cy="17.5" rx="13.1555" ry="13.5" fill="white"></ellipse>
-            </g>
-            <path d="M19.2777 12.7564L13.5889 17.8645L19.2777 22.9727" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <defs>
-                <filter id="filter0_d" x="0.344727" y="0" width="34.3109" height="35" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
-                    <feOffset></feOffset>
-                    <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
-                </filter>
-            </defs>
+        <symbol id="Back" viewbox="0 0 10 17" fill="none">
+            <path d="M9 1.314L1 8.49733L9 15.6807" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </symbol>
         <symbol id="FilterControl" viewbox="0 0 32 23" fill="none">
             <path d="M4.00127 3.89875C4.05478 2.2889 5.37707 1 7 1C8.65732 1 10 2.34366 10 3.99936C10 5.65506 8.65732 7 7 7C5.34268 7 4 5.65634 4 3.99936C4 3.96625 4.00127 3.93186 4.00127 3.89875Z" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -196,23 +178,9 @@
             <path d="M1 1L13 13" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
             <path d="M13 1L1 13" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
         </symbol>
-        <symbol id="ResetFilters" viewbox="0 0 45 46" fill="none">
-            <g filter="url(#filter0_d)">
-                <ellipse cx="22.5" cy="22.9845" rx="18.5" ry="18.9845" fill="white"></ellipse>
-            </g>
-            <path d="M13.2106 15.5961C15.2251 12.805 18.43 11 22.04 11C28.1373 11 33.08 16.1487 33.08 22.5C33.08 28.8513 28.1373 34 22.04 34C15.9427 34 11 28.8513 11 22.5" stroke="black" stroke-width="2"></path>
-            <path d="M13.271 11L12.8398 16.52L17.4398 16.1847" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
-            <defs>
-                <filter id="filter0_d" x="0" y="0" width="45" height="45.969" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
-                    <feOffset></feOffset>
-                    <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
-                </filter>
-            </defs>
+        <symbol id="ResetFilters" viewbox="0 0 25 25" fill="none">
+            <path d="M3.21059 5.59606C5.2251 2.80504 8.43 1 12.04 1C18.1373 1 23.08 6.14867 23.08 12.5C23.08 18.8513 18.1373 24 12.04 24C5.94272 24 1 18.8513 1 12.5" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M3.27093 1L2.83979 6.52L7.43979 6.1847" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
         </symbol>
     </svg>
 </div>
