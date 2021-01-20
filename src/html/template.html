@@ -3,20 +3,19 @@
         <!-- The panel containing the search label & the search box & the filter control button -->
         <div class="fl-mapviz-control-wrapper">
             <label class="fl-mapviz-query-label" for="search-query">Search by postal code or city</label>
-            <div class="fl-mapviz-control-holder">
-                <div class="fl-mapviz-query-holder">
-                    <div class="fl-mapviz-query-reset-holder">
-                        <div class="fl-mapviz-query-reset fl-mapviz-hoverable" style="display: none" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Reset the query">
-                            <svg height="1rem" width="1rem"><use xlink:href="#QueryReset" /></svg>
-                        </div>
+            <div class="fl-mapviz-query-holder">
+                <div class="fl-mapviz-query-reset-holder">
+                    <div class="fl-mapviz-query-reset fl-mapviz-hoverable" style="display: none" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Reset the query">
+                        <svg height="1rem" width="1rem"><use xlink:href="#QueryReset" /></svg>
                     </div>
                 </div>
-                <div class="fl-mapviz-filter-control-holder">
-                    <div class="fl-mapviz-filter-control fl-mapviz-hoverable" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Collapse the accessibility filter list">
-                        <svg><use xlink:href="#FilterControl" /></svg>
-                    </div>
+            </div>
+            <div class="fl-mapviz-filter-control-holder-on-desktop">
+                <label class="fl-mapviz-filter-label" for="filter-control-button">Accessibility Features</label>
+                <button class="fl-mapviz-filter-control fl-mapviz-hoverable" type="button" id="filter-control-button">
+                    <svg><use xlink:href="#FilterControl" /></svg>
                     <div class="fl-mapviz-filter-count">0</div>
-                </div>
+                </button>
             </div>
         </div>
 
