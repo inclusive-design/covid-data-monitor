@@ -1,9 +1,13 @@
 {
     "ApplyFilters": "src/img/ApplyFilters.svg",
+    "ResetFilters": "src/img/ResetFilters.svg",
     "ArrowDown": "src/img/ArrowDown.svg",
     "ArrowUp": "src/img/ArrowUp.svg",
     "Back": "src/img/Back.svg",
     "FilterControl": "src/img/FilterControl.svg",
     "QueryReset": "src/img/Close.svg",
-    "ResetFilters": "src/img/ResetFilters.svg"
+    "Marker": "src/img/Marker.svg",
+    "MarkerHover": "src/img/Marker-hover.svg",
+    "MarkerSelected": "src/img/Marker-selected.svg",
+    "MarkerUnzoomed": "src/img/Marker-unzoomed.svg"
 }

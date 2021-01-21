@@ -184,6 +184,12 @@ fluid.defaults("fluid.covidMap.map", {
         queryReset: ".fl-mapviz-query-reset",
         query: "#fl-search-query"
     },
+    styles: {
+        marker: "fl-mapviz-marker"
+    },
+    markup: {
+        marker: "<svg height=\"%height\" width=\"%width\"><use xlink:href=\"#%marker\" /></svg>"
+    },
     ids: {
         searchQuery: "fl-search-query"
     },
@@ -223,22 +229,22 @@ fluid.defaults("fluid.covidMap.map", {
     },
     markers: {
         unzoomed: {
-            iconUrl: "img/Marker-unzoomed.svg",
+            symbol: "MarkerUnzoomed",
             iconSize: [9, 13],
             iconAnchor: [4.5, 13]
         },
         standard: {
-            iconUrl: "img/Marker.svg",
+            symbol: "Marker",
             iconSize: [51, 65],
             iconAnchor: [25.5, 65]
         },
         hover: {
-            iconUrl: "img/Marker-hover.svg",
+            symbol: "MarkerHover",
             iconSize: [61, 76],
             iconAnchor: [30.5, 70]
         },
         selected: {
-            iconUrl: "img/Marker-selected.svg",
+            symbol: "MarkerSelected",
             iconSize: [108, 108],
             iconAnchor: [54, 90]
         }
@@ -761,11 +767,11 @@ fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
 
 fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
-        var markerIcon = that.model.selectedRows[index] ? that.markers.selected :
-            (that.model.hoveredRows[index] ? that.markers.hover : that.markers.standard);
-        if (that.model.smallMarkers) {
-            markerIcon = that.markers.unzoomed;
+        var markerKey = that.model.selectedRows[index] ? "selected" : (that.model.hoveredRows[index] ? "hover" : "standard");
+        if (that.model.smallMarkers) { // TODO: stopgap until we have 3 unzoomed markers
+            markerKey = "unzoomed";
         }
+        var markerIcon = that.markers[markerKey];
         var marker = that.rowMarkers[index];
         marker.setIcon(markerIcon);
         marker._icon.removeAttribute("tabindex");
@@ -818,9 +824,14 @@ fluid.covidMap.showPageForIndex = function (that, newIndex) {
 fluid.covidMap.addMarkers = function (that) {
     that.markers = fluid.transform(that.options.markers, function (marker) {
         var markerOptions = fluid.extend({}, marker, {
-            iconUrl: that.options.iconPrefix + marker.iconUrl
+            html: fluid.stringTemplate(that.options.markup.marker, {
+                marker: marker.symbol,
+                width: marker.iconSize[0],
+                height: marker.iconSize[1]
+            }),
+            className: that.options.styles.marker
         });
-        return L.icon(markerOptions);
+        return L.divIcon(markerOptions);
     });
 
     $(that.container).on("click", function (event) {

@@ -38,7 +38,7 @@ fluid.each(svgmap, function (filename, key) {
 
 var text = rootNode.outerHTML;
 var formatted = jsBeautify.html(text, {
-    indent_level: 3
+    indent_level: 4
 });
 
 fs.writeFileSync(outputFile, formatted, "utf8");
