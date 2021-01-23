@@ -23,8 +23,8 @@ var buildIndex = {
         src: "src/img/",
         dest: "build/img/"
     }, {
-        src: "src/html/searchResult.html",
-        dest: "build/html/searchResult.html"
+        src: "src/html/searchResultTemplate.html",
+        dest: "build/html/searchResultTemplate.html"
     }, {
         src: "src/buildTest/index.html",
         dest: "build/index.html"

@@ -171,7 +171,7 @@
                             <svg><use xlink:href="#Back" /></svg>
                             <h2>Back to locations</h2>
                         </div>
-                        <div class="fl-mapviz-search-result-list">
+                        <div class="fl-mapviz-search-results-list">
                             <!--<div class="fl-mapviz-search-result">
                                 <div class="fl-mapviz-hospital-title">Hospital 8</div>
                                 <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
@@ -179,14 +179,7 @@
                                 <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
                             </div>-->
                         </div>
-                        <div class="fl-mapviz-search-result-pagination">
-                            <span class="fl-mapviz-pagination-summary">Showing results 1-20 of 143</span>
-                            <span class="fl-mapviz-pagination-buttons">
-                                <a class="fl-mapviz-page-left flc-mapviz-hoverable" aria-label="page-left"></a>
-                                <a class="fl-mapviz-page-right flc-mapviz-hoverable" aria-label="page-right"></a>
-                            </span>
-                        </div>
-                    </div>
+                      </div>
 
                     <!-- The map panel -->
                     <div class="fl-mapviz-map"></div>
@@ -310,7 +303,7 @@
             fluid.covidMap.map(".fl-mapviz-outer-container", {
                 dataUrl: "data/assessment_centre_locations.csv",
                 iconPrefix: "src/",
-                searchResultTemplateUrl: "src/html/searchResult.html"
+                searchResultTemplateUrl: "src/html/searchResultTemplate.html"
             });
         </script>
     </body>
