@@ -4,6 +4,7 @@
     "ArrowUp": "src/img/ArrowUp.svg",
     "Back": "src/img/Back.svg",
     "FilterControl": "src/img/FilterControl.svg",
+    "Locations": "src/img/Locations.svg",
     "QueryReset": "src/img/Close.svg",
     "ResetFilters": "src/img/ResetFilters.svg"
 }
