@@ -8,67 +8,6 @@ fluid.registerNamespace("fluid.covidMap");
 
 fluid.covidMap.metresInMile = 1609.34;
 
-fluid.defaults("fluid.covidMap.pagerBar", {
-    gradeNames: "fluid.pager.pagerBar",
-    components: {
-        pageList: {
-            type: "fluid.emptySubcomponent"
-        }
-    },
-    selectors: {
-        previous: ".fl-mapviz-page-left",
-        next: ".fl-mapviz-page-right"
-    }
-});
-
-fluid.defaults("fluid.covidMap.pager", {
-    gradeNames: "fluid.pager",
-    dynamicComponents: {
-        pagerBar: {
-            type: "fluid.covidMap.pagerBar"
-        },
-        summary: {
-            options: {
-                strings: {
-                    message: "Showing results %first-%last of %total"
-                }
-            }
-        }
-    },
-    modelRelay: {
-        // These definitions taken from Pager's summary subcomponent, should go into its definition
-        firstIndex: {
-            target: "firstIndex",
-            func: (pageIndex, pageSize) => pageIndex * pageSize + 1,
-            args: ["{that}.model.pageIndex", "{that}.model.pageSize"]
-        },
-        lastIndex: {
-            target: "lastIndex",
-            source: "",
-            func: "fluid.pager.computePageLimit"
-        }
-    },
-    selectors: {
-        summary: ".fl-mapviz-pagination-summary",
-        // Note that we just about get away with the Pager's notion of a "pager bar" since we created a container for its
-        // buttons - but how would we accommodate, e.g., a model where the user wanted the summary duplicated etc.?
-        // Note that the pager has an interesting model of "duplicated but not repeating" components. This can't be accommodated
-        // in the renderer's current idiom which assumes that a selector which matches multiple nodes implies a contiguous area of repetition.
-        // Well - it sort of can - since it depends on the "sources" idiom which is model-driven rather than markup driven. We could upgrade it
-        // so that a boolean lensed component or unlensed component could duplicate itself into multiple containers - but still, this would
-        // imply a mismatch in cardinality of the model source and the number of instantiated components. We would better turn these into
-        // distinct subcomponents with distinct DOM binder selectors and linked models.
-        pagerBar: ".fl-mapviz-pagination-buttons"
-    },
-    invokers: {
-        acquireDefaultRange: { // TODO: Totally absurd integration model for Pager
-            func: function () {
-                return undefined;
-            }
-        }
-    }
-});
-
 fluid.defaults("fluid.covidMap.hospitalRenderer", {
     gradeNames: "fluid.modelComponent",
     selectors: {
@@ -171,7 +110,6 @@ fluid.defaults("fluid.covidMap.map", {
     unselectedFilterChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.filters)",
     selectors: {
         query: ".fl-mapviz-query",
-        pager: ".fl-mapviz-search-result-pagination",
         resultsPage: ".fl-mapviz-search-results",
         hospitalPanel: ".fl-mapviz-hospital-panel",
         attribution: ".leaflet-control-attribution",
@@ -183,6 +121,12 @@ fluid.defaults("fluid.covidMap.map", {
         queryHolder: ".fl-mapviz-query-holder",
         queryReset: ".fl-mapviz-query-reset",
         query: "#fl-search-query"
+    },
+    styles: {
+        marker: "fl-mapviz-marker"
+    },
+    markup: {
+        marker: "<svg height=\"%height\" width=\"%width\"><use xlink:href=\"#%marker\" /></svg>"
     },
     ids: {
         searchQuery: "fl-search-query"
@@ -198,12 +142,10 @@ fluid.defaults("fluid.covidMap.map", {
         cities: [],
         postcodes: {},
         query: "",
-        pageSize: 5,
         activeFilterChecks: "{that}.options.unselectedFilterChecks",
         uiFilterChecks: "{that}.options.unselectedFilterChecks",
         matchedRows: [], // Map of row indices to boolean
         matchedRowIndices: [], // The indices of the matched rows
-        visiblePageIndices: [], // The indices, selected from matchedRowIndices, which are visible
         selectedRows: [], // Map of row indices to boolean
         hoveredRows: [], // Map of row indices to boolean
         selectedIndex: null,
@@ -223,22 +165,22 @@ fluid.defaults("fluid.covidMap.map", {
     },
     markers: {
         unzoomed: {
-            iconUrl: "img/Marker-unzoomed.svg",
+            symbol: "MarkerUnzoomed",
             iconSize: [9, 13],
             iconAnchor: [4.5, 13]
         },
         standard: {
-            iconUrl: "img/Marker.svg",
+            symbol: "Marker",
             iconSize: [51, 65],
             iconAnchor: [25.5, 65]
         },
         hover: {
-            iconUrl: "img/Marker-hover.svg",
+            symbol: "MarkerHover",
             iconSize: [61, 76],
             iconAnchor: [30.5, 70]
         },
         selected: {
-            iconUrl: "img/Marker-selected.svg",
+            symbol: "MarkerSelected",
             iconSize: [108, 108],
             iconAnchor: [54, 90]
         }
@@ -292,14 +234,6 @@ fluid.defaults("fluid.covidMap.map", {
             target: "dom.queryReset.visible",
             func: query => !!query
         },
-        // Paging state
-        visiblePageIndices: {
-            target: "visiblePageIndices",
-            func: function (matchedRowIndices, firstIndex, lastIndex) {
-                return matchedRowIndices.slice(firstIndex - 1, lastIndex);
-            },
-            args: ["{that}.model.matchedRowIndices", "{pager}.model.firstIndex", "{pager}.model.lastIndex"]
-        },
         // Marker size
         smallMarkers: {
             target: "smallMarkers",
@@ -311,15 +245,17 @@ fluid.defaults("fluid.covidMap.map", {
     },
     modelListeners: {
         // Ensure that freshly selected or hovered item is visible
-        "selectedIndexPage": {
+        "showSelectedIndex": {
             path: "selectedIndex",
-            funcName: "fluid.covidMap.showPageForIndex",
-            args: ["{that}", "{change}.value"]
+            funcName: "fluid.covidMap.showResultIndex",
+            args: ["{that}", "{change}.value"],
+            excludeSource: "resultsList"
         },
-        "hoveredIndexPage": {
+        "showHoveredIndex": {
             path: "hoveredIndex",
-            funcName: "fluid.covidMap.showPageForIndex",
-            args: ["{that}", "{change}.value"]
+            funcName: "fluid.covidMap.showResultIndex",
+            args: ["{that}", "{change}.value"],
+            excludeSource: "resultsList"
         },
         // Update markers for selected or hovered items
         "selectedIndexMarkers": {
@@ -352,22 +288,12 @@ fluid.defaults("fluid.covidMap.map", {
         }
     },
     components: {
-        pager: {
-            type: "fluid.covidMap.pager",
-            container: "{that}.dom.pager",
-            options: {
-                model: {
-                    totalRange: "{map}.model.matchedRowIndices.length",
-                    pageSize: "{map}.model.pageSize"
-                }
-            }
-        },
         resultsPage: {
-            type: "fluid.covidMap.map.resultsPage",
+            type: "fluid.covidMap.resultsPage",
             container: "{that}.dom.resultsPage",
             options: {
                 model: {
-                    visiblePageIndices: "{map}.model.visiblePageIndices"
+                    visiblePageIndices: "{map}.model.matchedRowIndices"
                 }
             }
         },
@@ -634,85 +560,114 @@ fluid.defaults("fluid.styledButton", {
     }
 });
 
-fluid.defaults("fluid.covidMap.map.resultsPage", {
-    gradeNames: "fluid.viewComponent",
+fluid.defaults("fluid.covidMap.resultsPage", {
+    gradeNames: ["fluid.viewComponent", "fluid.resourceLoader"],
+    resources: {
+        resultTemplate: {
+            url: "{map}.options.searchResultTemplateUrl"
+        }
+    },
+    members: {
+        // Map of visiblePageIndices member to jQuery of DOM element
+        indexToElement: []
+    },
     model: {
+        template: "{that}.resources.resultTemplate.parsed" // Hack so that it loads on model load
         // visiblePageIndices: []
     },
     selectors: {
-        resultList: ".fl-mapviz-search-result-list"
-    },
-    listeners: {
-        // TODO: eliminate this workflow when we move to real renderer
-        // "onCreate.clear": {
-        //      "this": "{resultsPage}.dom.resultList",
-        //      method: "empty"
-        // }
-    },
-    dynamicComponents: {
-        searchResults: {
-            sources: "{resultsPage}.model.visiblePageIndices",
-            type: "fluid.covidMap.map.searchResult",
-            options: {
-                parentContainer: "{resultsPage}.dom.resultList"
-            }
-        }
-    }
-});
-
-fluid.defaults("fluid.covidMap.map.searchResult", {
-    gradeNames: ["fluid.covidMap.hospitalRenderer", "fluid.templateRenderingView"],
-    templateUrl: "{map}.options.searchResultTemplateUrl",
-    model: {
-        hospitalIndex: "{source}"
+        resultsList: ".fl-mapviz-search-results-list",
+        element: ".fl-mapviz-search-result"
     },
     styles: {
         selected: "fl-mapviz-search-result-selected",
         hover: "fl-mapviz-search-result-hover"
     },
-    modelRelay: {
-        fetchRow: {
-            target: "row",
-            func: (index, rows) => rows[index],
-            args: ["{that}.model.hospitalIndex", "{map}.model.rows"]
-        },
-        isSelected: {
-            target: "isSelected",
-            func: (index, selectedRows) => selectedRows[index],
-            args: ["{that}.model.hospitalIndex", "{map}.model.selectedRows"]
-        },
-        isHovered: {
-            target: "isHovered",
-            func: (index, hoveredRows) => hoveredRows[index],
-            args: ["{that}.model.hospitalIndex", "{map}.model.hoveredRows"]
-        },
-        // Rendering directives
+    modelListeners: {
         showSelected: {
-            source: "isSelected",
-            target: {
-                segs: ["dom", "container", "class", "{that}.options.styles.selected"]
-            }
+            path: "{map}.model.selectedRows.*",
+            funcName: "fluid.covidMap.booleanToClass",
+            args: ["{that}", "{change}.path", "{change}.value", "{that}.options.styles.selected"]
         },
-        showHovered: {
-            source: "isHovered",
-            target: {
-                segs: ["dom", "container", "class", "{that}.options.styles.hover"]
-            }
+        showHover: {
+            path: "{map}.model.hoveredRows.*",
+            funcName: "fluid.covidMap.booleanToClass",
+            args: ["{that}", "{change}.path", "{change}.value", "{that}.options.styles.hover"]
+        },
+        render: {
+            path: "visiblePageIndices",
+            func: "{that}.renderMarkup"
         }
     },
-    modelListeners: {
-        clickToSelect: {
-            path: "dom.container.click",
-            changePath: "{map}.model.selectedIndex",
-            value: "{that}.model.hospitalIndex"
-        },
-        hoverToHover: {
-            path: "dom.container.hover",
-            changePath: "{map}.model.hoveredIndex",
-            value: "{that}.model.hospitalIndex"
-        }
+    listeners: {
+        "onCreate.bindEvents": "fluid.covidMap.resultsPage.bindEvents({that}, {map})"
+    },
+    invokers: {
+        renderMarkup: "fluid.covidMap.resultsPage.renderMarkup({that}, {map})",
+        elementToIndex: "fluid.covidMap.resultsPage.elementToIndex({that}, {arguments}.0)"
     }
 });
+
+// Given change in row flag, map to toggled class of corresponding row
+fluid.covidMap.booleanToClass = function (resultsPage, path, value, className) {
+    var rowIndex = Number(fluid.peek(path));
+    var cellIndex = resultsPage.model.visiblePageIndices.indexOf(Number(rowIndex));
+    var element = resultsPage.indexToElement[cellIndex];
+    if (element) {
+        element.toggleClass(className, value);
+    }
+};
+
+fluid.covidMap.resultsPage.elementToIndex = function (that, target) {
+    var container = target.closest(that.options.selectors.element);
+    return container ? container.getAttribute("data-fl-index") : -1;
+};
+
+fluid.covidMap.resultsPage.transduceTarget = function (that, map, target, prefix) {
+    var cellIndex = that.elementToIndex(target);
+    var rowIndex = that.model.visiblePageIndices[cellIndex];
+    map.applier.change(prefix, rowIndex, "ADD", "resultsList");
+};
+
+fluid.covidMap.resultsPage.bindEvents = function (that, map) {
+    that.container.click(function (event) {
+        fluid.covidMap.resultsPage.transduceTarget(that, map, event.target, "selectedIndex");
+    });
+    that.container.mouseover(function (event) {
+        fluid.covidMap.resultsPage.transduceTarget(that, map, event.target, "hoveredIndex");
+    });
+};
+
+fluid.covidMap.rowToTerms = function (map, row) {
+    return {
+        hospitalTitle: row[map.options.fields.name],
+        hospitalHours: fluid.covidMap.renderHours(row),
+        hospitalAddress: fluid.covidMap.renderAddress(row),
+        hospitalPhone: row[map.options.fields.phone]
+    };
+};
+
+fluid.covidMap.resultsPage.renderMarkup = function (that, map) {
+    var template = that.resources.resultTemplate.parsed;
+    var indexToElement = [];
+    var fragment = document.createDocumentFragment();
+    that.model.visiblePageIndices.forEach(function (rowIndex, cellIndex) {
+        var row = map.model.rows[rowIndex];
+        var terms = fluid.covidMap.rowToTerms(map, row);
+        var record = fluid.stringTemplate(template, terms);
+        var element = $(record);
+        element.attr("data-fl-index", cellIndex);
+        element.toggleClass(that.options.styles.selected, map.model.selectedRows[rowIndex]);
+        element.toggleClass(that.options.styles.hover, map.model.hoveredRows[rowIndex]);
+        indexToElement[cellIndex] = element;
+        fragment.appendChild(element[0]);
+    });
+    that.indexToElement = indexToElement;
+    var resultsList = that.locate("resultsList");
+    resultsList.empty();
+    resultsList[0].appendChild(fragment);
+};
+
 
 fluid.covidMap.unselectedChecks = function (checks) {
     return fluid.transform(checks, () => false);
@@ -761,15 +716,17 @@ fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
 
 fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
-        var markerIcon = that.model.selectedRows[index] ? that.markers.selected :
-            (that.model.hoveredRows[index] ? that.markers.hover : that.markers.standard);
-        if (that.model.smallMarkers) {
-            markerIcon = that.markers.unzoomed;
+        var markerKey = that.model.selectedRows[index] ? "selected" : (that.model.hoveredRows[index] ? "hover" : "standard");
+        if (that.model.smallMarkers) { // TODO: stopgap until we have 3 unzoomed markers
+            markerKey = "unzoomed";
         }
+        var markerIcon = that.markers[markerKey];
         var marker = that.rowMarkers[index];
-        marker.setIcon(markerIcon);
-        marker._icon.removeAttribute("tabindex");
-        $(marker._icon).toggleClass("visually-hidden", !that.model.matchedRows[index]);
+        if (marker) { // Row with invalid coordinates doesn't get marker
+            marker.setIcon(markerIcon);
+            marker._icon.removeAttribute("tabindex");
+            $(marker._icon).toggleClass("visually-hidden", !that.model.matchedRows[index]);
+        }
     }
 };
 
@@ -805,12 +762,16 @@ fluid.covidMap.updateMarkerVisibility = function (that, matchedRows) {
     that.fitBounds(bounds, true);
 };
 
-fluid.covidMap.showPageForIndex = function (that, newIndex) {
+/** Ensure that the supplied search result at the supplied index is visible
+ * @param {fluid.covidMap.
+ */
+
+fluid.covidMap.showResultIndex = function (that, newIndex) {
     if (Number.isInteger(newIndex)) {
-        var filterIndex = that.model.matchedRowIndices.indexOf(newIndex);
-        if (filterIndex !== -1) {
-            var pageIndex = Math.floor(filterIndex / that.model.pageSize);
-            that.pager.applier.change("pageIndex", pageIndex);
+        var visibleIndex = that.model.matchedRowIndices.indexOf(newIndex);
+        var element = that.resultsPage.indexToElement[visibleIndex];
+        if (element) {
+            element[0].scrollIntoView();
         }
     }
 };
@@ -818,9 +779,14 @@ fluid.covidMap.showPageForIndex = function (that, newIndex) {
 fluid.covidMap.addMarkers = function (that) {
     that.markers = fluid.transform(that.options.markers, function (marker) {
         var markerOptions = fluid.extend({}, marker, {
-            iconUrl: that.options.iconPrefix + marker.iconUrl
+            html: fluid.stringTemplate(that.options.markup.marker, {
+                marker: marker.symbol,
+                width: marker.iconSize[0],
+                height: marker.iconSize[1]
+            }),
+            className: that.options.styles.marker
         });
-        return L.icon(markerOptions);
+        return L.divIcon(markerOptions);
     });
 
     $(that.container).on("click", function (event) {

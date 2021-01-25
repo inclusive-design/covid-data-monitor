@@ -278,8 +278,7 @@ h3,
 /* When the city list/search results panel is collapsed, hide all relevant elements */
 .fl-mapviz-expand-collapse-button-holder[aria-expanded="true"] > .fl-mapviz-expand-button,
 .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] > .fl-mapviz-collapse-button,
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-list,
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-pagination {
+.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-results-list {
     display: none;
 }
 
@@ -334,7 +333,7 @@ h3,
 }
 
 /* Search result list */
-.fl-mapviz-search-result-list {
+.fl-mapviz-search-results-list {
     /* This list takes up the remaining space whenever there's any */
     flex-grow: 1;
     overflow-y: scroll;
