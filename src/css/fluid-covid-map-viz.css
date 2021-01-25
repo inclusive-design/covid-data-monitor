@@ -360,38 +360,6 @@ h3,
     background: #fbdc90;
 }
 
-/* The search result panel -> pagination container that holds the summary text and pagination buttons */
-.fl-mapviz-search-result-pagination {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0.5rem;
-    user-select: none;
-}
-
-/* The "go backward" pagination button */
-.fl-mapviz-page-left {
-    background-image: url(../img/Page-left.svg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 2.375rem 2.375rem;
-    display: inline-block;
-    height: 2.5rem;
-    width: 2.5rem;
-}
-
-/* The "go forward" pagination button */
-.fl-mapviz-page-right {
-    background-image: url(../img/Page-right.svg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 2.375rem 2.375rem;
-    display: inline-block;
-    height: 2.5rem;
-    width: 2.5rem;
-}
-
 /******** The hosptial description panel ********/
 .fl-mapviz-hospital-panel {
     /* hide the hospital description panel at the page load */
@@ -656,7 +624,7 @@ h3,
         display: none;
     }
 
-    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-result-list {
+    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-results-list {
         display: block;
     }
 
