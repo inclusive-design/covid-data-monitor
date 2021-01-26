@@ -1,10 +1,10 @@
-<svg width="45" height="46" viewBox="0 0 45 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d)">
-<ellipse cx="22.5" cy="22.9845" rx="18.5" ry="18.9845" transform="rotate(-180 22.5 22.9845)" fill="white"/>
+<ellipse cx="17.5002" cy="17.5" rx="13.1555" ry="13.5" fill="white"/>
 </g>
-<path d="M20 29.6548L28 22.4714L20 15.2881" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.2777 12.7564L13.5889 17.8645L19.2777 22.9727" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <defs>
-<filter id="filter0_d" x="0" y="0" width="45" height="45.9691" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_d" x="0.344727" y="0" width="34.3109" height="35" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
 <feOffset/>

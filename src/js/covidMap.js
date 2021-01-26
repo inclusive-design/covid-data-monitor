@@ -8,74 +8,13 @@ fluid.registerNamespace("fluid.covidMap");
 
 fluid.covidMap.metresInMile = 1609.34;
 
-fluid.defaults("fluid.covidMap.pagerBar", {
-    gradeNames: "fluid.pager.pagerBar",
-    components: {
-        pageList: {
-            type: "fluid.emptySubcomponent"
-        }
-    },
-    selectors: {
-        previous: ".fld-mapviz-page-left",
-        next: ".fld-mapviz-page-right"
-    }
-});
-
-fluid.defaults("fluid.covidMap.pager", {
-    gradeNames: "fluid.pager",
-    dynamicComponents: {
-        pagerBar: {
-            type: "fluid.covidMap.pagerBar"
-        },
-        summary: {
-            options: {
-                strings: {
-                    message: "Showing results %first-%last of %total"
-                }
-            }
-        }
-    },
-    modelRelay: {
-        // These definitions taken from Pager's summary subcomponent, should go into its definition
-        firstIndex: {
-            target: "firstIndex",
-            func: (pageIndex, pageSize) => pageIndex * pageSize + 1,
-            args: ["{that}.model.pageIndex", "{that}.model.pageSize"]
-        },
-        lastIndex: {
-            target: "lastIndex",
-            source: "",
-            func: "fluid.pager.computePageLimit"
-        }
-    },
-    selectors: {
-        summary: ".fld-mapviz-pagination-summary",
-        // Note that we just about get away with the Pager's notion of a "pager bar" since we created a container for its
-        // buttons - but how would we accommodate, e.g., a model where the user wanted the summary duplicated etc.?
-        // Note that the pager has an interesting model of "duplicated but not repeating" components. This can't be accommodated
-        // in the renderer's current idiom which assumes that a selector which matches multiple nodes implies a contiguous area of repetition.
-        // Well - it sort of can - since it depends on the "sources" idiom which is model-driven rather than markup driven. We could upgrade it
-        // so that a boolean lensed component or unlensed component could duplicate itself into multiple containers - but still, this would
-        // imply a mismatch in cardinality of the model source and the number of instantiated components. We would better turn these into
-        // distinct subcomponents with distinct DOM binder selectors and linked models.
-        pagerBar: ".fld-mapviz-pagination-buttons"
-    },
-    invokers: {
-        acquireDefaultRange: { // TODO: Totally absurd integration model for Pager
-            func: function () {
-                return undefined;
-            }
-        }
-    }
-});
-
 fluid.defaults("fluid.covidMap.hospitalRenderer", {
     gradeNames: "fluid.modelComponent",
     selectors: {
-        hospitalTitle: ".fld-mapviz-hospital-title",
-        hospitalHours: ".fld-mapviz-hospital-hours",
-        hospitalAddress: ".fld-mapviz-hospital-address",
-        hospitalPhone:  ".fld-mapviz-hospital-phone"
+        hospitalTitle: ".fl-mapviz-hospital-title",
+        hospitalHours: ".fl-mapviz-hospital-hours",
+        hospitalAddress: ".fl-mapviz-hospital-address",
+        hospitalPhone:  ".fl-mapviz-hospital-phone"
     },
     modelRelay: {
         hospitalTitle: {
@@ -103,60 +42,119 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
     }
 });
 
+// TODO: Needs to be be copied back into framework
+fluid.copyImmutableResource = function (tocopy) {
+    var newContainer = fluid.isArrayable(tocopy) ? new fluid.ImmutableArray() : new fluid.ImmutableObject();
+    Object.assign(newContainer, tocopy);
+    if (tocopy.length) {
+        newContainer.length = tocopy.length;
+    }
+    return newContainer;
+};
+
+fluid.covidMap.extractCities = function (rows, field) {
+    var cities = fluid.getMembers(rows, field);
+    var cityHash = fluid.arrayToHash(cities);
+    return fluid.copyImmutableResource(Object.keys(cityHash).sort());
+};
+
+fluid.covidMap.extractPostcodes = function (rows, field) {
+    var postcodes = fluid.getMembers(rows, field);
+    var postcodeHash = fluid.arrayToHash(postcodes);
+    return postcodeHash;
+};
 
 fluid.defaults("fluid.covidMap.map", {
     gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
+    // Colours currently unused, may be again when we inline SVG markers
     colours: {
         accessible: "#0f0",
         inaccessible: "#f00"
     },
+    parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
+    smallMarkersBelowZoom: 9,
+    outerBounds: {
+        min: [-95.2, 41.6],
+        max: [-74.3, 56.9]
+    },
+    boundsBuffer: 0.01,
     fields: {
+        city: "city",
         name: "location_name",
         website: "website",
-        phone: "phone"
+        phone: "phone",
+        postcode: "postal_code"
     },
-    accessibleChecks: {
+    filters: {
         entrances: {
-            selector: ".fld-mapviz-filter-entrances",
+            selector: ".fl-mapviz-filter-entrances",
             column: "Wheelchair-accessible entrance"
         },
         washroom: {
-            selector: ".fld-mapviz-filter-washrooms",
+            selector: ".fl-mapviz-filter-washrooms",
             column: "Wheelchair-accessible bathrooms"
         },
         parking: {
-            selector: ".fld-mapviz-filter-parking",
+            selector: ".fl-mapviz-filter-parking",
             column: "Accessible parking"
         },
         individual: {
-            selector: ".fld-mapviz-filter-individual",
+            selector: ".fl-mapviz-filter-individual",
             column: "Personalized or individual service is offered"
         },
         wait: {
-            selector: ".fld-mapviz-filter-wait",
+            selector: ".fl-mapviz-filter-wait",
             column: "Queue accomodations"
         }
     },
-    unselectedChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.accessibleChecks)",
-    parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
+    unselectedFilterChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.filters)",
+    selectors: {
+        query: ".fl-mapviz-query",
+        resultsPage: ".fl-mapviz-search-results",
+        hospitalPanel: ".fl-mapviz-hospital-panel",
+        attribution: ".leaflet-control-attribution",
+        resetButton: ".fl-mapviz-reset-filters",
+        applyButton: ".fl-mapviz-reset-filters",
+        filterPanel: ".fl-mapviz-filter-panel",
+        filterControl: ".fl-mapviz-filter-control",
+        filterCount: ".fl-mapviz-filter-count",
+        queryHolder: ".fl-mapviz-query-holder",
+        queryReset: ".fl-mapviz-query-reset",
+        query: "#fl-search-query"
+    },
+    styles: {
+        marker: "fl-mapviz-marker"
+    },
+    markup: {
+        marker: "<svg height=\"%height\" width=\"%width\"><use xlink:href=\"#%marker\" /></svg>"
+    },
+    ids: {
+        searchQuery: "fl-search-query"
+    },
     listeners: {
-        "buildMap.addMarkers": "fluid.covidMap.addMarkers({that}, {that}.options.parsedColours, {that}.options.markup)"
+        "buildMap.addMarkers": {
+            funcName: "fluid.covidMap.addMarkers",
+            args: ["{that}"],
+            priority: "last"
+        }
     },
     model: {
+        cities: [],
+        postcodes: {},
         query: "",
-        pageSize: 5,
-        activeChecks: "{that}.options.unselectedChecks",
-        uiChecks: "{that}.options.unselectedChecks",
+        activeFilterChecks: "{that}.options.unselectedFilterChecks",
+        uiFilterChecks: "{that}.options.unselectedFilterChecks",
         matchedRows: [], // Map of row indices to boolean
         matchedRowIndices: [], // The indices of the matched rows
-        visiblePageIndices: [], // The indices, selected from matchedRowIndices, which are visible
         selectedRows: [], // Map of row indices to boolean
         hoveredRows: [], // Map of row indices to boolean
         selectedIndex: null,
         hoveredIndex: null
         // selectedHospital: null
     },
-    // TODO: Allow resources to be defaulted in a civilized manner
+    members: {
+        rowMarkers: [] // an array of Leaflet.Marker constructed during buildMap.addMarkers
+    },
     templateUrl: null,
     searchResultTemplateUrl: null,
     iconPrefix: "",
@@ -166,93 +164,39 @@ fluid.defaults("fluid.covidMap.map", {
         }
     },
     markers: {
+        unzoomed: {
+            symbol: "MarkerUnzoomed",
+            iconSize: [9, 13],
+            iconAnchor: [4.5, 13]
+        },
         standard: {
-            iconUrl: "img/Marker.svg",
+            symbol: "Marker",
             iconSize: [51, 65],
             iconAnchor: [25.5, 65]
         },
         hover: {
-            iconUrl: "img/Marker-hover.svg",
+            symbol: "MarkerHover",
             iconSize: [61, 76],
             iconAnchor: [30.5, 70]
         },
         selected: {
-            iconUrl: "img/Marker-selected.svg",
+            symbol: "MarkerSelected",
             iconSize: [108, 108],
             iconAnchor: [54, 90]
         }
     },
-    modelListeners: {
-        "selectedIndexMarkers": {
-            path: "selectedIndex",
-            funcName: "fluid.covidMap.updateMarkers",
-            args: ["{that}", "{change}.value", "{change}.oldValue"]
-        },
-        "hoveredIndexMarkers": {
-            path: "hoveredIndex",
-            funcName: "fluid.covidMap.updateMarkers",
-            args: ["{that}", "{change}.value", "{change}.oldValue"]
-        },
-        "selectedIndexPage": {
-            path: "selectedIndex",
-            funcName: "fluid.covidMap.showPageForIndex",
-            args: ["{that}", "{change}.value"]
-        },
-        "hoveredIndexPage": {
-            path: "hoveredIndex",
-            funcName: "fluid.covidMap.showPageForIndex",
-            args: ["{that}", "{change}.value"]
-        }
-    },
-    components: {
-        pager: {
-            type: "fluid.covidMap.pager",
-            container: "{that}.dom.pager",
-            options: {
-                model: {
-                    totalRange: "{map}.model.matchedRowIndices.length",
-                    pageSize: "{map}.model.pageSize"
-                }
-            }
-        },
-        resultsPage: {
-            type: "fluid.covidMap.map.resultsPage",
-            container: "{that}.dom.resultsPage",
-            options: {
-                model: {
-                    visiblePageIndices: "{map}.model.visiblePageIndices"
-                }
-            }
-        },
-        selectedHospitalPane: {
-            type: "fluid.covidMap.hospitalRenderer",
-            container: "{that}.dom.hospitalPanel",
-            options: {
-                gradeNames: "fluid.viewComponent",
-                model: {
-                    row: "{map}.model.selectedHospital"
-                },
-                selectors: {
-                    hospitalWebsite: ".fld-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
-                },
-                modelRelay: {
-                    hospitalWebsite: {
-                        source: {
-                            segs: ["row", "{map}.options.fields.website"]
-                        },
-                        target: "dom.hospitalWebsite.text"
-                    }
-                }
-            }
-        }
-    },
-    selectors: {
-        query: ".fld-mapviz-query",
-        pager: ".fld-mapviz-search-result-pagination",
-        resultsPage: ".fld-mapviz-search-results",
-        hospitalPanel: ".fld-mapviz-hospital-panel"
-    },
     modelRelay: {
+        // Data mapping:
+        cities: {
+            target: "cities",
+            func: "fluid.covidMap.extractCities",
+            args: ["{that}.model.rows", "{that}.options.fields.city"]
+        },
+        postcodes: {
+            target: "postcodes",
+            func: "fluid.covidMap.extractPostcodes",
+            args: ["{that}.model.rows", "{that}.options.fields.postcode"]
+        },
         // Selection and hover state
         isHospitalSelected: {
             target: "dom.hospitalPanel.visible",
@@ -274,7 +218,6 @@ fluid.defaults("fluid.covidMap.map", {
             args: ["{that}.model.rows", "{that}.model.hoveredIndex"],
             func: "fluid.transforms.indexToBooleans"
         },
-        // Query state
         matchedRows: {
             target: "matchedRows",
             func: "fluid.covidMap.doQuery",
@@ -285,102 +228,446 @@ fluid.defaults("fluid.covidMap.map", {
             source: "matchedRows",
             func: "fluid.transforms.setMembershipToArray"
         },
-        // Paging state
-        visiblePageIndices: {
-            target: "visiblePageIndices",
-            func: function (matchedRowIndices, firstIndex, lastIndex) {
-                return matchedRowIndices.slice(firstIndex - 1, lastIndex);
+        // Query reset visibility
+        queryResetVisible: {
+            source: "query",
+            target: "dom.queryReset.visible",
+            func: query => !!query
+        },
+        // Marker size
+        smallMarkers: {
+            target: "smallMarkers",
+            func: function (zoom, zoomThresh) {
+                return zoom < zoomThresh;
             },
-            args: ["{that}.model.matchedRowIndices", "{pager}.model.firstIndex", "{pager}.model.lastIndex"]
+            args: ["{that}.model.zoom", "{that}.options.smallMarkersBelowZoom"]
+        }
+    },
+    modelListeners: {
+        // Ensure that freshly selected or hovered item is visible
+        "showSelectedIndex": {
+            path: "selectedIndex",
+            funcName: "fluid.covidMap.showResultIndex",
+            args: ["{that}", "{change}.value"],
+            excludeSource: "resultsList"
+        },
+        "showHoveredIndex": {
+            path: "hoveredIndex",
+            funcName: "fluid.covidMap.showResultIndex",
+            args: ["{that}", "{change}.value"],
+            excludeSource: "resultsList"
+        },
+        // Update markers for selected or hovered items
+        "selectedIndexMarkers": {
+            path: "selectedIndex",
+            funcName: "fluid.covidMap.updateMarkers",
+            args: ["{that}", "{change}.value", "{change}.oldValue"]
+        },
+        "hoveredIndexMarkers": {
+            path: "hoveredIndex",
+            funcName: "fluid.covidMap.updateMarkers",
+            args: ["{that}", "{change}.value", "{change}.oldValue"]
+        },
+        // Update all markers if marker size changes
+        "smallMarkers": { // TODO: modelise marker choices
+            path: "smallMarkers",
+            excludeSource: "init",
+            func: function (that) {
+                that.rowMarkers.forEach(function (row, index) {
+                    fluid.covidMap.updateMarker(that, index);
+                });
+            },
+            args: "{that}"
+        },
+        // Marker visibility
+        "markerVisibility": {
+            path: "matchedRows",
+            excludeSource: "init",
+            funcName: "fluid.covidMap.updateMarkerVisibility",
+            args: ["{that}", "{change}.value"]
+        }
+    },
+    components: {
+        resultsPage: {
+            type: "fluid.covidMap.resultsPage",
+            container: "{that}.dom.resultsPage",
+            options: {
+                model: {
+                    visiblePageIndices: "{map}.model.matchedRowIndices"
+                }
+            }
+        },
+        resetButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.resetButton",
+            options: {
+                modelListeners: {
+                    "resetFilters": {
+                        path: "activate",
+                        changePath: "{map}.model.uiFilterChecks",
+                        value: "{map}.options.unselectedFilterChecks"
+                    }
+                }
+            }
+        },
+        applyButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.applyButton"
+        },
+        resetQueryButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.queryReset",
+            options: {
+                modelListeners: {
+                    "resetQuery": {
+                        path: "activate",
+                        changePath: "{map}.model.query",
+                        value: ""
+                    }
+                }
+            }
+        },
+        query: {
+            type: "fluid.covidMap.autocomplete",
+            container: "{that}.dom.queryHolder",
+            options: {
+                id: "{map}.options.ids.searchQuery",
+                modelRelay: {
+                    query: {
+                        target: "{map}.model.query",
+                        source: "dom.input.value"
+                    }
+                }
+            }
+        },
+        selectedHospitalPane: {
+            type: "fluid.covidMap.hospitalRenderer",
+            container: "{that}.dom.hospitalPanel",
+            options: {
+                gradeNames: "fluid.viewComponent",
+                model: {
+                    row: "{map}.model.selectedHospital"
+                },
+                selectors: {
+                    hospitalWebsite: ".fl-mapviz-hospital-website" // This field left over from fluid.covidMap.hospitalRenderer
+                },
+                modelRelay: {
+                    hospitalWebsite: {
+                        source: {
+                            segs: ["row", "{map}.options.fields.website"]
+                        },
+                        target: "dom.hospitalWebsite.text"
+                    }
+                }
+            }
+        },
+        filterControl: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.filterControl",
+            options: {
+                model: {
+                    filterVisible: true
+                },
+                modelRelay: {
+                    toggle: {
+                        source: "activate",
+                        target: "filterVisible",
+                        singleTransform: "fluid.transforms.toggle"
+                    },
+                    expanded: {
+                        source: "filterVisible",
+                        target: "{that}.model.dom.container.attrs.aria-expanded"
+                    },
+                    filterVisible: {
+                        source: "filterVisible",
+                        target: "{map}.model.dom.filterPanel.visible"
+                    }
+                }
+            }
+        },
+        filterCount: {
+            type: "fluid.viewComponent",
+            container: "{that}.dom.filterCount",
+            options: {
+                model: {
+                    // checkArray: Array
+                    // filterCount: Number
+                },
+                modelRelay: {
+                    checkArray: {
+                        source: "{map}.model.uiFilterChecks",
+                        target: "checkArray",
+                        func: checks => Object.values(checks)
+                    },
+                    filterCount: {
+                        source: "checkArray",
+                        target: "filterCount",
+                        func: checks => checks.reduce((acc, current) => acc + (+current), 0)
+                    },
+                    renderCount: {
+                        source: "filterCount",
+                        target: "dom.container.text"
+                    }
+                }
+            }
+        }
+    },
+    dynamicComponents: {
+        filterChecks: {
+            sources: "{that}.options.filters",
+            type: "fluid.covidMap.filter",
+            options: {
+                // Weird integration model whilst we don't render markup
+                container: "@expand:fluid.covidMap.findSelector({map}.container, {source}.selector)",
+                key: "{sourcePath}",
+                distributeOptions: {
+                    target: "{that styledCheckbox}.options.gradeNames",
+                    record: "fluid.covidMap.filterCheckboxInMap"
+                }
+            }
         }
     }
 });
 
+fluid.defaults("fluid.covidMap.filterCheckboxInMap", {
+    modelRelay: {
+        source: {
+            context: "map",
+            segs: ["uiFilterChecks", "{fluid.covidMap.filter}.options.key"]
+        },
+        target: "checked"
+    }
+});
+
+fluid.defaults("fluid.covidMap.filter", {
+    gradeNames: "fluid.viewComponent",
+    // key: String
+    selectors: {
+        checkbox: ".fl-checkbox-holder",
+        tooltipIcon: ".fl-mapviz-filter-tooltip-icon",
+        tooltip: ".fl-mapviz-filter-tooltip",
+        title: ".fl-mapviz-filter-title" // currently unused
+    },
+    components: {
+        checkbox: {
+            type: "fluid.styledCheckbox",
+            container: "{filter}.dom.checkbox"
+        }
+    }
+});
+
+fluid.defaults("fluid.covidMap.autocomplete", {
+    gradeNames: "hortis.autocomplete",
+    invokers: {
+        query: "fluid.covidMap.autocomplete.query({map}.model.cities, {map}.model.postcodes, {arguments}.0, {arguments}.1)"
+    }
+});
+
+fluid.covidMap.autocomplete.query = function (cities, postcodes, query, callback) {
+    var queried;
+    var lower = query.trim().toLowerCase();
+    if (fluid.covidMap.isPostcodeStart(lower)) {
+        var upper = lower.toUpperCase();
+        var codes = Object.keys(postcodes);
+        var matches = codes.filter(function (code) {
+            return code.startsWith(upper);
+        });
+        queried = matches;
+    } else {
+        queried = Array.prototype.filter.call(cities, function (city) {
+            return city.toLowerCase().startsWith(lower);
+        });
+    }
+    callback(queried);
+};
+
+// Stupid utility to compensate for lack of this-ism in expander resolution
+fluid.covidMap.findSelector = function (scope, selector) {
+    return scope.find(selector);
+};
+
+/** Maps an array and an index number to an array of booleans with `true` at the selected index
+ * @param {Array} rows - An array of any type - only the length will be used
+ * @param {Integer} selectedIndex - An index into the array
+ * @return {Boolean[]} An array of booleans of the same length as `rows` with `true` at the index `selectedIndex` and
+ * `false` at all other positions
+ */
 fluid.transforms.indexToBooleans = function (rows, selectedIndex) {
     return rows.map(function (row, index) {
         return index === selectedIndex;
     });
 };
 
-fluid.defaults("fluid.covidMap.map.resultsPage", {
+fluid.defaults("fluid.activatableComponent", {
     gradeNames: "fluid.viewComponent",
     model: {
-        // visiblePageIndices: []
+        activate: 0
     },
-    selectors: {
-        resultList: ".fld-mapviz-search-result-list"
+    // These options will be forwarded to fluid.activatable applied to the container
+    activatableOptions: {
+    },
+    invokers: {
+        // This invoker only necessary as an integration artefact until fluid.activatable is made integral
+        activate: {
+            changePath: "activate",
+            func: x => x + 1,
+            args: "{that}.model.activate"
+        }
     },
     listeners: {
-        // TODO: eliminate this workflow when we move to real renderer
-        // "onCreate.clear": {
-        //      "this": "{resultsPage}.dom.resultList",
-        //      method: "empty"
-        // }
-    },
-    dynamicComponents: {
-        searchResults: {
-            sources: "{resultsPage}.model.visiblePageIndices",
-            type: "fluid.covidMap.map.searchResult",
-            options: {
-                parentContainer: "{resultsPage}.dom.resultList"
-            }
+        "onCreate.makeActivatable": {
+            funcName: "fluid.activatable",
+            args: ["{that}.container", "{that}.activate", "{that}.options.activatableOptions"]
         }
     }
 });
 
-fluid.defaults("fluid.covidMap.map.searchResult", {
-    gradeNames: ["fluid.covidMap.hospitalRenderer", "fluid.templateRenderingView"],
-    templateUrl: "{map}.options.searchResultTemplateUrl",
+fluid.defaults("fluid.styledCheckbox", {
+    gradeNames: "fluid.activatableComponent",
+    selectors: {
+        control: ".fl-mapviz-checkbox"
+    },
     model: {
-        hospitalIndex: "{source}"
+        // checked: Boolean
+    },
+    modelRelay: {
+        toggleChecked: {
+            target: "checked",
+            source: "activate",
+            singleTransform: "fluid.transforms.toggle"
+        },
+        checked: {
+            target: "checked",
+            source: "{that}.model.dom.control.value"
+        }
+    },
+
+    markup: {
+        container: "<label class=\"fl-checkbox-holder\" tabindex=\"0\"><input class=\"fl-mapviz-checkbox visually-hidden\" tabindex=\"-1\" type=\"checkbox\"><span></span></label>"
+    }
+});
+
+fluid.defaults("fluid.styledButton", {
+    gradeNames: "fluid.activatableComponent",
+    markup: {
+        container: "<a class=\"fl-mapviz-apply-filters fl-mapviz-hoverable\" tabindex=\"0\"></a>"
+    },
+    modelRelay: {
+        clickToActivate: {
+            target: "activate",
+            source: "{that}.model.dom.container.click"
+        }
+    }
+});
+
+fluid.defaults("fluid.covidMap.resultsPage", {
+    gradeNames: ["fluid.viewComponent", "fluid.resourceLoader"],
+    resources: {
+        resultTemplate: {
+            url: "{map}.options.searchResultTemplateUrl"
+        }
+    },
+    members: {
+        // Map of visiblePageIndices member to jQuery of DOM element
+        indexToElement: []
+    },
+    model: {
+        template: "{that}.resources.resultTemplate.parsed" // Hack so that it loads on model load
+        // visiblePageIndices: []
+    },
+    selectors: {
+        resultsList: ".fl-mapviz-search-results-list",
+        element: ".fl-mapviz-search-result"
     },
     styles: {
         selected: "fl-mapviz-search-result-selected",
         hover: "fl-mapviz-search-result-hover"
     },
-    modelRelay: {
-        fetchRow: {
-            target: "row",
-            func: (index, rows) => rows[index],
-            args: ["{that}.model.hospitalIndex", "{map}.model.rows"]
-        },
-        isSelected: {
-            target: "isSelected",
-            func: (index, selectedRows) => selectedRows[index],
-            args: ["{that}.model.hospitalIndex", "{map}.model.selectedRows"]
-        },
-        isHovered: {
-            target: "isHovered",
-            func: (index, hoveredRows) => hoveredRows[index],
-            args: ["{that}.model.hospitalIndex", "{map}.model.hoveredRows"]
-        },
-        // Rendering directives
+    modelListeners: {
         showSelected: {
-            source: "isSelected",
-            target: {
-                segs: ["dom", "container", "class", "{that}.options.styles.selected"]
-            }
+            path: "{map}.model.selectedRows.*",
+            funcName: "fluid.covidMap.booleanToClass",
+            args: ["{that}", "{change}.path", "{change}.value", "{that}.options.styles.selected"]
         },
-        showHovered: {
-            source: "isHovered",
-            target: {
-                segs: ["dom", "container", "class", "{that}.options.styles.hover"]
-            }
+        showHover: {
+            path: "{map}.model.hoveredRows.*",
+            funcName: "fluid.covidMap.booleanToClass",
+            args: ["{that}", "{change}.path", "{change}.value", "{that}.options.styles.hover"]
+        },
+        render: {
+            path: "visiblePageIndices",
+            func: "{that}.renderMarkup"
         }
     },
-    modelListeners: {
-        clickToSelect: {
-            path: "dom.container.click",
-            changePath: "{map}.model.selectedIndex",
-            value: "{that}.model.hospitalIndex"
-        },
-        hoverToHover: {
-            path: "dom.container.hover",
-            changePath: "{map}.model.hoveredIndex",
-            value: "{that}.model.hospitalIndex"
-        }
+    listeners: {
+        "onCreate.bindEvents": "fluid.covidMap.resultsPage.bindEvents({that}, {map})"
+    },
+    invokers: {
+        renderMarkup: "fluid.covidMap.resultsPage.renderMarkup({that}, {map})",
+        elementToIndex: "fluid.covidMap.resultsPage.elementToIndex({that}, {arguments}.0)"
     }
 });
+
+// Given change in row flag, map to toggled class of corresponding row
+fluid.covidMap.booleanToClass = function (resultsPage, path, value, className) {
+    var rowIndex = Number(fluid.peek(path));
+    var cellIndex = resultsPage.model.visiblePageIndices.indexOf(Number(rowIndex));
+    var element = resultsPage.indexToElement[cellIndex];
+    if (element) {
+        element.toggleClass(className, value);
+    }
+};
+
+fluid.covidMap.resultsPage.elementToIndex = function (that, target) {
+    var container = target.closest(that.options.selectors.element);
+    return container ? container.getAttribute("data-fl-index") : -1;
+};
+
+fluid.covidMap.resultsPage.transduceTarget = function (that, map, target, prefix) {
+    var cellIndex = that.elementToIndex(target);
+    var rowIndex = that.model.visiblePageIndices[cellIndex];
+    map.applier.change(prefix, rowIndex, "ADD", "resultsList");
+};
+
+fluid.covidMap.resultsPage.bindEvents = function (that, map) {
+    that.container.click(function (event) {
+        fluid.covidMap.resultsPage.transduceTarget(that, map, event.target, "selectedIndex");
+    });
+    that.container.mouseover(function (event) {
+        fluid.covidMap.resultsPage.transduceTarget(that, map, event.target, "hoveredIndex");
+    });
+};
+
+fluid.covidMap.rowToTerms = function (map, row) {
+    return {
+        hospitalTitle: row[map.options.fields.name],
+        hospitalHours: fluid.covidMap.renderHours(row),
+        hospitalAddress: fluid.covidMap.renderAddress(row),
+        hospitalPhone: row[map.options.fields.phone]
+    };
+};
+
+fluid.covidMap.resultsPage.renderMarkup = function (that, map) {
+    var template = that.resources.resultTemplate.parsed;
+    var indexToElement = [];
+    var fragment = document.createDocumentFragment();
+    that.model.visiblePageIndices.forEach(function (rowIndex, cellIndex) {
+        var row = map.model.rows[rowIndex];
+        var terms = fluid.covidMap.rowToTerms(map, row);
+        var record = fluid.stringTemplate(template, terms);
+        var element = $(record);
+        element.attr("data-fl-index", cellIndex);
+        element.toggleClass(that.options.styles.selected, map.model.selectedRows[rowIndex]);
+        element.toggleClass(that.options.styles.hover, map.model.hoveredRows[rowIndex]);
+        indexToElement[cellIndex] = element;
+        fragment.appendChild(element[0]);
+    });
+    that.indexToElement = indexToElement;
+    var resultsList = that.locate("resultsList");
+    resultsList.empty();
+    resultsList[0].appendChild(fragment);
+};
+
 
 fluid.covidMap.unselectedChecks = function (checks) {
     return fluid.transform(checks, () => false);
@@ -400,28 +687,46 @@ fluid.covidMap.renderAddress = function (row) {
     return row.address + ", " + row.city + ", " + row.province + " " + row.postal_code;
 };
 
+fluid.covidMap.isPostcodeStart = function (query) {
+    return query.match(/[a-z][0-9]/i);
+};
+
 fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
-    var tokens = query.split(" ").map(s => s.trim()).filter(t => t);
+    var normalised = query.trim();
+    var isPostcodeQuery = fluid.covidMap.isPostcodeStart(normalised);
     var noChecks = fluid.hashToArray(activeChecks).every(a => !a);
     // var checksActive = activeChecks.some(a => a) && activeChecks.some(a => !a);
-    var selected = rows.map(function (row) {
-        var address = fluid.covidMap.renderAddress(row);
-        var matchTokens = tokens.length ? tokens.some(t => address.contains(t)) : true;
+    var anyMatched = false;
+    var matched = rows.map(function (row) {
+        var matchQuery = (isPostcodeQuery ? row.postal_code : row.city).startsWith(query);
         var checkMatches = fluid.transform(checks, function (record, key) {
             var value = row[record.column];
             return !activeChecks[key] || value.contains("Yes");
         });
         var matchChecks = noChecks || fluid.hashToArray(checkMatches).every(a => a);
-        return matchTokens && matchChecks;
+        var match = matchQuery && matchChecks;
+        anyMatched = anyMatched || match;
+        return match;
     });
-    return selected;
+    if (!anyMatched) {
+        matched = fluid.generate(rows.length, true);
+    }
+    return matched;
 };
 
 fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
-        var marker = that.model.selectedRows[index] ? that.markers.selected : (that.model.hoveredRows[index] ?
-            that.markers.hover : that.markers.standard);
-        that.rowMarkers[index].setIcon(marker);
+        var markerKey = that.model.selectedRows[index] ? "selected" : (that.model.hoveredRows[index] ? "hover" : "standard");
+        if (that.model.smallMarkers) { // TODO: stopgap until we have 3 unzoomed markers
+            markerKey = "unzoomed";
+        }
+        var markerIcon = that.markers[markerKey];
+        var marker = that.rowMarkers[index];
+        if (marker) { // Row with invalid coordinates doesn't get marker
+            marker.setIcon(markerIcon);
+            marker._icon.removeAttribute("tabindex");
+            $(marker._icon).toggleClass("visually-hidden", !that.model.matchedRows[index]);
+        }
     }
 };
 
@@ -430,12 +735,43 @@ fluid.covidMap.updateMarkers = function (that, index1, index2) {
     fluid.covidMap.updateMarker(that, index2);
 };
 
-fluid.covidMap.showPageForIndex = function (that, newIndex) {
+fluid.covidMap.computeBounds = function (rows, matched, buffer) {
+    var bounds = fluid.geom.emptyBounds();
+    rows.forEach(function (row, index) {
+        if (matched[index]) {
+            fluid.geom.updateBounds(bounds, row.longitude, row.latitude);
+        }
+    });
+    if (!fluid.geom.isEmptyBounds(bounds)) {
+        fluid.geom.expandBounds(bounds, buffer);
+    }
+    return bounds;
+};
+
+fluid.covidMap.updateMarkerVisibility = function (that, matchedRows) {
+    var allMatched = true;
+    matchedRows.forEach(function (matched, index) {
+        var marker = that.rowMarkers[index];
+        if (marker) { // Some rows may not have valid coordinates and hence no markers
+            $(marker._icon).toggleClass("visually-hidden", !matched);
+        }
+        allMatched = allMatched && matched;
+    });
+    var matchedBounds = fluid.covidMap.computeBounds(that.model.rows, matchedRows, that.options.boundsBuffer);
+    var bounds = fluid.geom.isEmptyBounds(matchedBounds) || allMatched ? that.options.outerBounds : matchedBounds;
+    that.fitBounds(bounds, true);
+};
+
+/** Ensure that the supplied search result at the supplied index is visible
+ * @param {fluid.covidMap.
+ */
+
+fluid.covidMap.showResultIndex = function (that, newIndex) {
     if (Number.isInteger(newIndex)) {
-        var filterIndex = that.model.matchedRowIndices.indexOf(newIndex);
-        if (filterIndex !== -1) {
-            var pageIndex = Math.floor(filterIndex / that.model.pageSize);
-            that.pager.applier.change("pageIndex", pageIndex);
+        var visibleIndex = that.model.matchedRowIndices.indexOf(newIndex);
+        var element = that.resultsPage.indexToElement[visibleIndex];
+        if (element) {
+            element[0].scrollIntoView();
         }
     }
 };
@@ -443,9 +779,14 @@ fluid.covidMap.showPageForIndex = function (that, newIndex) {
 fluid.covidMap.addMarkers = function (that) {
     that.markers = fluid.transform(that.options.markers, function (marker) {
         var markerOptions = fluid.extend({}, marker, {
-            iconUrl: that.options.iconPrefix + marker.iconUrl
+            html: fluid.stringTemplate(that.options.markup.marker, {
+                marker: marker.symbol,
+                width: marker.iconSize[0],
+                height: marker.iconSize[1]
+            }),
+            className: that.options.styles.marker
         });
-        return L.icon(markerOptions);
+        return L.divIcon(markerOptions);
     });
 
     $(that.container).on("click", function (event) {
@@ -453,14 +794,18 @@ fluid.covidMap.addMarkers = function (that) {
             that.applier.change("selectedIndex", null);
         }
     });
+    that.locate("attribution").find("a").attr("tabindex", -1);
     var data = that.resources.data.parsed.data;
-    that.rowMarkers = data.map(function (row, index) {
+    that.rowMarkers = [];
+    data.forEach(function (row, index) {
         if (!row.latitude || !row.longitude) {
             fluid.log("Warning, ignoring row ", row, " which does not have valid coordinates");
         } else {
             var marker = L.marker([row.latitude, row.longitude], {
                 icon: that.markers.standard
             }).addTo(that.map);
+            that.rowMarkers[index] = marker;
+            fluid.covidMap.updateMarker(that, index);
             marker.on("mouseover", function () {
                 that.applier.change("hoveredIndex", index);
             });
