@@ -111,6 +111,8 @@ fluid.defaults("fluid.covidMap.map", {
     selectors: {
         query: ".fl-mapviz-query",
         resultsPage: ".fl-mapviz-search-results",
+        citiesList: ".fl-mapviz-city-list",
+        backButton: ".fl-mapviz-back-button",
         hospitalPanel: ".fl-mapviz-hospital-panel",
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
@@ -149,7 +151,8 @@ fluid.defaults("fluid.covidMap.map", {
         selectedRows: [], // Map of row indices to boolean
         hoveredRows: [], // Map of row indices to boolean
         selectedIndex: null,
-        hoveredIndex: null
+        hoveredIndex: null,
+        resultsShowing: false
         // selectedHospital: null
     },
     members: {
@@ -228,10 +231,24 @@ fluid.defaults("fluid.covidMap.map", {
             source: "matchedRows",
             func: "fluid.transforms.setMembershipToArray"
         },
+        resultsShowing: {
+            source: "resultsShowing",
+            target: "dom.resultsPage.visible"
+        },
+        citiesShowing: {
+            source: "resultsShowing",
+            target: "dom.citiesList.visible",
+            func: x => !x
+        },
         // Query reset visibility
         queryResetVisible: {
             source: "query",
             target: "dom.queryReset.visible",
+            func: query => !!query
+        },
+        queryResultsShowing: {
+            source: "query",
+            target: "resultsShowing",
             func: query => !!query
         },
         // Marker size
@@ -285,6 +302,12 @@ fluid.defaults("fluid.covidMap.map", {
             excludeSource: "init",
             funcName: "fluid.covidMap.updateMarkerVisibility",
             args: ["{that}", "{change}.value"]
+        },
+        "queryAccept": {
+            path: "query",
+            priority: "last",
+            func: "{query}.accept",
+            args: [0]
         }
     },
     components: {
@@ -294,6 +317,28 @@ fluid.defaults("fluid.covidMap.map", {
             options: {
                 model: {
                     visiblePageIndices: "{map}.model.matchedRowIndices"
+                }
+            }
+        },
+        citiesList: {
+            type: "fluid.covidMap.citiesList",
+            container: "{that}.dom.citiesList",
+            options: {
+                model: {
+                    cities: "{map}.model.cities"
+                }
+            }
+        },
+        backButton: {
+            type: "fluid.styledButton",
+            container: "{that}.dom.backButton",
+            options: {
+                modelListeners: {
+                    "goBack": {
+                        path: "activate",
+                        changePath: "{map}.model.query",
+                        value: ""
+                    }
                 }
             }
         },
@@ -560,6 +605,53 @@ fluid.defaults("fluid.styledButton", {
     }
 });
 
+fluid.defaults("fluid.covidMap.citiesList", {
+    gradeNames: ["fluid.viewComponent"],
+    markup: {
+        cityTemplate: "<div class=\"fl-mapviz-city fl-mapviz-hoverable\">%city</div>"
+    },
+    selectors: {
+        cities: ".fl-mapviz-cities",
+        element: ".fl-mapviz-city"
+    },
+    modelListeners: {
+        render: {
+            path: "cities",
+            func: "{that}.renderMarkup"
+        }
+    },
+    invokers: {
+        renderMarkup: "fluid.covidMap.citiesList.renderMarkup({that})",
+        elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)"
+    },
+    listeners: {
+        "onCreate.bindEvents": "fluid.covidMap.citiesList.bindEvents({that}, {map})"
+    }
+});
+
+fluid.covidMap.citiesList.renderMarkup = function (that) {
+    var template = that.options.markup.cityTemplate;
+    var fragment = document.createDocumentFragment();
+    that.model.cities.forEach(function (city, index) {
+        var terms = {city: city};
+        var record = fluid.stringTemplate(template, terms);
+        var element = $(record);
+        element.attr("data-fl-index", index);
+        fragment.appendChild(element[0]);
+    });
+    var cities = that.locate("cities");
+    cities.empty();
+    cities[0].appendChild(fragment);
+};
+
+fluid.covidMap.citiesList.bindEvents = function (that, map) {
+    that.container.click(function (event) {
+        var index = that.elementToIndex(event.target);
+        var city = that.model.cities[index];
+        map.applier.change("query", city);
+    });
+};
+
 fluid.defaults("fluid.covidMap.resultsPage", {
     gradeNames: ["fluid.viewComponent", "fluid.resourceLoader"],
     resources: {
@@ -604,7 +696,7 @@ fluid.defaults("fluid.covidMap.resultsPage", {
     },
     invokers: {
         renderMarkup: "fluid.covidMap.resultsPage.renderMarkup({that}, {map})",
-        elementToIndex: "fluid.covidMap.resultsPage.elementToIndex({that}, {arguments}.0)"
+        elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)"
     }
 });
 
@@ -618,7 +710,7 @@ fluid.covidMap.booleanToClass = function (resultsPage, path, value, className) {
     }
 };
 
-fluid.covidMap.resultsPage.elementToIndex = function (that, target) {
+fluid.covidMap.elementToIndex = function (that, target) {
     var container = target.closest(that.options.selectors.element);
     return container ? container.getAttribute("data-fl-index") : -1;
 };
