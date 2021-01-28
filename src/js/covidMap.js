@@ -421,7 +421,7 @@ fluid.defaults("fluid.covidMap.map", {
                 container: "@expand:fluid.covidMap.findSelector({map}.container, {source}.selector)",
                 key: "{sourcePath}",
                 distributeOptions: {
-                    target: "{that styledCheckbox}.options.gradeNames",
+                    target: "{that filterCheckbox}.options.gradeNames",
                     record: "fluid.covidMap.filterCheckboxInMap"
                 }
             }
@@ -441,20 +441,43 @@ fluid.defaults("fluid.covidMap.filterCheckboxInMap", {
 
 fluid.defaults("fluid.covidMap.filter", {
     gradeNames: "fluid.viewComponent",
-    // key: String
     selectors: {
-        checkbox: ".fl-checkbox-holder",
+        checkbox: ".fl-mapviz-checkbox",
         tooltipIcon: ".fl-mapviz-filter-tooltip-icon",
         tooltip: ".fl-mapviz-filter-tooltip",
         title: ".fl-mapviz-filter-title" // currently unused
     },
     components: {
         checkbox: {
-            type: "fluid.styledCheckbox",
+            type: "fluid.covidMap.filterCheckbox",
             container: "{filter}.dom.checkbox"
         }
     }
 });
+
+fluid.defaults("fluid.covidMap.filterCheckbox", {
+    gradeNames: "fluid.viewComponent",
+    model: {
+        // checked: Boolean
+    },
+    listeners: {
+        "onCreate.bindClickEvent": {
+            this: "{that}.container",
+            method: "click",
+            args: ["{that}.updateCheckState"]
+        }
+    },
+    invokers: {
+        updateCheckState: {
+            funcName: "fluid.covidMap.filterCheckbox.updateCheckState",
+            args: ["{that}"]
+        }
+    }
+});
+
+fluid.covidMap.filterCheckbox.updateCheckState = function (that) {
+    that.applier.change("checked", that.container[0].checked);
+};
 
 fluid.defaults("fluid.covidMap.autocomplete", {
     gradeNames: "hortis.autocomplete",
@@ -519,31 +542,6 @@ fluid.defaults("fluid.activatableComponent", {
             funcName: "fluid.activatable",
             args: ["{that}.container", "{that}.activate", "{that}.options.activatableOptions"]
         }
-    }
-});
-
-fluid.defaults("fluid.styledCheckbox", {
-    gradeNames: "fluid.activatableComponent",
-    selectors: {
-        control: ".fl-mapviz-checkbox"
-    },
-    model: {
-        // checked: Boolean
-    },
-    modelRelay: {
-        toggleChecked: {
-            target: "checked",
-            source: "activate",
-            singleTransform: "fluid.transforms.toggle"
-        },
-        checked: {
-            target: "checked",
-            source: "{that}.model.dom.control.value"
-        }
-    },
-
-    markup: {
-        container: "<label class=\"fl-checkbox-holder\" tabindex=\"0\"><input class=\"fl-mapviz-checkbox visually-hidden\" tabindex=\"-1\" type=\"checkbox\"><span></span></label>"
     }
 });
 
