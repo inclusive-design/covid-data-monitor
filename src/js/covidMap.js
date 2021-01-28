@@ -167,25 +167,35 @@ fluid.defaults("fluid.covidMap.map", {
         }
     },
     markers: {
-        unzoomed: {
-            symbol: "MarkerUnzoomed",
+        standard: {
+            symbol: "Marker",
+            iconSize: [23, 33],
+            iconAnchor: [11.5, 33]
+        },
+        standardHover: {
+            symbol: "MarkerHover",
+            iconSize: [27, 37],
+            iconAnchor: [13.5, 35]
+        },
+        standardSelected: {
+            symbol: "MarkerSelected",
+            iconSize: [49, 49],
+            iconAnchor: [24.5, 41]
+        },
+        small: {
+            symbol: "MarkerSmall",
             iconSize: [9, 13],
             iconAnchor: [4.5, 13]
         },
-        standard: {
-            symbol: "Marker",
-            iconSize: [51, 65],
-            iconAnchor: [25.5, 65]
+        smallHover: {
+            symbol: "MarkerSmallHover",
+            iconSize: [10.5, 14.5],
+            iconAnchor: [5.25, 13.5]
         },
-        hover: {
-            symbol: "MarkerHover",
-            iconSize: [61, 76],
-            iconAnchor: [30.5, 70]
-        },
-        selected: {
-            symbol: "MarkerSelected",
-            iconSize: [108, 108],
-            iconAnchor: [54, 90]
+        smallSelected: {
+            symbol: "MarkerSmallSelected",
+            iconSize: [19.5, 19.5],
+            iconAnchor: [9.75, 17]
         }
     },
     modelRelay: {
@@ -808,10 +818,9 @@ fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
 
 fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
-        var markerKey = that.model.selectedRows[index] ? "selected" : (that.model.hoveredRows[index] ? "hover" : "standard");
-        if (that.model.smallMarkers) { // TODO: stopgap until we have 3 unzoomed markers
-            markerKey = "unzoomed";
-        }
+        var markerSuffix = that.model.selectedRows[index] ? "Selected" : (that.model.hoveredRows[index] ? "Hover" : "");
+        var markerPrefix = that.model.smallMarkers ? "small" : "standard";
+        var markerKey = markerPrefix + markerSuffix;
         var markerIcon = that.markers[markerKey];
         var marker = that.rowMarkers[index];
         if (marker) { // Row with invalid coordinates doesn't get marker
