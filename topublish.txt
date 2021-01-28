@@ -28,7 +28,7 @@ node_modules/infusion/src/components/pager/js/Pager.js
 node_modules/infusion/src/components/tooltip/js/Tooltip.js
 node_modules/new-renderer-demo/src/js/core/jquery.standalone.renderer.js
 node_modules/new-renderer-demo/src/js/core/fastXmlPull.js
-node_modules/new-renderer-demo/src/js/core/fluidView-template.js
+node_modules/new-renderer-demo/src/js/core/FluidView-template.js
 node_modules/new-renderer-demo/src/js/core/fluidNewRenderer.js
 node_modules/new-renderer-demo/src/js/core/fluidNewRendererComponents.js
 node_modules/new-renderer-demo/src/js/core/htmlParser.js
