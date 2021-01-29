@@ -1,3 +1,15 @@
+body {
+    /* Work with other css to display the map in a full screen on the mobile view */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Work with other css to display the map in a full screen on the mobile view */
+.fl-mapviz-outer-container {
+    flex-grow: 1;
+}
+
 /** Preload all images **/
 body::after {
     content:
@@ -706,13 +718,13 @@ h3,
 
     /* Box */
     .fl-mapviz-checkbox + label::before {
-        right: -3rem;
+        right: -5rem;
         top: 2.3rem;
     }
 
     /* Checkmark */
     .fl-mapviz-checkbox:checked + label::after {
-        right: -2rem;
+        right: -4rem;
         top: 2.4rem;
     }
 
