@@ -2,7 +2,7 @@ body {
     /* Work with other css to display the map in a full screen on the mobile view */
     display: flex;
     flex-direction: column;
-    font-family: sans-serif;
+    font-family: Fira Sans, Arial, Helvetica, sans-serif;
     height: 100vh;
 }
 
