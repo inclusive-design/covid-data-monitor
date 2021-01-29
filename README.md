@@ -32,7 +32,7 @@ To produce a fresh HTML build from a collection of SVG icon files held in `src/i
 
     node buildSVG.js
 
-This will produce output in `buildSVG/svgIcons.html` which can be pasted into the demo markup in `index.html` and
+This will produce output in `buildSVG/svgIcons.html` which is automatically pasted into `index.html` and the
 bundled template in `src/html/template.html`.
 
 ## Lint

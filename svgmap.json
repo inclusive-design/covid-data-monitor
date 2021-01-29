@@ -1,14 +1,28 @@
 {
-    "ApplyFilters": "src/img/ApplyFilters.svg",
-    "ResetFilters": "src/img/ResetFilters.svg",
-    "ArrowDown": "src/img/ArrowDown.svg",
-    "ArrowUp": "src/img/ArrowUp.svg",
-    "Back": "src/img/Back.svg",
-    "FilterControl": "src/img/FilterControl.svg",
-    "Locations": "src/img/Locations.svg",
-    "QueryReset": "src/img/Close.svg",
-    "Marker": "src/img/Marker.svg",
-    "MarkerHover": "src/img/Marker-hover.svg",
-    "MarkerSelected": "src/img/Marker-selected.svg",
-    "MarkerUnzoomed": "src/img/Marker-unzoomed.svg"
+    "images": {
+        "ApplyFilters": "src/img/ApplyFilters.svg",
+        "ResetFilters": "src/img/ResetFilters.svg",
+        "ArrowDown": "src/img/ArrowDown.svg",
+        "ArrowUp": "src/img/ArrowUp.svg",
+        "Back": "src/img/Back.svg",
+        "FilterControl": "src/img/FilterControl.svg",
+        "Locations": "src/img/Locations.svg",
+        "QueryReset": "src/img/Close.svg",
+        "Marker": "src/img/Map Marker-large-landing-01.svg",
+        "MarkerHover": "src/img/Map Marker-large-hover-03.svg",
+        "MarkerSelected": "src/img/Map Marker-large-selected-05.svg",
+        "MarkerSmall": "src/img/Map Marker-small-landing-02.svg",
+        "MarkerSmallHover": "src/img/Map Marker-small-hover-04.svg",
+        "MarkerSmallSelected": "src/img/Map Marker-small-selected-06.svg"
+    },
+    "targets": [
+        {
+            "path": "index.html",
+            "selector": ".fl-mapviz-icons"
+        }, {
+            "path": "src/html/template.html",
+            "selector": ".fl-mapviz-icons",
+            "fragment": true
+        }
+    ]
 }

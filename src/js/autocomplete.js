@@ -34,6 +34,7 @@ fluid.defaults("hortis.autocomplete", {
     },
     invokers: {
         query: "hortis.autocomplete.emptyQuery",
+        accept: "hortis.autocomplete.accept({that}, {arguments}.0)",
         renderSuggestion: "fluid.identity",
         renderInputValue: "fluid.identity"
     },
@@ -53,6 +54,20 @@ hortis.autocomplete.confirmToUpdate = function (that, selectedOption) {
     // Broken implementation of accessible-autocomplete calls the "onConfirm" callback before it calls its "setState".
     // So we need to ensure that the value of the input is correct at the time we try to read it.
     fluid.changeElementValue(that.locate("input"), selectedOption);
+};
+
+// Yet another appalling reuse failure. The accessible-autocomplete widget has no API. Therefore if we progammatically
+// cause a change in its query state, there is no way to get it to dismiss the dropdown list other than simulating
+// a click on one of its DOM elements. Once more the DOM saves us from what React won't. However, given React renders
+// asynchronously we don't even know when the element will appear.
+hortis.autocomplete.accept = function (that, index) {
+    window.setTimeout(function () {
+        var options = that.container.find("li");
+        var element = options[index || 0];
+        if (element && $(element).is(":visible")) {
+            element.click();
+        }
+    }, 25);
 };
 
 // TODO: What on earth happened to generalised interception !!

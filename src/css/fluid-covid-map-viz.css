@@ -363,12 +363,17 @@ h3,
 }
 
 /******** The city list panel ********/
+
+/* Search result list */
 .fl-mapviz-city-list {
-    display: none;
+    /* This list takes up the remaining space whenever there's any */
+    flex-grow: 1;
+    overflow-y: scroll;
 }
 
 .fl-mapviz-city-list-title h2 {
     margin: 0;
+    text-transform: uppercase;
 }
 
 /******** The search results panel ********/
@@ -422,6 +427,14 @@ h3,
 /* For individual search result */
 .fl-mapviz-search-result {
     border-bottom: 1px solid #c4c4c4;
+    padding: 0.5rem 0.5rem;
+}
+
+/* For individual city */
+.fl-mapviz-city {
+    border-bottom: 1px solid #c4c4c4;
+    height: 2rem;
+    margin-left: 0.5rem;
     padding: 0.5rem 0.5rem;
 }
 
@@ -636,7 +649,6 @@ h3,
         grid-column-start: 1;
         grid-row-end: 3;
         grid-row-start: 2;
-        height: inherit;
         max-height: 100%;
 
         /* Override the mobile css */
@@ -742,6 +754,10 @@ h3,
     /******** The panel for displaying cities ********/
     .fl-mapviz-city-list {
         height: auto;
+    }
+
+    .fl-mapviz-city {
+        font-size: 1.5rem;
     }
 
     /******** The panel for displaying search results ********/
