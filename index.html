@@ -64,147 +64,154 @@
 <body>
     <h1>Accessibility Map for COVID-19 assessment centres</h1>
     <div class="fl-mapviz-outer-container">
-        <div>
-            <div class="fl-mapviz-container">
-                <!-- The panel containing the search label & the search box & the filter control button -->
-                <div class="fl-mapviz-control-wrapper">
-                    <label class="fl-mapviz-query-label" for="search-query">Search by postal code or city</label>
-                    <div class="fl-mapviz-control-holder">
-                        <div class="fl-mapviz-query-holder">
-                            <div class="fl-mapviz-query-reset-holder">
-                                <div class="fl-mapviz-query-reset fl-mapviz-hoverable" style="display: none" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Reset the query">
-                                    <svg height="1rem" width="1rem">
-                                        <use xlink:href="#QueryReset"></use>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fl-mapviz-filter-control-holder">
-                            <div class="fl-mapviz-filter-control fl-mapviz-hoverable" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Collapse the accessibility filter list">
-                                <svg>
-                                    <use xlink:href="#FilterControl"></use>
-                                </svg>
-                            </div>
-                            <div class="fl-mapviz-filter-count">0</div>
+        <div class="fl-mapviz-container">
+            <!-- The panel containing the search label & the search box & the filter control button -->
+            <div class="fl-mapviz-control-wrapper">
+                <label class="fl-mapviz-query-label" for="search-query">Search by postal code or city</label>
+                <div class="fl-mapviz-query-holder">
+                    <div class="fl-mapviz-query-reset-holder">
+                        <div class="fl-mapviz-query-reset fl-mapviz-hoverable" style="display: none" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Reset the query">
+                            <svg height="1rem" width="1rem"><use xlink:href="#QueryReset" /></svg>
                         </div>
                     </div>
                 </div>
+                <div class="fl-mapviz-filter-control-holder-on-desktop">
+                    <label class="fl-mapviz-filter-label" for="filter-control-button">Accessibility Features</label>
+                    <button class="fl-mapviz-filter-control fl-mapviz-hoverable" type="button" id="filter-control-button">
+                        <svg><use xlink:href="#FilterControl" /></svg>
+                        <div class="fl-mapviz-filter-count">0</div>
+                    </button>
+                </div>
+            </div>
 
-                <!-- A11y filter panel -->
-                <div class="fl-mapviz-filter-panel">
-                    <div class="fl-mapviz-filters">
-                        <div class="fl-mapviz-filter fl-mapviz-filter-entrances">
-                            <span class="fl-mapviz-filter-icon"></span>
-                            <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                            <span class="fl-mapviz-filter-tooltip"></span>
-                            <label class="fl-mapviz-filter-title" for="toggle-1">Accessible Entrances</label>
-                            <label class="fl-checkbox-holder" tabindex="0">
-                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-1" type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="fl-mapviz-filter fl-mapviz-filter-washrooms">
-                            <span class="fl-mapviz-filter-icon"></span>
-                            <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                            <span class="fl-mapviz-filter-tooltip"></span>
-                            <label class="fl-mapviz-filter-title" for="toggle-2">Accessible Washrooms</label>
-                            <label class="fl-checkbox-holder" tabindex="0">
-                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-2" type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="fl-mapviz-filter fl-mapviz-filter-parking">
-                            <span class="fl-mapviz-filter-icon"></span>
-                            <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                            <span class="fl-mapviz-filter-tooltip"></span>
-                            <label class="fl-mapviz-filter-title" for="toggle-3">Accessible Parking</label>
-                            <label class="fl-checkbox-holder" tabindex="0">
-                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-3" type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="fl-mapviz-filter fl-mapviz-filter-individual">
-                            <span class="fl-mapviz-filter-icon"></span>
-                            <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                            <span class="fl-mapviz-filter-tooltip"></span>
-                            <label class="fl-mapviz-filter-title" for="toggle-4">Individual Service</label>
-                            <label class="fl-checkbox-holder" tabindex="0">
-                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-4" type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                        <div class="fl-mapviz-filter fl-mapviz-filter-wait">
-                            <span class="fl-mapviz-filter-icon"></span>
-                            <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
-                            <span class="fl-mapviz-filter-tooltip"></span>
-                            <label class="fl-mapviz-filter-title" for="toggle-5">Wait Accommodations</label>
-                            <label class="fl-checkbox-holder" tabindex="0">
-                                <input class="fl-mapviz-checkbox visually-hidden" tabindex="-1" id="toggle-6" type="checkbox">
-                                <span></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="fl-mapviz-filter-buttons">
-                        <button class="fl-mapviz-reset-filters fl-mapviz-hoverable" type="button">
+            <!-- A11y filter panel -->
+            <div class="fl-mapviz-filter-panel">
+                <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
+                    <svg class="fl-mapviz-collapse-button">
+                        <use xlink:href="#ArrowDown"></use>
+                    </svg>
+                    <svg class="fl-mapviz-expand-button">
+                        <use xlink:href="#ArrowUp"></use>
+                    </svg>
+                </button>
+                <h2>Accessibility Filters</h2>
+                <ul class="fl-mapviz-filters">
+                    <li class="fl-mapviz-filter fl-mapviz-filter-entrances">
+                        <span class="fl-mapviz-filter-icon"></span>
+                        <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                        <span class="fl-mapviz-filter-tooltip"></span>
+                        <input class="fl-mapviz-checkbox" id="toggle-1" type="checkbox">
+                        <label class="fl-mapviz-filter-title" for="toggle-1">
+                            <h3>Accessible Entrances</h3>
+                        </label>
+                    </li>
+                    <li class="fl-mapviz-filter fl-mapviz-filter-washrooms">
+                        <span class="fl-mapviz-filter-icon"></span>
+                        <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                        <span class="fl-mapviz-filter-tooltip"></span>
+                        <input class="fl-mapviz-checkbox" id="toggle-2" type="checkbox">
+                        <label class="fl-mapviz-filter-title" for="toggle-2">
+                            <h3>Accessible Washrooms</h3>
+                        </label>
+                    </li>
+                    <li class="fl-mapviz-filter fl-mapviz-filter-parking">
+                        <span class="fl-mapviz-filter-icon"></span>
+                        <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                        <span class="fl-mapviz-filter-tooltip"></span>
+                        <input class="fl-mapviz-checkbox" id="toggle-3" type="checkbox">
+                        <label class="fl-mapviz-filter-title" for="toggle-3">
+                            <h3>Accessible Parking</h3>
+                        </label>
+                    </li>
+                    <li class="fl-mapviz-filter fl-mapviz-filter-individual">
+                        <span class="fl-mapviz-filter-icon"></span>
+                        <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                        <span class="fl-mapviz-filter-tooltip"></span>
+                        <input class="fl-mapviz-checkbox" id="toggle-4" type="checkbox">
+                        <label class="fl-mapviz-filter-title" for="toggle-4">
+                            <h3>Individual Service</h3>
+                        </label>
+                    </li>
+                    <li class="fl-mapviz-filter fl-mapviz-filter-wait">
+                        <span class="fl-mapviz-filter-icon"></span>
+                        <span class="fl-mapviz-filter-tooltip-icon flc-mapviz-hoverable"></span>
+                        <span class="fl-mapviz-filter-tooltip"></span>
+                        <input class="fl-mapviz-checkbox" id="toggle-5" type="checkbox">
+                        <label class="fl-mapviz-filter-title" for="toggle-5">
+                            <h3>Wait Accommodations</h3>
+                        </label>
+                    </li>
+                </ul>
+                <div class="fl-mapviz-filter-buttons">
+                    <button class="fl-mapviz-reset-filters fl-mapviz-hoverable" type="button">
+                        <div class="fl-mapviz-icon-shadow">
                             <svg>
                                 <use xlink:href="#ResetFilters"></use>
-                            </svg><span>Reset Filters</span>
-                        </button>
-                        <button class="fl-mapviz-apply-filters fl-mapviz-hoverable" type="button">
+                            </svg>
+                        </div>
+                        <span>Reset Filters</span>
+                    </button>
+                    <button class="fl-mapviz-apply-filters fl-mapviz-hoverable" type="button">
+                        <div class="fl-mapviz-icon-shadow">
                             <svg>
                                 <use xlink:href="#ApplyFilters"></use>
-                            </svg><span>Apply Filters</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- The city list panel -->
-                <div class="fl-mapviz-city-list">
-                    <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
-                        <svg class="fl-mapviz-collapse-button">
-                            <use xlink:href="#ArrowDown"></use>
-                        </svg>
-                        <svg class="fl-mapviz-expand-button">
-                            <use xlink:href="#ArrowUp"></use>
-                        </svg>
+                            </svg>
+                        </div>
+                        <span>Apply Filters</span>
                     </button>
-                    <!-- Toggle headings when the render toggles between the city list and search results -->
-                    <div class="fl-mapviz-city-list-title">
-                        <h2>List of cities</h2>
-                    </div>
-                    <div class="fl-mapviz-cities">
-                    </div>
                 </div>
-
-                <!-- The search result panel -->
-                <div class="fl-mapviz-search-results" style="display: none">
-                    <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
-                        <svg class="fl-mapviz-collapse-button">
-                            <use xlink:href="#ArrowDown"></use>
-                        </svg>
-                        <svg class="fl-mapviz-expand-button">
-                            <use xlink:href="#ArrowUp"></use>
-                        </svg>
-                    </button>
-                    <div class="fl-mapviz-back-button fl-mapviz-hoverable">
-                        <svg>
-                            <use xlink:href="#Back"></use>
-                        </svg>
-                        <h2>Back to locations</h2>
-                    </div>
-                    <div class="fl-mapviz-search-results-list">
-                        <!--<div class="fl-mapviz-search-result">
-                                <div class="fl-mapviz-hospital-title">Hospital 8</div>
-                                <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
-                                <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-                                <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
-                            </div>-->
-                    </div>
-                </div>
-
-                <!-- The map panel -->
-                <div class="fl-mapviz-map"></div>
             </div>
+
+            <!-- The city list panel -->
+            <div class="fl-mapviz-city-list">
+                <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
+                    <svg class="fl-mapviz-collapse-button">
+                        <use xlink:href="#ArrowDown"></use>
+                    </svg>
+                    <svg class="fl-mapviz-expand-button">
+                        <use xlink:href="#ArrowUp"></use>
+                    </svg>
+                </button>
+                <!-- Toggle headings when the render toggles between the city list and search results -->
+                <div class="fl-mapviz-city-list-title">
+                    <h2>List of cities</h2>
+                </div>
+                <div class="fl-mapviz-cities">
+                </div>
+            </div>
+
+            <!-- The search result panel -->
+            <div class="fl-mapviz-search-results">
+                <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
+                    <svg class="fl-mapviz-collapse-button">
+                        <use xlink:href="#ArrowDown"></use>
+                    </svg>
+                    <svg class="fl-mapviz-expand-button">
+                        <use xlink:href="#ArrowUp"></use>
+                    </svg>
+                </button>
+                <div class="fl-mapviz-back-button-wrapper">
+                    <button class="fl-mapviz-back-button" type="button">
+                        <div class="fl-mapviz-icon-shadow">
+                            <svg>
+                                <use xlink:href="#Back"></use>
+                            </svg>
+                        </div>
+                        <h2 class="h3">Back to locations</h2>
+                    </button>
+                </div>
+                <div class="fl-mapviz-search-results-list">
+                    <!--<div class="fl-mapviz-search-result">
+                            <div class="fl-mapviz-hospital-title">Hospital 8</div>
+                            <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
+                            <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                            <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
+                        </div>-->
+                </div>
+            </div>
+
+            <!-- The map panel -->
+            <div class="fl-mapviz-map"></div>
 
             <!-- The hospital description panel -->
             <div class="fl-mapviz-hospital-panel">
@@ -219,41 +226,33 @@
                 <div class="fl-mapviz-hospital-website">www.mountsinai.on.ca</div>
             </div>
 
+            <!-- The mobile-design-only panel with "Locations" and "Accessibility Filters"-->
+            <div class="fl-panel-controls-on-mobile">
+                <button class="fl-mapviz-locations-control">
+                    <svg>
+                        <use xlink:href="#Locations"></use>
+                    </svg>
+                    <div>Locations</div>
+                </button>
+                <!-- TODO: use the same css selector for the filter buttons and count values on the desktop and mobile designs -->
+                <button class="fl-mapviz-filter-control-on-mobile">
+                    <div class="fl-mapviz-filter-control-icon-on-mobile">
+                        <svg>
+                            <use xlink:href="#FilterControl"></use>
+                        </svg>
+                        <div class="fl-mapviz-filter-count-on-mobile">0</div>
+                    </div>
+                    <div>Accessibility Filters</div>
+                </button>
+            </div>
+
             <svg class="fl-mapviz-icons" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                <symbol id="ApplyFilters" viewbox="0 0 45 46" fill="none">
-                    <g filter="url(#filter0_d)">
-                        <ellipse cx="22.5" cy="22.9845" rx="18.5" ry="18.9845" fill="white"></ellipse>
-                    </g>
-                    <path d="M12 25.481C13.5624 27.0467 15.1257 28.6117 16.6881 30.1775C21.8377 25.1183 26.9872 20.0592 32.1368 15" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <defs>
-                        <filter id="filter0_d" x="0" y="0" width="45" height="45.969" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                            <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
-                            <feOffset></feOffset>
-                            <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
-                        </filter>
-                    </defs>
+                <symbol id="ApplyFilters" viewbox="0 0 23 18" fill="none">
+                    <path d="M1 11.481C2.56244 13.0467 4.12567 14.6117 5.68812 16.1775C10.8377 11.1183 15.9872 6.05917 21.1368 1" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
                 </symbol>
-                <symbol id="ResetFilters" viewbox="0 0 45 46" fill="none">
-                    <g filter="url(#filter0_d)">
-                        <ellipse cx="22.5" cy="22.9845" rx="18.5" ry="18.9845" fill="white"></ellipse>
-                    </g>
-                    <path d="M13.2106 15.5961C15.2251 12.805 18.43 11 22.04 11C28.1373 11 33.08 16.1487 33.08 22.5C33.08 28.8513 28.1373 34 22.04 34C15.9427 34 11 28.8513 11 22.5" stroke="black" stroke-width="2"></path>
-                    <path d="M13.271 11L12.8398 16.52L17.4398 16.1847" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <defs>
-                        <filter id="filter0_d" x="0" y="0" width="45" height="45.969" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                            <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
-                            <feOffset></feOffset>
-                            <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
-                        </filter>
-                    </defs>
+                <symbol id="ResetFilters" viewbox="0 0 25 25" fill="none">
+                    <path d="M3.21059 5.59606C5.2251 2.80504 8.43 1 12.04 1C18.1373 1 23.08 6.14867 23.08 12.5C23.08 18.8513 18.1373 24 12.04 24C5.94272 24 1 18.8513 1 12.5" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M3.27093 1L2.83979 6.52L7.43979 6.1847" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
                 </symbol>
                 <symbol id="ArrowDown" viewbox="0 0 24 13" fill="none">
                     <path d="M1 1L12 12L23 1" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -261,22 +260,8 @@
                 <symbol id="ArrowUp" viewbox="0 0 24 13" fill="none">
                     <path d="M23 12L12 1L1 12" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </symbol>
-                <symbol id="Back" viewbox="0 0 35 35" fill="none">
-                    <g filter="url(#filter0_d)">
-                        <ellipse cx="17.5002" cy="17.5" rx="13.1555" ry="13.5" fill="white"></ellipse>
-                    </g>
-                    <path d="M19.2777 12.7564L13.5889 17.8645L19.2777 22.9727" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <defs>
-                        <filter id="filter0_d" x="0.344727" y="0" width="34.3109" height="35" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                            <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
-                            <feOffset></feOffset>
-                            <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
-                        </filter>
-                    </defs>
+                <symbol id="Back" viewbox="0 0 10 17" fill="none">
+                    <path d="M9 1.314L1 8.49733L9 15.6807" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </symbol>
                 <symbol id="FilterControl" viewbox="0 0 32 23" fill="none">
                     <path d="M4.00127 3.89875C4.05478 2.2889 5.37707 1 7 1C8.65732 1 10 2.34366 10 3.99936C10 5.65506 8.65732 7 7 7C5.34268 7 4 5.65634 4 3.99936C4 3.96625 4.00127 3.93186 4.00127 3.89875Z" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -288,6 +273,10 @@
                     <path d="M1 11.5H22" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
                     <path d="M16 19H31" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
                     <path d="M1 19H10" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                </symbol>
+                <symbol id="Locations" data-name="Layer 1" viewbox="0 0 22.84 33">
+                    <path d="M11.46,33a2,2,0,0,1-1.73-1L1.48,17A11.39,11.39,0,0,1,1.63,5.65,11.26,11.26,0,0,1,11.21,0h.51A11.29,11.29,0,0,1,21.3,5.65h0A11.44,11.44,0,0,1,21.45,17L13.21,32A2,2,0,0,1,11.46,33Zm0-31h-.21a9.33,9.33,0,0,0-7.9,4.66A9.43,9.43,0,0,0,3.23,16l8.23,15L19.7,16a9.46,9.46,0,0,0-.13-9.38A9.3,9.3,0,0,0,11.68,2Z" transform="translate(-0.04 0)"></path>
+                    <path d="M11.5,18.33a6.88,6.88,0,1,1,6.87-6.87A6.88,6.88,0,0,1,11.5,18.33Zm0-11.75a4.88,4.88,0,1,0,4.87,4.88A4.89,4.89,0,0,0,11.5,6.58Z" transform="translate(-0.04 0)"></path>
                 </symbol>
                 <symbol id="QueryReset" viewbox="0 0 14 14" fill="none">
                     <path d="M1 1L13 13" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -402,6 +391,13 @@
             searchResultTemplateUrl: "src/html/searchResultTemplate.html"
         });
     </script>
+
+
+
+
+
+
+
 
 
 

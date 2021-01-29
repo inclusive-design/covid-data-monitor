@@ -10,21 +10,6 @@ body {
     flex-grow: 1;
 }
 
-/** Preload all images **/
-body::after {
-    content:
-        url("../img/Checkbox-unselected.svg")
-        url("../img/Checkbox-selected.svg")
-        url("../img/Marker.svg")
-        url("../img/Marker-hover.svg")
-        url("../img/Marker-selected.svg");
-    height: 0;
-    overflow: hidden;
-    position: absolute;
-    width: 0;
-    z-index: -1;
-}
-
 /******** Base styles ********/
 h2 {
     font-size: 1.5rem;
