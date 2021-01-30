@@ -117,8 +117,6 @@ fluid.defaults("fluid.covidMap.map", {
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
         applyButton: ".fl-mapviz-reset-filters",
-        filterPanel: ".fl-mapviz-filter-panel",
-        filterControl: ".fl-mapviz-filter-control",
         filterCount: ".fl-mapviz-filter-count",
         queryHolder: ".fl-mapviz-query-holder",
         queryReset: ".fl-mapviz-query-reset",
@@ -412,30 +410,6 @@ fluid.defaults("fluid.covidMap.map", {
                             segs: ["row", "{map}.options.fields.website"]
                         },
                         target: "dom.hospitalWebsite.text"
-                    }
-                }
-            }
-        },
-        filterControl: {
-            type: "fluid.styledButton",
-            container: "{that}.dom.filterControl",
-            options: {
-                model: {
-                    filterVisible: true
-                },
-                modelRelay: {
-                    toggle: {
-                        source: "activate",
-                        target: "filterVisible",
-                        singleTransform: "fluid.transforms.toggle"
-                    },
-                    expanded: {
-                        source: "filterVisible",
-                        target: "{that}.model.dom.container.attrs.aria-expanded"
-                    },
-                    filterVisible: {
-                        source: "filterVisible",
-                        target: "{map}.model.dom.filterPanel.visible"
                     }
                 }
             }
