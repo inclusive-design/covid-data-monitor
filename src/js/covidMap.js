@@ -117,7 +117,8 @@ fluid.defaults("fluid.covidMap.map", {
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
         applyButton: ".fl-mapviz-reset-filters",
-        filterCount: ".fl-mapviz-filter-count",
+        filterCountOnDesktop: ".fl-mapviz-filter-count-on-desktop",
+        filterCountOnMobile: ".fl-mapviz-filter-count-on-mobile",
         queryHolder: ".fl-mapviz-query-holder",
         queryReset: ".fl-mapviz-query-reset",
         query: "#fl-search-query"
@@ -414,31 +415,13 @@ fluid.defaults("fluid.covidMap.map", {
                 }
             }
         },
-        filterCount: {
-            type: "fluid.viewComponent",
-            container: "{that}.dom.filterCount",
-            options: {
-                model: {
-                    // checkArray: Array
-                    // filterCount: Number
-                },
-                modelRelay: {
-                    checkArray: {
-                        source: "{map}.model.uiFilterChecks",
-                        target: "checkArray",
-                        func: checks => Object.values(checks)
-                    },
-                    filterCount: {
-                        source: "checkArray",
-                        target: "filterCount",
-                        func: checks => checks.reduce((acc, current) => acc + (+current), 0)
-                    },
-                    renderCount: {
-                        source: "filterCount",
-                        target: "dom.container.text"
-                    }
-                }
-            }
+        filterCountOnDesktop: {
+            type: "fluid.covidMap.filterCount",
+            container: "{that}.dom.filterCountOnDesktop"
+        },
+        filterCountOnMobile: {
+            type: "fluid.covidMap.filterCount",
+            container: "{that}.dom.filterCountOnMobile"
         }
     },
     dynamicComponents: {
@@ -484,6 +467,30 @@ fluid.defaults("fluid.covidMap.filter", {
     }
 });
 
+fluid.defaults("fluid.covidMap.filterCount", {
+    gradeNames: "fluid.viewComponent",
+    model: {
+        // checkArray: Array
+        // filterCount: Number
+    },
+    modelRelay: {
+        checkArray: {
+            source: "{map}.model.uiFilterChecks",
+            target: "checkArray",
+            func: checks => Object.values(checks)
+        },
+        filterCount: {
+            source: "checkArray",
+            target: "filterCount",
+            func: checks => checks.reduce((acc, current) => acc + (+current), 0)
+        },
+        renderCount: {
+            source: "filterCount",
+            target: "dom.container.text"
+        }
+    }
+});
+
 fluid.defaults("fluid.covidMap.filterCheckbox", {
     gradeNames: "fluid.viewComponent",
     model: {
@@ -494,7 +501,8 @@ fluid.defaults("fluid.covidMap.filterCheckbox", {
             this: "{that}.container",
             method: "click",
             args: ["{that}.updateCheckState"]
-        }
+        },
+        "onCreate.updateCheckState": "{that}.updateCheckState"
     },
     invokers: {
         updateCheckState: {

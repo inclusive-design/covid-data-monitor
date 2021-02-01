@@ -96,7 +96,7 @@ h3,
     width: 100%;
 }
 
-/******** The panel with the query label, the query input box and the filter control button **********/
+/******** The panel with the query label, the query input **********/
 .fl-mapviz-query-label {
     display: none;
 }
@@ -110,11 +110,6 @@ h3,
 
 .fl-mapviz-query-holder {
     margin: 0.5rem;
-}
-
-/* Contains both the search input box and the filter control button */
-.fl-mapviz-filter-count-holder-on-desktop {
-    display: none;
 }
 
 .fl-mapviz-query-reset-holder {
@@ -153,6 +148,10 @@ h3,
 }
 
 /******** The accessibility filters panel **********/
+.fl-mapviz-filter-count-holder-on-desktop {
+    display: none;
+}
+
 .fl-mapviz-filter-panel {
     max-width: 100%;
 }
@@ -365,12 +364,12 @@ h3,
     box-shadow: inset 0 -7px 2px -4px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     padding: 0.5rem 2rem;
 }
 
 .fl-mapviz-city-list-title h2 {
-    margin: 0;
+    margin: 0 1rem 0 0;
     text-transform: uppercase;
 }
 
@@ -684,7 +683,7 @@ h3,
 
     /* End: arrange positions of sub containers */
 
-    /******** The panel with the query label, the query input box and the filter control button **********/
+    /******** The panel with the query label, the query input box **********/
 
     /* The query label */
     .fl-mapviz-query-label {
@@ -698,7 +697,8 @@ h3,
         margin-right: 2rem;
     }
 
-    /* The a11y filter control */
+    /******** The accessibility filters panel **********/
+    /* The a11y filter count */
     .fl-mapviz-filter-count-holder-on-desktop {
         align-items: center;
         align-self: center;
@@ -712,7 +712,11 @@ h3,
         width: 4rem;
     }
 
-    .fl-mapviz-filter-count-holder-on-desktop .fl-mapviz-filter-count {
+    .fl-mapviz-filter-panel-title {
+        margin-left: 1rem;
+    }
+
+    .fl-mapviz-filter-count-holder-on-desktop .fl-mapviz-filter-count-on-desktop {
         margin: 0 0.5rem;
     }
 
@@ -722,7 +726,7 @@ h3,
         width: 1.5rem;
     }
 
-    /******** The accessibility filters panel **********/
+    /* The a11y filter list */
     .fl-mapviz-filter-icon {
         height: 3.75rem;
         width: 3.75rem;
@@ -753,6 +757,10 @@ h3,
         margin: 0.5rem;
     }
 
+    .fl-mapviz-filter {
+        justify-content: left;
+    }
+
     /******** Expand/collapse button for the city list and the search results panels ********/
     .fl-mapviz-expand-collapse-button-holder {
         display: none;
@@ -762,12 +770,16 @@ h3,
         display: block;
     }
 
-    /******** The panel for displaying cities ********/
+    /******** The city list panel ********/
+    .fl-mapviz-city-list-title {
+        justify-content: space-between;
+    }
+
     .fl-mapviz-city {
         font-size: 1.5rem;
     }
 
-    /******** The panel for displaying search results ********/
+    /******** The search results panel ********/
     .fl-mapviz-search-results {
         height: 40rem;
         margin-right: 1rem;
