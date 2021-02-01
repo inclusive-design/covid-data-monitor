@@ -162,7 +162,7 @@ h3,
 }
 
 .fl-mapviz-filter-panel h2 {
-    margin: 1rem 1rem;
+    margin: 1rem 0;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
@@ -186,15 +186,6 @@ h3,
     flex-direction: row;
     height: 6rem;
     justify-content: center;
-}
-
-/* The title of each a11y feature */
-.fl-mapviz-filter-title {
-    display: inline-block;
-    font-stretch: condensed;
-    font-style: normal;
-    text-transform: uppercase;
-    width: 12.5rem;
 }
 
 /* The icon for each a11y feature */
@@ -227,84 +218,32 @@ h3,
     outline-offset: 1px;
 }
 
-/* Custom checkboxes for a11y features. Reference: https://codepen.io/spacemonkey/pen/vmZROv */
-.fl-mapviz-checkbox {
-    opacity: 0; /* hide it */
-    position: absolute; /* take it out of document flow */
-}
-
-.fl-mapviz-checkbox + label {
-    cursor: pointer;
-    padding: 0;
-    position: relative;
-}
-
-/* Box */
-.fl-mapviz-checkbox + label::before {
-    content: '';
+/* The title of each a11y feature */
+.fl-mapviz-filter-title {
     display: inline-block;
-    height: 1.25rem;
-    left: auto;
-    margin-right: 0.625rem;
-    outline: 1px solid black;
-    position: absolute;
-    right: -1.5rem;
-    top: 1.1rem;
-    width: 1.25rem;
+    font-stretch: condensed;
+    font-style: normal;
+    text-transform: uppercase;
+    width: 15rem;
 }
 
-/* Checkmark */
-.fl-mapviz-checkbox:checked + label::after {
-    border-bottom: 2px solid white;
-    border-right: 2px solid white;
-    content: "";
-    height: 0.7rem;
-    position: absolute;
-    right: -0.5rem;
-    top: 1.2rem;
-    transform: rotate(45deg);
-    width: 0.375rem;
+/* The checkbox for each a11y feature */
+.fl-checkbox-holder span {
+    background-image: url("../img/Checkbox-unselected.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 2rem;
+    vertical-align: middle;
+    width: 2rem;
 }
 
-/* End of custom checkboxes */
-
-/* Custom styles for custom checkboxes */
-
-/* When UIO "enhance inputs" is enabled */
-.fl-input-enhanced .fl-mapviz-checkbox + label::before {
-    outline: 3px double black;
+.fl-checkbox-holder span:hover {
+    outline: 1px solid #000;
 }
 
-/* Box checked */
-.fl-mapviz-checkbox:checked + label::before {
-    background: black;
-}
-
-/* Box focus */
-.fl-mapviz-checkbox:focus + label::before,
-.fl-mapviz-checkbox:hover + label::before {
-    outline: 2.5px solid black;
-}
-
-/* Box focus when "enhance inputs" is enabled */
-.fl-input-enhanced .fl-mapviz-checkbox:focus + label::before,
-.fl-input-enhanced .fl-mapviz-checkbox:hover + label::before {
-    border: 2.5px solid black;
-    outline: 3.5px double black;
-}
-
-/* Box checked and focus/hover */
-.fl-mapviz-checkbox:checked:focus + label::before,
-.fl-mapviz-checkbox:checked:hover + label::before {
-    outline: 3px double black;
-}
-
-/* Box checked and focus/hover */
-.fl-input-enhanced .fl-mapviz-checkbox:checked:focus + label::before,
-.fl-input-enhanced .fl-mapviz-checkbox:checked:hover + label::before {
-    border: 1px solid white;
-    box-shadow: 0 0 0 1px black inset;
-    outline: 3px double black;
+.fl-checkbox-holder input:checked + span {
+    background-image: url("../img/Checkbox-selected.svg");
 }
 
 /* The parent container of filter buttons */
@@ -698,6 +637,7 @@ h3,
     }
 
     /******** The accessibility filters panel **********/
+
     /* The a11y filter count */
     .fl-mapviz-filter-count-holder-on-desktop {
         align-items: center;
@@ -706,10 +646,10 @@ h3,
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
         display: flex;
         flex-direction: row;
-        height: 4rem;
+        height: 3.5rem;
         justify-content: center;
         margin-right: 0.7rem;
-        width: 4rem;
+        width: 3.5rem;
     }
 
     .fl-mapviz-filter-panel-title {
@@ -735,22 +675,6 @@ h3,
     .fl-mapviz-filter-tooltip-icon {
         margin-right: 0.5rem;
     }
-
-    /* Custom checkboxes for a11y features */
-
-    /* Box */
-    .fl-mapviz-checkbox + label::before {
-        right: -5rem;
-        top: 2.3rem;
-    }
-
-    /* Checkmark */
-    .fl-mapviz-checkbox:checked + label::after {
-        right: -4rem;
-        top: 2.4rem;
-    }
-
-    /* End of custom checkboxes for a11y features */
 
     .fl-mapviz-apply-filters,
     .fl-mapviz-reset-filters {
