@@ -24,15 +24,6 @@ h3,
 }
 
 /******** Shared selectors ********/
-.visually-hidden {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-}
 
 .fl-mapviz-hoverable:hover {
     outline: 1px solid #000;
@@ -228,22 +219,45 @@ h3,
 }
 
 /* The checkbox for each a11y feature */
-.fl-checkbox-holder span {
-    background-image: url("../img/Checkbox-unselected.svg");
-    background-position: center;
-    background-repeat: no-repeat;
+
+.fl-checkbox-holder {
+    margin-right: 0.5rem;
+}
+
+.fl-checkbox-holder > span {
+    border: 2px solid black;
+    box-sizing: border-box;
     display: inline-block;
     height: 2rem;
+    position: relative;
     vertical-align: middle;
     width: 2rem;
 }
 
-.fl-checkbox-holder span:hover {
+.fl-checkbox-holder > span:hover,
+.fl-checkbox-holder > input:focus + span {
     outline: 1px solid #000;
+    outline-offset: 2px;
 }
 
-.fl-checkbox-holder input:checked + span {
-    background-image: url("../img/Checkbox-selected.svg");
+.fl-checkbox-holder > input {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.fl-checkbox-holder svg {
+    /** The checkbox is not quite correctly sized and doesn't fill its box **/
+    height: 2.2rem;
+    left: -3px;
+
+    /** On Firefox, the SVG will take up an unpredictable amount of extra space in the layout **/
+    position: absolute;
+    top: -3px;
+    width: 2.2rem;
+}
+
+.fl-checkbox-holder input:not(:checked) + span .fl-checkbox-selected {
+    display: none;
 }
 
 /* The parent container of filter buttons */
@@ -679,10 +693,6 @@ h3,
     .fl-mapviz-apply-filters,
     .fl-mapviz-reset-filters {
         margin: 0.5rem;
-    }
-
-    .fl-mapviz-filter {
-        justify-content: left;
     }
 
     /******** Expand/collapse button for the city list and the search results panels ********/
