@@ -229,9 +229,9 @@ h3,
     box-sizing: border-box;
     display: inline-block;
     height: 2rem;
-    width: 2rem;
     position: relative;
     vertical-align: middle;
+    width: 2rem;
 }
 
 .fl-checkbox-holder > span:hover,
@@ -249,11 +249,11 @@ h3,
     /** The checkbox is not quite correctly sized and doesn't fill its box **/
     height: 2.2rem;
     left: -3px;
-    position: relative;
-    top: -3px;
-    width: 2.2rem;
+
     /** On Firefox, the SVG will take up an unpredictable amount of extra space in the layout **/
     position: absolute;
+    top: -3px;
+    width: 2.2rem;
 }
 
 .fl-checkbox-holder input:not(:checked) + span .fl-checkbox-selected {
