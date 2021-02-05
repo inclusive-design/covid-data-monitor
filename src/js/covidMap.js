@@ -585,7 +585,7 @@ fluid.defaults("fluid.activatableComponent", {
 fluid.defaults("fluid.styledButton", {
     gradeNames: "fluid.activatableComponent",
     markup: {
-        container: "<a class=\"fl-mapviz-apply-filters fl-mapviz-hoverable\" tabindex=\"0\"></a>"
+        container: "<a class=\"fl-mapviz-apply-filters\" tabindex=\"0\"></a>"
     },
     modelRelay: {
         clickToActivate: {
@@ -598,7 +598,7 @@ fluid.defaults("fluid.styledButton", {
 fluid.defaults("fluid.covidMap.citiesList", {
     gradeNames: ["fluid.viewComponent"],
     markup: {
-        cityTemplate: "<div class=\"fl-mapviz-city fl-mapviz-hoverable\">%city</div>"
+        cityTemplate: "<div class=\"fl-mapviz-city\">%city</div>"
     },
     selectors: {
         cities: ".fl-mapviz-cities",
