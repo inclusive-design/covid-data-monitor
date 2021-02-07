@@ -598,7 +598,7 @@ fluid.defaults("fluid.styledButton", {
 fluid.defaults("fluid.covidMap.citiesList", {
     gradeNames: ["fluid.viewComponent"],
     markup: {
-        cityTemplate: "<div class=\"fl-mapviz-city\">%city</div>"
+        cityTemplate: "<div class=\"fl-mapviz-city fl-mapviz-hoverable-focusable\">%city</div>"
     },
     selectors: {
         cities: ".fl-mapviz-cities",
