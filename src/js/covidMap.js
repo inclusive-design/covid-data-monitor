@@ -496,25 +496,13 @@ fluid.defaults("fluid.covidMap.filterCheckbox", {
     model: {
         // checked: Boolean
     },
-    listeners: {
-        "onCreate.bindClickEvent": {
-            this: "{that}.container",
-            method: "click",
-            args: ["{that}.updateCheckState"]
-        },
-        "onCreate.updateCheckState": "{that}.updateCheckState"
-    },
-    invokers: {
-        updateCheckState: {
-            funcName: "fluid.covidMap.filterCheckbox.updateCheckState",
-            args: ["{that}"]
+    modelRelay: {
+        checked: {
+            source: "dom.container.value",
+            target: "checked"
         }
     }
 });
-
-fluid.covidMap.filterCheckbox.updateCheckState = function (that) {
-    that.applier.change("checked", that.container[0].checked);
-};
 
 fluid.defaults("fluid.covidMap.autocomplete", {
     gradeNames: "hortis.autocomplete",
