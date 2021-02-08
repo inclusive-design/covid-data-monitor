@@ -1,6 +1,6 @@
 {
     "images": {
-        "CheckboxSelected": "src/img/Checkbox-selected-01.svg",
+        "CheckboxSelected": "src/img/Checkbox-selected.svg",
         "ApplyFilters": "src/img/ApplyFilters.svg",
         "ResetFilters": "src/img/ResetFilters.svg",
         "ArrowDown": "src/img/ArrowDown.svg",
@@ -14,7 +14,14 @@
         "MarkerSelected": "src/img/Map Marker-large-selected-05.svg",
         "MarkerSmall": "src/img/Map Marker-small-landing-02.svg",
         "MarkerSmallHover": "src/img/Map Marker-small-hover-04.svg",
-        "MarkerSmallSelected": "src/img/Map Marker-small-selected-06.svg"
+        "MarkerSmallSelected": "src/img/Map Marker-small-selected-06.svg",
+        "Search": "src/img/Search.svg",
+        "Tooltip": "src/img/Tooltip.svg",
+        "Entrances": "src/img/Entrances.svg",
+        "Washrooms": "src/img/Washrooms.svg",
+        "Parking": "src/img/Parking.svg",
+        "Individual": "src/img/Individual.svg",
+        "Wait": "src/img/Wait.svg"
     },
     "targets": [
         {

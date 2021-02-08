@@ -20,9 +20,6 @@ var buildIndex = {
         src: "src/html/template.html",
         dest: "build/html/template.html"
     }, {
-        src: "src/img/",
-        dest: "build/img/"
-    }, {
         src: "src/css/demo.css",
         dest: "build/css/demo.css"
     }, {
