@@ -1,6 +1,6 @@
 {
     "images": {
-        "CheckboxSelected": "src/img/Checkbox-selected-01.svg",
+        "CheckboxSelected": "src/img/Checkbox-selected.svg",
         "ApplyFilters": "src/img/ApplyFilters.svg",
         "ResetFilters": "src/img/ResetFilters.svg",
         "ArrowDown": "src/img/ArrowDown.svg",
