@@ -1,10 +1,3 @@
-body {
-    /* Work with other css to display the map in a full screen on the mobile view */
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
 /* Work with other css to display the map in a full screen on the mobile view */
 .fl-mapviz-outer-container {
     flex-grow: 1;
@@ -111,12 +104,13 @@ h3,
     z-index: 999;
 }
 
-.fl-mapviz-query-wrapper svg {
+.fl-mapviz-query-wrapper > svg {
     height: 1.5rem;
     padding-left: 1rem;
     padding-top: 0.7rem;
     position: absolute;
     width: 1.5rem;
+    z-index: 1;
 }
 
 .fl-mapviz-query-holder {
@@ -124,6 +118,7 @@ h3,
 }
 
 .fl-mapviz-query-holder input {
+    background-color: white;
     border: 1px solid black;
     border-radius: 1.5rem;
     height: 2rem;
@@ -153,6 +148,7 @@ h3,
 .fl-mapviz-query-reset svg {
     height: 1rem;
     width: 1rem;
+    z-index: 1;
 }
 
 /******** The accessibility filters panel **********/
@@ -304,11 +300,6 @@ h3,
     width: 1rem;
 }
 
-.fl-mapviz-apply-filters span,
-.fl-mapviz-reset-filters span {
-    display: inline-flex;
-}
-
 .fl-mapviz-apply-filters:hover .fl-mapviz-icon-shadow,
 .fl-mapviz-apply-filters:focus .fl-mapviz-icon-shadow,
 .fl-mapviz-reset-filters:hover .fl-mapviz-icon-shadow,
@@ -386,12 +377,12 @@ h3,
 .fl-mapviz-city-list {
     background-color: white;
     border-radius: 1rem 1rem 0 0;
-    bottom: 3.1rem;
+    bottom: 2.7rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
-    max-height: calc(100% - 16rem);
+    max-height: calc(100% - 16.5rem);
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -443,7 +434,6 @@ h3,
 /* For individual city */
 .fl-mapviz-city {
     border-bottom: 1px solid #c4c4c4;
-    height: 2rem;
     margin-left: 0.5rem;
     padding: 0.5rem 0.5rem;
 }
@@ -487,6 +477,7 @@ h3,
     grid-template-columns: 1fr 1fr;
     height: 3rem;
     padding-top: 3px;
+    z-index: 1;
 }
 
 .fl-panel-controls-on-mobile svg {
@@ -601,7 +592,6 @@ h3,
         display: grid;
         font-size: 1.125rem;
         grid-template-columns: 1fr 2fr 1fr;
-        height: 42rem;
     }
 
     .fl-mapviz-query-wrapper {
@@ -613,7 +603,7 @@ h3,
         grid-column-start: 1;
         grid-row-end: 2;
         grid-row-start: 1;
-        height: 3rem;
+        height: 5rem;
         padding: 0.5rem 0;
 
         /* Override the mobile css */
@@ -627,6 +617,7 @@ h3,
         grid-column-start: 3;
         grid-row-end: 3;
         grid-row-start: 2;
+        height: 43rem;
 
         /* Override the mobile css */
         position: inherit;
@@ -639,7 +630,7 @@ h3,
         grid-column-start: 1;
         grid-row-end: 3;
         grid-row-start: 2;
-        height: 40rem;
+        height: 43rem;
 
         /* Override the mobile css */
         max-height: inherit;
@@ -653,7 +644,7 @@ h3,
         grid-row-start: 2;
 
         /* Override the mobile css */
-        height: 40rem;
+        height: 43rem;
     }
 
     .fl-mapviz-hospital-panel {
@@ -661,7 +652,6 @@ h3,
         grid-column-start: 1;
         grid-row-end: 4;
         grid-row-start: 3;
-        margin-top: 0.3rem;
     }
 
     /* End: arrange positions of sub containers */
@@ -674,7 +664,7 @@ h3,
         margin: 0 1rem;
     }
 
-    .fl-mapviz-query-wrapper svg {
+    .fl-mapviz-query-wrapper > svg {
         margin-right: -2.5rem;
         padding-top: 0;
         position: relative;
@@ -746,7 +736,6 @@ h3,
 
     /******** The search results panel ********/
     .fl-mapviz-search-results {
-        height: 40rem;
         margin-right: 1rem;
     }
 
