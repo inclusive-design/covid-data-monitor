@@ -112,7 +112,8 @@ fluid.defaults("fluid.covidMap.map", {
         query: ".fl-mapviz-query",
         resultsPage: ".fl-mapviz-search-results",
         citiesList: ".fl-mapviz-city-list",
-        backButton: ".fl-mapviz-back-button",
+        searchResultsBackButton: ".fl-mapviz-search-results-back-button",
+        hospitalBackButton: ".fl-mapviz-hospital-back-button",
         hospitalPanel: ".fl-mapviz-hospital-panel",
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
@@ -338,18 +339,13 @@ fluid.defaults("fluid.covidMap.map", {
                 }
             }
         },
-        backButton: {
-            type: "fluid.styledButton",
-            container: "{that}.dom.backButton",
-            options: {
-                modelListeners: {
-                    "goBack": {
-                        path: "activate",
-                        changePath: "{map}.model.query",
-                        value: ""
-                    }
-                }
-            }
+        searchResultsBackButton: {
+            type: "fluid.backButton",
+            container: "{that}.dom.searchResultsBackButton"
+        },
+        hosptialBackButton: {
+            type: "fluid.backButton",
+            container: "{that}.dom.hospitalBackButton"
         },
         resetButton: {
             type: "fluid.styledButton",
@@ -579,6 +575,17 @@ fluid.defaults("fluid.styledButton", {
         clickToActivate: {
             target: "activate",
             source: "{that}.model.dom.container.click"
+        }
+    }
+});
+
+fluid.defaults("fluid.backButton", {
+    gradeNames: "fluid.styledButton",
+    modelListeners: {
+        "goBack": {
+            path: "activate",
+            changePath: "{map}.model.query",
+            value: ""
         }
     }
 });

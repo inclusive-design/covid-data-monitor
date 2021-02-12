@@ -374,7 +374,8 @@ h3,
 /******** The search results panel ********/
 .fl-mapviz-search-results,
 .fl-mapviz-filter-panel,
-.fl-mapviz-city-list {
+.fl-mapviz-city-list,
+.fl-mapviz-hospital-panel {
     background-color: white;
     border-radius: 1rem 1rem 0 0;
     bottom: 2.7rem;
@@ -382,7 +383,7 @@ h3,
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
-    max-height: calc(100% - 16.5rem);
+    max-height: calc(100% - 17rem);
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -393,7 +394,8 @@ h3,
     background-color: #acdeeb;
 }
 
-.fl-mapviz-back-button {
+.fl-mapviz-search-results-back-button,
+.fl-mapviz-hospital-back-button {
     align-self: center;
     background-color: #acdeeb;
     border: none;
@@ -403,18 +405,22 @@ h3,
     width: 100%;
 }
 
-.fl-mapviz-back-button svg {
+.fl-mapviz-search-results-back-button svg,
+.fl-mapviz-hospital-back-button svg {
     height: 1rem;
     width: 1rem;
 }
 
-.fl-mapviz-back-button h2 {
+.fl-mapviz-search-results-back-button h2,
+.fl-mapviz-hospital-back-button h2 {
     align-self: center;
     margin: 0;
 }
 
-.fl-mapviz-back-button:hover .fl-mapviz-icon-shadow,
-.fl-mapviz-back-button:focus .fl-mapviz-icon-shadow {
+.fl-mapviz-search-results-back-button:hover .fl-mapviz-icon-shadow,
+.fl-mapviz-search-results-back-button:focus .fl-mapviz-icon-shadow,
+.fl-mapviz-hospital-back-button:hover .fl-mapviz-icon-shadow,
+.fl-mapviz-hospital-back-button:focus .fl-mapviz-icon-shadow {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset, 0 0 0 1px black;
 }
 
@@ -454,20 +460,24 @@ h3,
 }
 
 /******** The hosptial description panel ********/
+
+/* hide the hospital description panel at the page load */
 .fl-mapviz-hospital-panel {
-    /* hide the hospital description panel at the page load */
-
     display: none;
-}
-
-.fl-mapviz-hospital-panel > div {
-    padding: 0.3rem;
 }
 
 .fl-mapviz-hospital-panel .fl-mapviz-hospital-title {
     background: #fbdc90;
-    font-size: 2.2rem;
+    margin: 0;
     padding: 0.5rem;
+}
+
+.fl-mapviz-hospital-panel .fl-mapviz-hospital-description {
+    overflow-y: scroll;
+}
+
+.fl-mapviz-hospital-panel .fl-mapviz-hospital-description > div {
+    padding: 0.3rem;
 }
 
 /******** The panel control buttons ********/
@@ -652,6 +662,10 @@ h3,
         grid-column-start: 1;
         grid-row-end: 4;
         grid-row-start: 3;
+
+        /* Override the mobile css */
+        max-height: inherit;
+        position: inherit;
     }
 
     /* End: arrange positions of sub containers */
@@ -716,8 +730,8 @@ h3,
         margin: 0.5rem;
     }
 
-    /******** Expand/collapse button for the city list and the search results panels ********/
-    .fl-mapviz-expand-collapse-button-holder {
+    /******** All expand/collapse buttons ********/
+    .fl-mapviz-expand-collapse-button-wrapper {
         display: none;
     }
 
@@ -739,8 +753,14 @@ h3,
         margin-right: 1rem;
     }
 
-    .fl-mapviz-back-button {
+    .fl-mapviz-search-results-back-button,
+    .fl-mapviz-hospital-back-button {
         justify-content: left;
+    }
+
+    /******** The hospital description panel ********/
+    .fl-mapviz-hospital-panel .fl-mapviz-back-button-wrapper {
+        display: none;
     }
 
     /******** The panel control buttons ********/
