@@ -9,9 +9,10 @@ fluid.registerNamespace("fluid.covidMap");
 fluid.covidMap.metresInMile = 1609.34;
 
 fluid.defaults("fluid.covidMap.hospitalRenderer", {
-    gradeNames: "fluid.modelComponent",
+    gradeNames: ["fluid.modelComponent", "fluid.expandCollapseButton"],
     selectors: {
         hospitalTitle: ".fl-mapviz-hospital-title",
+        hospitalDescription: ".fl-mapviz-hospital-description",
         hospitalHours: ".fl-mapviz-hospital-hours",
         hospitalAddress: ".fl-mapviz-hospital-address",
         hospitalPhone:  ".fl-mapviz-hospital-phone"
@@ -38,6 +39,14 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
                 segs: ["mwp", "{map}.options.fields.phone"]
             },
             target: "dom.hospitalPhone.text"
+        }
+    },
+    modelListeners: {
+        expandCollapse: {
+            path: "expanded",
+            func: "{that}.toggleExpandedState",
+            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
+            args: ["{change}.value", ["{that}.dom.hospitalTitle", "{that}.dom.hospitalDescription"]]
         }
     }
 });
@@ -110,6 +119,7 @@ fluid.defaults("fluid.covidMap.map", {
     unselectedFilterChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.filters)",
     selectors: {
         query: ".fl-mapviz-query",
+        filterPanel: ".fl-mapviz-filter-panel",
         resultsPage: ".fl-mapviz-search-results",
         citiesList: ".fl-mapviz-city-list",
         searchResultsBackButton: ".fl-mapviz-search-results-back-button",
@@ -321,6 +331,10 @@ fluid.defaults("fluid.covidMap.map", {
         }
     },
     components: {
+        filterPanel: {
+            type: "fluid.covidMap.filterPanel",
+            container: "{that}.dom.filterPanel"
+        },
         resultsPage: {
             type: "fluid.covidMap.resultsPage",
             container: "{that}.dom.resultsPage",
@@ -487,6 +501,23 @@ fluid.defaults("fluid.covidMap.filterCount", {
     }
 });
 
+fluid.defaults("fluid.covidMap.filterPanel", {
+    gradeNames: ["fluid.expandCollapseButton"],
+    selectors: {
+        title: ".fl-mapviz-filter-panel-title",
+        filters: ".fl-mapviz-filters",
+        filterButtons: ".fl-mapviz-filter-buttons"
+    },
+    modelListeners: {
+        expandCollapse: {
+            path: "expanded",
+            func: "{that}.toggleExpandedState",
+            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
+            args: ["{change}.value", ["{that}.dom.title", "{that}.dom.filters", "{that}.dom.filterButtons"]]
+        }
+    }
+});
+
 fluid.defaults("fluid.covidMap.filterCheckbox", {
     gradeNames: "fluid.viewComponent",
     model: {
@@ -590,12 +621,14 @@ fluid.defaults("fluid.backButton", {
     }
 });
 
+// The cities list component
 fluid.defaults("fluid.covidMap.citiesList", {
-    gradeNames: ["fluid.viewComponent"],
+    gradeNames: ["fluid.viewComponent", "fluid.expandCollapseButton"],
     markup: {
         cityTemplate: "<div class=\"fl-mapviz-city fl-mapviz-hoverable-focusable\">%city</div>"
     },
     selectors: {
+        title: ".fl-mapviz-city-list-title",
         cities: ".fl-mapviz-cities",
         element: ".fl-mapviz-city"
     },
@@ -603,6 +636,12 @@ fluid.defaults("fluid.covidMap.citiesList", {
         render: {
             path: "cities",
             func: "{that}.renderMarkup"
+        },
+        expandCollapse: {
+            path: "expanded",
+            func: "{that}.toggleExpandedState",
+            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
+            args: ["{change}.value", ["{that}.dom.title", "{that}.dom.cities"]]
         }
     },
     invokers: {
@@ -610,7 +649,7 @@ fluid.defaults("fluid.covidMap.citiesList", {
         elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)"
     },
     listeners: {
-        "onCreate.bindEvents": "fluid.covidMap.citiesList.bindEvents({that}, {map})"
+        "onCreate.bindCitiesListEvents": "fluid.covidMap.citiesList.bindEvents({that}, {map})"
     }
 });
 
@@ -638,7 +677,7 @@ fluid.covidMap.citiesList.bindEvents = function (that, map) {
 };
 
 fluid.defaults("fluid.covidMap.resultsPage", {
-    gradeNames: ["fluid.viewComponent", "fluid.resourceLoader"],
+    gradeNames: ["fluid.viewComponent", "fluid.resourceLoader", "fluid.expandCollapseButton"],
     resources: {
         resultTemplate: {
             url: "{map}.options.searchResultTemplateUrl"
@@ -674,6 +713,12 @@ fluid.defaults("fluid.covidMap.resultsPage", {
         render: {
             path: "visiblePageIndices",
             func: "{that}.renderMarkup"
+        },
+        expandCollapse: {
+            path: "expanded",
+            func: "{that}.toggleExpandedState",
+            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
+            args: ["{change}.value", ["{that}.dom.resultsList"]]
         }
     },
     listeners: {

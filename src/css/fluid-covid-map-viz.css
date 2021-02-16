@@ -315,7 +315,7 @@ h3,
     justify-content: center;
 }
 
-.fl-mapviz-expand-collapse-button-holder {
+.fl-mapviz-expand-collapse-button {
     align-self: center;
     background: none;
     border: none;
@@ -323,7 +323,7 @@ h3,
     width: 4rem;
 }
 
-.fl-mapviz-expand-collapse-button-holder svg {
+.fl-mapviz-expand-collapse-button svg {
     height: 0.7rem;
     width: 1.4rem;
 }
@@ -334,16 +334,15 @@ h3,
     stroke-width: var(--expand-button-stroke-width, 2px);
 }
 
-.fl-mapviz-expand-collapse-button-holder:hover,
-.fl-mapviz-expand-collapse-button-holder:focus {
+.fl-mapviz-expand-collapse-button:hover,
+.fl-mapviz-expand-collapse-button:focus {
     --expand-button-color: black;
     --expand-button-stroke-width: 0;
 }
 
-/* When the city list/search results panel is collapsed, hide all relevant elements */
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="true"] > .fl-mapviz-expand-button,
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] > .fl-mapviz-collapse-button,
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-results-list {
+/* Show/hide the expand or the collapse SVG based on the expanded state */
+.fl-mapviz-expand-collapse-button[aria-expanded="true"] > .fl-mapviz-expand-button,
+.fl-mapviz-expand-collapse-button[aria-expanded="false"] > .fl-mapviz-collapse-button {
     display: none;
 }
 
@@ -670,6 +669,11 @@ h3,
 
     /* End: arrange positions of sub containers */
 
+    /******** Expand/collapse buttons ********/
+    .fl-mapviz-expand-collapse-button-wrapper {
+        display: none;
+    }
+
     /******** The panel with the query label, the query input box **********/
 
     /* The query label */
@@ -728,15 +732,6 @@ h3,
     .fl-mapviz-apply-filters,
     .fl-mapviz-reset-filters {
         margin: 0.5rem;
-    }
-
-    /******** All expand/collapse buttons ********/
-    .fl-mapviz-expand-collapse-button-wrapper {
-        display: none;
-    }
-
-    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-results-list {
-        display: block;
     }
 
     /******** The city list panel ********/
