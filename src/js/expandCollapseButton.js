@@ -51,5 +51,5 @@ fluid.toggleExpandedState = function (expandCollapseButton, expanded, elementsTo
     console.log(expandCollapseButton);
     expandCollapseButton[0].setAttribute("aria-expanded", expanded);
     expandCollapseButton[0].setAttribute("aria-label", expanded ? "expand" : "collapse");
-    elementsToToggle.forEach(elem => {elem[expanded ? "show" : "hide"]()});
+    elementsToToggle.forEach(elem => {elem[expanded ? "show" : "hide"]();});
 };
