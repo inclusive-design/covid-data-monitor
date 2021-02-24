@@ -9,13 +9,32 @@ fluid.registerNamespace("fluid.covidMap");
 fluid.covidMap.metresInMile = 1609.34;
 
 fluid.defaults("fluid.covidMap.hospitalRenderer", {
-    gradeNames: ["fluid.modelComponent", "fluid.expandCollapseButton"],
+    gradeNames: ["fluid.modelComponent"],
     selectors: {
         hospitalTitle: ".fl-mapviz-hospital-title",
         hospitalDescription: ".fl-mapviz-hospital-description",
         hospitalHours: ".fl-mapviz-hospital-hours",
         hospitalAddress: ".fl-mapviz-hospital-address",
-        hospitalPhone:  ".fl-mapviz-hospital-phone"
+        hospitalPhone:  ".fl-mapviz-hospital-phone",
+        expandButton: ".fl-mapviz-expand-collapse-button"
+    },
+    components: {
+        expandButton: {
+            type: "fluid.expandButton",
+            container: "{hospitalRenderer}.dom.expandButton",
+            options: {
+                modelRelay: {
+                    collapseTitle: {
+                        source: "expanded",
+                        target: "{hospitalRenderer}.model.dom.hospitalDescription.visible"
+                    },
+                    collapseCities: {
+                        source: "expanded",
+                        target: "{hospitalRenderer}.model.dom.hospitalTitle.visible"
+                    }
+                }
+            }
+        }
     },
     modelRelay: {
         hospitalTitle: {
@@ -39,14 +58,6 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
                 segs: ["mwp", "{map}.options.fields.phone"]
             },
             target: "dom.hospitalPhone.text"
-        }
-    },
-    modelListeners: {
-        expandCollapse: {
-            path: "expanded",
-            func: "{that}.toggleExpandedState",
-            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
-            args: ["{change}.value", ["{that}.dom.hospitalTitle", "{that}.dom.hospitalDescription"]]
         }
     }
 });
@@ -362,7 +373,7 @@ fluid.defaults("fluid.covidMap.map", {
             container: "{that}.dom.hospitalBackButton"
         },
         resetButton: {
-            type: "fluid.styledButton",
+            type: "fluid.button",
             container: "{that}.dom.resetButton",
             options: {
                 modelListeners: {
@@ -375,11 +386,11 @@ fluid.defaults("fluid.covidMap.map", {
             }
         },
         applyButton: {
-            type: "fluid.styledButton",
+            type: "fluid.button",
             container: "{that}.dom.applyButton"
         },
         resetQueryButton: {
-            type: "fluid.styledButton",
+            type: "fluid.button",
             container: "{that}.dom.queryReset",
             options: {
                 modelListeners: {
@@ -502,18 +513,33 @@ fluid.defaults("fluid.covidMap.filterCount", {
 });
 
 fluid.defaults("fluid.covidMap.filterPanel", {
-    gradeNames: ["fluid.expandCollapseButton"],
+    gradeNames: ["fluid.viewComponent"],
     selectors: {
         title: ".fl-mapviz-filter-panel-title",
         filters: ".fl-mapviz-filters",
-        filterButtons: ".fl-mapviz-filter-buttons"
+        filterButtons: ".fl-mapviz-filter-buttons",
+        expandButton: ".fl-mapviz-expand-collapse-button"
     },
-    modelListeners: {
-        expandCollapse: {
-            path: "expanded",
-            func: "{that}.toggleExpandedState",
-            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
-            args: ["{change}.value", ["{that}.dom.title", "{that}.dom.filters", "{that}.dom.filterButtons"]]
+    components: {
+        expandButton: {
+            type: "fluid.expandButton",
+            container: "{filterPanel}.dom.expandButton",
+            options: {
+                modelRelay: {
+                    visibleTitle: {
+                        source: "expanded",
+                        target: "{filterPanel}.model.dom.title.visible"
+                    },
+                    visibleFilters: {
+                        source: "expanded",
+                        target: "{filterPanel}.model.dom.filters.visible"
+                    },
+                    visibleFilterButtons: {
+                        source: "expanded",
+                        target: "{filterPanel}.model.dom.filterButtons.visible"
+                    }
+                }
+            }
         }
     }
 });
@@ -573,32 +599,11 @@ fluid.transforms.indexToBooleans = function (rows, selectedIndex) {
     });
 };
 
-fluid.defaults("fluid.activatableComponent", {
+fluid.defaults("fluid.button", {
     gradeNames: "fluid.viewComponent",
     model: {
         activate: 0
     },
-    // These options will be forwarded to fluid.activatable applied to the container
-    activatableOptions: {
-    },
-    invokers: {
-        // This invoker only necessary as an integration artefact until fluid.activatable is made integral
-        activate: {
-            changePath: "activate",
-            func: x => x + 1,
-            args: "{that}.model.activate"
-        }
-    },
-    listeners: {
-        "onCreate.makeActivatable": {
-            funcName: "fluid.activatable",
-            args: ["{that}.container", "{that}.activate", "{that}.options.activatableOptions"]
-        }
-    }
-});
-
-fluid.defaults("fluid.styledButton", {
-    gradeNames: "fluid.activatableComponent",
     markup: {
         container: "<a class=\"fl-mapviz-apply-filters\" tabindex=\"0\"></a>"
     },
@@ -611,7 +616,7 @@ fluid.defaults("fluid.styledButton", {
 });
 
 fluid.defaults("fluid.backButton", {
-    gradeNames: "fluid.styledButton",
+    gradeNames: "fluid.button",
     modelListeners: {
         "goBack": {
             path: "activate",
@@ -623,25 +628,38 @@ fluid.defaults("fluid.backButton", {
 
 // The cities list component
 fluid.defaults("fluid.covidMap.citiesList", {
-    gradeNames: ["fluid.viewComponent", "fluid.expandCollapseButton"],
+    gradeNames: ["fluid.viewComponent"],
     markup: {
         cityTemplate: "<div class=\"fl-mapviz-city fl-mapviz-hoverable-focusable\">%city</div>"
     },
     selectors: {
         title: ".fl-mapviz-city-list-title",
         cities: ".fl-mapviz-cities",
-        element: ".fl-mapviz-city"
+        element: ".fl-mapviz-city",
+        expandButton: ".fl-mapviz-expand-collapse-button"
     },
     modelListeners: {
         render: {
             path: "cities",
             func: "{that}.renderMarkup"
-        },
-        expandCollapse: {
-            path: "expanded",
-            func: "{that}.toggleExpandedState",
-            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
-            args: ["{change}.value", ["{that}.dom.title", "{that}.dom.cities"]]
+        }
+    },
+    components: {
+        expandButton: {
+            type: "fluid.expandButton",
+            container: "{citiesList}.dom.expandButton",
+            options: {
+                modelRelay: {
+                    collapseTitle: {
+                        source: "expanded",
+                        target: "{citiesList}.model.dom.title.visible"
+                    },
+                    collapseCities: {
+                        source: "expanded",
+                        target: "{citiesList}.model.dom.cities.visible"
+                    }
+                }
+            }
         }
     },
     invokers: {
@@ -677,7 +695,7 @@ fluid.covidMap.citiesList.bindEvents = function (that, map) {
 };
 
 fluid.defaults("fluid.covidMap.resultsPage", {
-    gradeNames: ["fluid.viewComponent", "fluid.resourceLoader", "fluid.expandCollapseButton"],
+    gradeNames: ["fluid.viewComponent", "fluid.resourceLoader"],
     resources: {
         resultTemplate: {
             url: "{map}.options.searchResultTemplateUrl"
@@ -693,7 +711,8 @@ fluid.defaults("fluid.covidMap.resultsPage", {
     },
     selectors: {
         resultsList: ".fl-mapviz-search-results-list",
-        element: ".fl-mapviz-search-result"
+        element: ".fl-mapviz-search-result",
+        expandButton: ".fl-mapviz-expand-collapse-button"
     },
     styles: {
         selected: "fl-mapviz-search-result-selected",
@@ -713,12 +732,20 @@ fluid.defaults("fluid.covidMap.resultsPage", {
         render: {
             path: "visiblePageIndices",
             func: "{that}.renderMarkup"
-        },
-        expandCollapse: {
-            path: "expanded",
-            func: "{that}.toggleExpandedState",
-            // These arguments are required by the invoker defined in the "fluid.expandCollapseButton" component
-            args: ["{change}.value", ["{that}.dom.resultsList"]]
+        }
+    },
+    components: {
+        expandButton: {
+            type: "fluid.expandButton",
+            container: "{resultsPage}.dom.expandButton",
+            options: {
+                modelRelay: {
+                    collapseResultsList: {
+                        source: "expanded",
+                        target: "{resultsPage}.model.dom.resultsList.visible"
+                    }
+                }
+            }
         }
     },
     listeners: {
