@@ -42,6 +42,6 @@ src/js/geom.js
 src/js/autocomplete.js
 src/js/leafletMap.js
 src/js/CSVResource.js
-src/js/expandCollapseButton.js
+src/js/expandButton.js
 src/js/covidMap.js
 index.html

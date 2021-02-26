@@ -24,11 +24,11 @@ fluid.defaults("fluid.expandButton", {
         },
         ariaExpanded: {
             source: "expanded",
-            target: "dom.button.attrs.aria-expanded"
+            target: "dom.container.attrs.aria-expanded"
         },
         ariaLabel: {
             source: "expanded",
-            target: "dom.button.attrs.aria-label",
+            target: "dom.container.attrs.aria-label",
             func: expanded => expanded ? "collapse" : "expand"
         }
     }

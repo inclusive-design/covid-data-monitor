@@ -494,24 +494,24 @@ h3,
     width: 1rem;
 }
 
-.fl-mapviz-locations-control,
-.fl-mapviz-filter-control-on-mobile {
+.fl-mapviz-locations-button-on-mobile,
+.fl-mapviz-filter-button-on-mobile {
     background-color: white;
     border: none;
 }
 
-.fl-mapviz-filter-control-on-mobile {
+.fl-mapviz-filter-button-on-mobile {
     border-left: 1px solid #c4c4c4;
 }
 
-.fl-mapviz-filter-control-on-mobile .fl-mapviz-filter-control-icon-on-mobile {
+.fl-mapviz-filter-button-on-mobile .fl-mapviz-filter-icon-on-mobile {
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin-bottom: 0.3rem;
 }
 
-.fl-mapviz-filter-control-on-mobile .fl-mapviz-filter-control-icon-on-mobile svg {
+.fl-mapviz-filter-button-on-mobile .fl-mapviz-filter-icon-on-mobile svg {
     margin-right: 0.5rem;
 }
 
