@@ -24,7 +24,7 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
             container: "{hospitalRenderer}.dom.expandButton",
             options: {
                 model: {
-                    expanded: "{map}.model.hospitalPanelExpanded"
+                    expanded: "{map}.model.expandedPanels.hospitalPanel"
                 },
                 modelRelay: {
                     collapseTitle: {
@@ -87,34 +87,14 @@ fluid.covidMap.extractPostcodes = function (rows, field) {
     return postcodeHash;
 };
 
-// Apply special grade component for the mobile view
-fluid.covidMap.isMobileView = function () {
-    const mediaMatchResult = window.matchMedia("screen and (min-width: 1024px)");
-    return !mediaMatchResult.matches;
-};
-
-fluid.contextAware.makeChecks({
-    "fluid.isMobileView": "fluid.covidMap.isMobileView"
-});
-
 fluid.defaults("fluid.covidMap.map", {
-    gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer", "fluid.contextAware"],
-    contextAwareness: {
-        mobileView: {
-            checks: {
-                isMobileView: {
-                    contextValue: "{fluid.isMobileView}",
-                    gradeNames: "fluid.covidMap.mobileViewHandler"
-                }
-            },
-            defaultGradeNames: "fluid.covidMap.desktopViewHandler"
-        }
-    },
+    gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
     // Colours currently unused, may be again when we inline SVG markers
     colours: {
         accessible: "#0f0",
         inaccessible: "#f00"
     },
+    mediaQueryBreakpoint: "screen and (min-width: 1024px)",
     parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
     smallMarkersBelowZoom: 9,
     outerBounds: {
@@ -164,6 +144,9 @@ fluid.defaults("fluid.covidMap.map", {
         resetButton: ".fl-mapviz-reset-filters",
         applyButton: ".fl-mapviz-reset-filters",
         filterCountOnDesktop: ".fl-mapviz-filter-count-on-desktop",
+        filterCountOnMobile: ".fl-mapviz-filter-count-on-mobile",
+        locationButtonOnMobile: ".fl-mapviz-locations-button-on-mobile",
+        filterButtonOnMobile: ".fl-mapviz-filter-button-on-mobile",
         queryHolder: ".fl-mapviz-query-holder",
         queryReset: ".fl-mapviz-query-reset",
         query: "#fl-search-query"
@@ -178,6 +161,10 @@ fluid.defaults("fluid.covidMap.map", {
         searchQuery: "fl-search-query"
     },
     listeners: {
+        "onCreate.detectWindowSize": {
+            funcName: "fluid.covidMap.detectWindowSize",
+            args: ["{that}"]
+        },
         "buildMap.addMarkers": {
             funcName: "fluid.covidMap.addMarkers",
             args: ["{that}"],
@@ -197,17 +184,11 @@ fluid.defaults("fluid.covidMap.map", {
         selectedIndex: null,
         hoveredIndex: null,
         resultsShowing: false
-        // selectedHospital: null,
-
-        // Control panel visibilities
-        // filterPanelVisible: null,
-        // filterPanelExpanded: null,
-        // resultsPageVisible: null,
-        // resultsPageExpanded: null,
-        // citiesListVisible: null,
-        // citiesListExpanded: null,
-        // hospitalPanelVisible: null,
-        // hospitalPanelExpanded: null
+        // isDesktopView: null,  // A boolean indicating if the window size is a desktop view
+        // isMobileView: null,   // A boolean indicating if the window size is a mobile view
+        // visiblePanels: ["citiesList", "filterPanel"],   // An array of panels that should be visible
+        // expandedPanels: {}   // An object whose keys are panel names and values are their expanded state
+        // selectedHospital: null
     },
     members: {
         rowMarkers: [] // an array of Leaflet.Marker constructed during buildMap.addMarkers
@@ -265,7 +246,7 @@ fluid.defaults("fluid.covidMap.map", {
             args: ["{that}.model.rows", "{that}.options.fields.postcode"]
         },
         isHospitalSelected: {
-            target: "hospitalPanelVisible",
+            target: "dom.hospitalPanel.visible",
             source: "selectedIndex",
             func: "fluid.isValue"
         },
@@ -294,15 +275,14 @@ fluid.defaults("fluid.covidMap.map", {
             source: "matchedRows",
             func: "fluid.transforms.setMembershipToArray"
         },
-        resultsShowing: {
+        resultsPanelShowing: {
             source: "resultsShowing",
-            target: "resultsPageVisible",
-            backward: "never"
+            target: "dom.resultsPage.visible"
         },
-        citiesShowing: {
+        resultsPanelExpanding: {
             source: "resultsShowing",
-            target: "citiesListVisible",
-            func: x => !x
+            target: "{resultsPage}.expandButton.model.expanded",
+            backward: "never"
         },
         // Query reset visibility
         queryResetVisible: {
@@ -323,22 +303,31 @@ fluid.defaults("fluid.covidMap.map", {
             },
             args: ["{that}.model.zoom", "{that}.options.smallMarkersBelowZoom"]
         },
-        // Control panel visibilities
-        filterPanelVisibility: {
-            source: "filterPanelVisible",
-            target: "dom.filterPanel.visible"
+        isMobileView: {
+            source: "isDesktopView",
+            target: "isMobileView",
+            func: value => !value
+        },
+        // Panel visibilities
+        citiesListVisibility: {
+            source: "visiblePanels",
+            func: panels => panels.includes("citiesList"),
+            target: "{map}.model.dom.citiesList.visible"
         },
         resultsPageVisibility: {
-            source: "resultsPageVisible",
-            target: "dom.resultsPage.visible"
+            source: "visiblePanels",
+            func: panels => panels.includes("resultsPage"),
+            target: "{map}.model.dom.resultsPage.visible"
         },
-        citiesListVisibility: {
-            source: "citiesListVisible",
-            target: "dom.citiesList.visible"
+        filterPanelVisibility: {
+            source: "visiblePanels",
+            func: panels => panels.includes("filterPanel"),
+            target: "{map}.model.dom.filterPanel.visible"
         },
         hospitalPanelVisibility: {
-            source: "hospitalPanelVisible",
-            target: "dom.hospitalPanel.visible"
+            source: "visiblePanels",
+            func: panels => panels.includes("hospitalPanel"),
+            target: "{map}.model.dom.hospitalPanel.visible"
         }
     },
     modelListeners: {
@@ -418,7 +407,7 @@ fluid.defaults("fluid.covidMap.map", {
             type: "fluid.backButton",
             container: "{that}.dom.searchResultsBackButton"
         },
-        hosptialBackButton: {
+        hospitalBackButton: {
             type: "fluid.backButton",
             container: "{that}.dom.hospitalBackButton"
         },
@@ -465,7 +454,7 @@ fluid.defaults("fluid.covidMap.map", {
                 }
             }
         },
-        selectedHospitalPanel: {
+        hospitalPanel: {
             type: "fluid.covidMap.hospitalRenderer",
             container: "{that}.dom.hospitalPanel",
             options: {
@@ -489,6 +478,50 @@ fluid.defaults("fluid.covidMap.map", {
         filterCountOnDesktop: {
             type: "fluid.covidMap.filterCount",
             container: "{that}.dom.filterCountOnDesktop"
+        },
+        filterCountOnMobile: {
+            type: "fluid.covidMap.filterCount",
+            container: "{that}.dom.filterCountOnMobile"
+        },
+        locationButtonOnMobile: {
+            type: "fluid.button",
+            container: "{that}.dom.locationButtonOnMobile",
+            options: {
+                modelListeners: {
+                    "showCitiesList": {
+                        path: "activate",
+                        changePath: "{map}.model.visiblePanels",
+                        value: ["citiesList"],
+                        excludeSource: "init"
+                    },
+                    "expandCitiesList": {
+                        path: "activate",
+                        changePath: "{map}.model.expandedPanels",
+                        value: ["citiesList"],
+                        excludeSource: "init"
+                    }
+                }
+            }
+        },
+        filterButtonOnMobile: {
+            type: "fluid.button",
+            container: "{that}.dom.filterButtonOnMobile",
+            options: {
+                modelListeners: {
+                    "showFilterPanel": {
+                        path: "activate",
+                        changePath: "{map}.model.visiblePanels",
+                        value: ["filterPanel"],
+                        excludeSource: "init"
+                    },
+                    "expandFilterPanel": {
+                        path: "activate",
+                        changePath: "{map}.model.expandedPanels",
+                        value: ["filterPanel"],
+                        excludeSource: "init"
+                    }
+                }
+            }
         }
     },
     dynamicComponents: {
@@ -504,182 +537,97 @@ fluid.defaults("fluid.covidMap.map", {
                     record: "fluid.covidMap.filterCheckboxInMap"
                 }
             }
+        },
+        desktopViewHandler: {
+            source: "{map}.model.isDesktopView",
+            type: "fluid.covidMap.desktopViewHandler"
+        },
+        mobileViewHandler: {
+            source: "{map}.model.isMobileView",
+            type: "fluid.covidMap.mobileViewHandler"
         }
     }
 });
 
-// The context awareness handler for the desktop view
+fluid.covidMap.detectWindowSize = function (that) {
+    const mediaQuery = window.matchMedia(that.options.mediaQueryBreakpoint);
+    that.applier.change("isDesktopView", mediaQuery.matches ? true : false);
+    mediaQuery.addListener(function (evt) {
+        that.applier.change("isDesktopView", evt.matches ? true : false);
+    });
+};
+
+// The desktop view handler
 fluid.defaults("fluid.covidMap.desktopViewHandler", {
     gradeNames: "fluid.modelComponent",
-    model: {
-        // Initial visibility values for the desktop view
-        filterPanelVisible: true,
-        filterPanelExpanded: true,
-        resultsPageVisible: true,
-        resultsPageExpanded: true,
-        citiesListVisible: true,
-        citiesListExpanded: true,
-        hospitalPanelVisible: false,
-        hospitalPanelExpanded: true
+    listeners: {
+        "onCreate.setVisiblePanels": {
+            listener: "{map}.applier.change",
+            args: ["visiblePanels", ["citiesList", "filterPanel"]]
+        },
+        "onCreate.setExpandedPanels": {
+            listener: "{map}.applier.change",
+            args: ["expandedPanels", {
+                citiesList: true,
+                resultsPage: true,
+                filterPanel: true,
+                hospitalPanel: true
+            }]
+        }
+    },
+    modelRelay: {
+        citiesShowing: {
+            source: "resultsShowing",
+            target: "dom.citiesList.visible",
+            func: x => !x
+        }
     }
 });
 
-// The context awareness handler for the mobile view
+// The mobile view handler
 fluid.defaults("fluid.covidMap.mobileViewHandler", {
-    gradeNames: "fluid.viewComponent",
-    selectors: {
-        filterCountOnMobile: ".fl-mapviz-filter-count-on-mobile",
-        locationButtonOnMobile: ".fl-mapviz-locations-button-on-mobile",
-        filterButtonOnMobile: ".fl-mapviz-filter-button-on-mobile"
-    },
-    components: {
-        filterCountOnMobile: {
-            type: "fluid.covidMap.filterCount",
-            container: "{that}.dom.filterCountOnMobile"
+    gradeNames: "fluid.modelComponent",
+    listeners: {
+        "onCreate.setVisiblePanels": {
+            listener: "{map}.applier.change",
+            args: ["visiblePanels", ["citiesList"]]
         },
-        locationButtonOnMobile: {
-            type: "fluid.button",
-            container: "{that}.dom.locationButtonOnMobile",
-            options: {
-                modelListeners: {
-                    "showCitiesList": {
-                        path: "activate",
-                        changePath: "{map}.model.citiesListVisible",
-                        value: true,
-                        excludeSource: ["init"]
-                    },
-                    "expandCitiesList": {
-                        path: "activate",
-                        changePath: "{map}.model.citiesListExpanded",
-                        value: true,
-                        excludeSource: ["init"]
-                    }
-                }
-            }
-        },
-        filterButtonOnMobile: {
-            type: "fluid.button",
-            container: "{that}.dom.filterButtonOnMobile",
-            options: {
-                modelListeners: {
-                    "showFilterPanel": {
-                        path: "activate",
-                        changePath: "{map}.model.filterPanelVisible",
-                        value: true,
-                        excludeSource: ["init"]
-                    },
-                    "expandFilterPanel": {
-                        path: "activate",
-                        changePath: "{map}.model.filterPanelExpanded",
-                        value: true,
-                        excludeSource: ["init"]
-                    }
-                }
-            }
+        "onCreate.setExpandedPanels": {
+            listener: "{map}.applier.change",
+            args: ["expandedPanels", {
+                citiesList: false,
+                resultsPage: true,
+                filterPanel: true,
+                hospitalPanel: true
+            }]
         }
     },
-    model: {
-        filterPanelVisible: false,
-        filterPanelExpanded: true,
-        // resultsPageVisible: false,
-        resultsPageExpanded: true,
-        // citiesListVisible: true,
-        citiesListExpanded: false,
-        hospitalPanelVisible: false,
-        hospitalPanelExpanded: true
-    },
     modelRelay: {
-        filterPanelVisibilityEffect: {
-            target: "{that}.model",
-            singleTransform: {
-                type: "fluid.transforms.valueMapper",
-                defaultInput: "{that}.model.filterPanelVisible",
-                match: {
-                    true: {
-                        outputValue: {
-                            filterPanelExpanded: true,
-                            resultsPageVisible: false,
-                            resultsPageExpanded: true,
-                            citiesListVisible: false,
-                            hospitalPanelVisible: false,
-                            hospitalPanelExpanded: true
-                        }
-                    }
-                },
-                forward: {
-                    excludeSource: ["init"]
-                },
-                backward: "never"
-            }
+        // handle "back to location" buttons
+        backToCities: {
+            source: "{map}.model.query",
+            target: "{map}.model.visiblePanels",
+            func: x => x ? ["resultsPage"] : ["citiesList"]
         },
-        resultsPageVisibilityEffect: {
-            target: "{that}.model",
-            singleTransform: {
-                type: "fluid.transforms.valueMapper",
-                defaultInput: "{that}.model.resultsPageVisible",
-                match: {
-                    true: {
-                        outputValue: {
-                            filterPanelVisible: false,
-                            filterPanelExpanded: true,
-                            citiesListVisible: false,
-                            citiesListExpanded: true,
-                            hospitalPanelVisible: false,
-                            hospitalPanelExpanded: true
-                        }
-                    }
-                },
-                forward: {
-                    excludeSource: ["init"]
-                },
-                backward: "never"
-            }
+        onlyShowResultsPage: {
+            source: "{map}.model.resultsShowing",
+            target: "{map}.model.visiblePanels",
+            func: x => {if (x) {return ["resultsPage"];}}
         },
-        citiesListVisibilityEffect: {
-            target: "{that}.model",
-            singleTransform: {
-                type: "fluid.transforms.valueMapper",
-                defaultInput: "{that}.model.citiesListVisible",
-                match: {
-                    true: {
-                        outputValue: {
-                            filterPanelVisible: false,
-                            filterPanelExpanded: true,
-                            resultsPageVisible: false,
-                            resultsPageExpanded: true,
-                            hospitalPanelVisible: false,
-                            hospitalPanelExpanded: true
-                        }
-                    }
-                },
-                forward: {
-                    excludeSource: ["init"]
-                },
-                backward: "never"
-            }
+        expandResultsPage: {
+            source: "{map}.model.resultsShowing",
+            target: "{map}.model.expandedPanels.resultsPage",
+            func: x => {if (x) {return true;}}
         },
-        hospitalPanelVisibilityEffect: {
-            target: "{that}.model",
-            singleTransform: {
-                type: "fluid.transforms.valueMapper",
-                defaultInput: "{that}.model.hospitalPanelVisible",
-                match: {
-                    true: {
-                        outputValue: {
-                            filterPanelVisible: false,
-                            filterPanelExpanded: true,
-                            resultsPageVisible: false,
-                            resultsPageExpanded: true,
-                            citiesListVisible: false,
-                            citiesListExpanded: true
-                        }
-                    }
-                }
-            },
-            forward: {
-                excludeSource: ["init"]
-            },
-            backward: "never"
+        onlyShowHospitalPanel: {
+            source: "{map}.model.selectedIndex",
+            target: "{map}.model.visiblePanels",
+            func: x => {if (x) {return ["hospitalPanel"];}}
+        },
+        expandHospitalPanel: {
+            source: "{map}.model.selectedIndex",
+            target: "{map}.model.expandedPanels.hospitalPanel",
+            func: x => {if (x) {return true;}}
         }
     }
 });
@@ -748,7 +696,7 @@ fluid.defaults("fluid.covidMap.filterPanel", {
             container: "{filterPanel}.dom.expandButton",
             options: {
                 model: {
-                    expanded: "{map}.model.filterPanelExpanded"
+                    expanded: "{map}.model.expandedPanels.filterPanel"
                 },
                 modelRelay: {
                     visibleTitle: {
@@ -843,10 +791,15 @@ fluid.defaults("fluid.button", {
 fluid.defaults("fluid.backButton", {
     gradeNames: "fluid.button",
     modelListeners: {
-        "goBack": {
+        "resetQuery": {
             path: "activate",
             changePath: "{map}.model.query",
             value: ""
+        },
+        "resetSelectedIndex": {
+            path: "activate",
+            changePath: "{map}.model.selectedIndex",
+            value: null
         }
     }
 });
@@ -875,7 +828,7 @@ fluid.defaults("fluid.covidMap.citiesList", {
             container: "{citiesList}.dom.expandButton",
             options: {
                 model: {
-                    expanded: "{map}.model.citiesListExpanded"
+                    expanded: "{map}.model.expandedPanels.citiesList"
                 },
                 modelRelay: {
                     collapseTitle: {
@@ -968,7 +921,7 @@ fluid.defaults("fluid.covidMap.resultsPage", {
             container: "{resultsPage}.dom.expandButton",
             options: {
                 model: {
-                    expanded: "{map}.model.resultsPageExpanded"
+                    expanded: "{map}.model.expandedPanels.resultsPage"
                 },
                 modelRelay: {
                     collapseResultsList: {
