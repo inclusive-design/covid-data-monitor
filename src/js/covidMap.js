@@ -191,7 +191,7 @@ fluid.defaults("fluid.covidMap.map", {
             citiesList: "{that}.model.dom.citiesList.visible",
             resultsPage: "{that}.model.dom.resultsPage.visible",
             filterPanel: "{that}.model.dom.filterPanel.visible",
-            hospitalPanel: "{that}.model.dom.hospitalPanel.visible",
+            hospitalPanel: "{that}.model.dom.hospitalPanel.visible"
         }
 
         // isDesktopView: null,  // A boolean indicating if the window size is a desktop view
