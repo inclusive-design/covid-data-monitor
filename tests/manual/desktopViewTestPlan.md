@@ -1,6 +1,6 @@
 # Desktop View - Manual Test Plan
 
-Desktop view is applied when the browser width is above 1024px, the iPad size.
+The desktop view is applied when the browser width is above 1024px, the iPad size.
 
 ## Initial load
 
@@ -21,6 +21,7 @@ panel shows the total number of selected filters is 0.
 ### Search
 
 There are 3 ways to search for a COVID assessment centre:
+
 1. Select a city from the auto-completed search input box;
 2. Select a postal code from the auto-completed search input box;
 3. Select a city from the cities list.
@@ -29,11 +30,10 @@ There are 3 ways to search for a COVID assessment centre:
 
 1. Use keyboard or mouse to focus in the search input box;
 2. Start to type a letter for example "t";
-3. A drop down list box shows up with all matching city names starting with "t". See the screenshot below:
-
-![Desktop View - Auto Complete Search](images/desktopInitialLoad.png)
-
+3. A drop down list box shows up with all matching city names starting with "t". See the screenshot below;
 4. Select the city you are interested in from the auto-completed drop down list box.
+
+![Desktop View - Auto Complete Search](images/searchAutoComplete.png)
 
 #### Method 2: Select a postal code from the auto-completed search input box
 

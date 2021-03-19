@@ -1,6 +1,6 @@
 # Mobile View - Manual Test Plan
 
-Mobile view is applied when the browser width is below 1024px, the iPad size. This test plan is based on
+The mobile view is applied when the browser width is below 1024px, the iPad size. This test plan is based on
 [Mobile View - Manual Test Plan](desktopViewTestPlan.md). It doesn't contain common functionalities that
 have been described in the desktop view test plan including search auto-complete, search methods, reset search and
 reset filters.
@@ -24,11 +24,10 @@ Load the COVID map. The interface shows the content as the screenshot below:
 ## "Accessibility Filters" button: Show the accessibility filters panel
 
 1. Click the "Accessibility Filters" button at the bottom;
-2. The accessibility filters panel is shown as the screenshot below:
+2. The accessibility filters panel is shown as the screenshot below;
+3. The number above the words "Accessibility Filters" shows the total number of selected filters.
 
 ![Mobile View - Locations](images/mobileA11yFilters.png)
-
-3. The number above the words "Accessibility Filters" shows the total number of selected filters.
 
 ## Expand and collapse a panel
 
