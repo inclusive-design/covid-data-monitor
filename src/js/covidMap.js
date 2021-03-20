@@ -611,6 +611,11 @@ fluid.defaults("fluid.covidMap.mobileViewHandler", {
             container: "{map}.dom.locationButtonOnMobile",
             options: {
                 modelListeners: {
+                    "resetQuery": {
+                        path: "activate",
+                        changePath: "{map}.model.query",
+                        value: ""
+                    },
                     "showCitiesList": {
                         path: "activate",
                         changePath: "{map}.model.visiblePanelArray",
