@@ -380,32 +380,6 @@ fluid.defaults("fluid.covidMap.map", {
             priority: "last",
             func: "{query}.accept",
             args: [0]
-        },
-        // debugging listeners
-        debugVisiblePanelArray: {
-            path: "visiblePanelArray",
-            func: "console.log",
-            args: ["visiblePanelArray: ", "{change}.value"]
-        },
-        debugVisiblePanelFlags: {
-            path: "visiblePanelFlags",
-            func: "console.log",
-            args: ["visiblePanelFlags: ", "{change}.value"]
-        },
-        debugExpandedPanels: {
-            path: "expandedPanels",
-            func: "console.log",
-            args: ["expandedPanels: ", "{change}.value"]
-        },
-        debugisDesktopView: {
-            path: "isDesktopView",
-            func: "console.log",
-            args: ["isDesktopView: ", "{change}.value"]
-        },
-        debugisMobileView: {
-            path: "isMobileView",
-            func: "console.log",
-            args: ["isMobileView: ", "{change}.value"]
         }
     },
     components: {
@@ -544,56 +518,27 @@ fluid.covidMap.detectWindowSize = function (that) {
 // The desktop view handler
 fluid.defaults("fluid.covidMap.desktopViewHandler", {
     gradeNames: "fluid.modelComponent",
-    // listeners: {
-    //     "onCreate.setVisiblePanels": {
-    //         listener: "{map}.applier.change",
-    //         args: ["visiblePanelArray", ["citiesList", "filterPanel"]]
-    //     },
-    //     "onCreate.setExpandedPanels": {
-    //         listener: "{map}.applier.change",
-    //         args: ["expandedPanels", {
-    //             citiesList: true,
-    //             resultsPage: true,
-    //             filterPanel: true,
-    //             hospitalPanel: true
-    //         }]
-    //     }
-    // },
-    model: {
-        visiblePanelArray: ["citiesList", "filterPanel"],
-        expandedPanels: {
-            citiesList: true,
-            resultsPage: true,
-            filterPanel: true,
-            hospitalPanel: true
+    listeners: {
+        "onCreate.setVisiblePanels": {
+            listener: "{map}.applier.change",
+            args: ["visiblePanelArray", ["citiesList", "filterPanel"]]
+        },
+        "onCreate.setExpandedPanels": {
+            listener: "{map}.applier.change",
+            args: ["expandedPanels", {
+                citiesList: true,
+                resultsPage: true,
+                filterPanel: true,
+                hospitalPanel: true
+            }]
         }
     },
     modelRelay: {
-        visiblePanelArray: {
-            source: "visiblePanelArray",
-            target: "{map}.model.visiblePanelArray",
-            backward: {
-                excludeSource: "init"
-            }
-        },
-        expandedPanels: {
-            source: "expandedPanels",
-            target: "{map}.model.expandedPanels",
-            backward: {
-                excludeSource: "init"
-            }
-        },
         // The results page and hide the cities list is only shown one at a time based on the hospital results.
         citiesShowing: {
             source: "{map}.model.resultsShowing",
             target: "{map}.model.dom.citiesList.visible",
             func: x => !x
-        }
-    },
-    listeners: {
-        "onCreate.debug": {
-            listener: "console.log",
-            args: ["desktopViewHandler is created", "{that}.model.expandedPanels", "{that}.model.visiblePanelArray"]
         }
     }
 });
@@ -649,48 +594,21 @@ fluid.defaults("fluid.covidMap.mobileViewHandler", {
         }
     },
     listeners: {
-        // "onCreate.setVisiblePanels": {
-        //     listener: "{map}.applier.change",
-        //     args: ["visiblePanelArray", ["citiesList"]]
-        // },
-        // "onCreate.setExpandedPanels": {
-        //     listener: "{map}.applier.change",
-        //     args: ["expandedPanels", {
-        //         citiesList: false,
-        //         resultsPage: true,
-        //         filterPanel: true,
-        //         hospitalPanel: true
-        //     }]
-        // },
-        "onCreate.debug": {
-            listener: "console.log",
-            args: ["mobileViewHandler onCreate fired. expandedPanels: ", "{map}.model.expandedPanels", "visiblePanelArray: ", "{map}.model.visiblePanelArray"]
-        }
-    },
-    model: {
-        visiblePanelArray: ["citiesList"],
-        expandedPanels: {
-            citiesList: false,
-            resultsPage: true,
-            filterPanel: true,
-            hospitalPanel: true
+        "onCreate.setVisiblePanels": {
+            listener: "{map}.applier.change",
+            args: ["visiblePanelArray", ["citiesList"]]
+        },
+        "onCreate.setExpandedPanels": {
+            listener: "{map}.applier.change",
+            args: ["expandedPanels", {
+                citiesList: false,
+                resultsPage: true,
+                filterPanel: true,
+                hospitalPanel: true
+            }]
         }
     },
     modelRelay: {
-        visiblePanelArray: {
-            source: "visiblePanelArray",
-            target: "{map}.model.visiblePanelArray",
-            backward: {
-                excludeSource: "init"
-            }
-        },
-        expandedPanels: {
-            source: "expandedPanels",
-            target: "{map}.model.expandedPanels",
-            backward: {
-                excludeSource: "init"
-            }
-        },
         // As "back to location" buttons reset the query value, when the query value is empty,
         // show the citiesList panel only, otherwise, only show the results page.
         backToCities: {
