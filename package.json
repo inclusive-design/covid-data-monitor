@@ -1,15 +1,15 @@
 {
     "name": "covid-data-monitor",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "We Count Data Monitor project visualising Ontario Covid test centre data as accessible map",
     "scripts": {
-        "lint": "grunt lint",
+        "lint": "fluid-lint-all",
         "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
         "test": "node node_modules/nyc/bin/nyc.js node tests/all-tests.js"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/amb26/fluid-covid-map-viz.git"
+        "url": "git@github.com:inclusive-design/covid-data-monitor.git"
     },
     "license": "BSD-3-Clause",
     "bugs": {
@@ -27,11 +27,7 @@
         "node-jqunit": "1.1.8",
         "eslint": "7.19.0",
         "eslint-config-fluid": "2.0.0",
-        "eslint-plugin-markdown": "1.0.2",
-        "fluid-grunt-lint-all": "2.0.0",
-        "grunt": "1.3.0",
-        "grunt-jsonlint": "2.1.3",
-        "grunt-stylelint": "0.16.0",
+        "fluid-lint-all": "1.0.0",
         "stylelint": "13.9.0",
         "stylelint-config-fluid": "0.1.0",
         "terser": "5.5.1",

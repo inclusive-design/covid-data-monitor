@@ -1,0 +1,19 @@
+{
+    "WeCount": {
+        "sourceType": "git",
+        "repository": "https://github.com/inclusive-design/covid-assessment-centres",
+        "path": "WeCount/assessment_centre_data_collection_2020_09_02.csv",
+        "revision": "c4069cac59d50075575f29f7e88447763f9cc44c"
+    },
+    "ODC": {
+        "sourceType": "git",
+        "repository": "https://github.com/inclusive-design/covid-assessment-centres",
+        "path": "ODC/assessment_centre_locations_2021_02_10.csv",
+        "revision": "c4069cac59d50075575f29f7e88447763f9cc44c"
+    },
+    "invent": {
+        "type": "fluid.covidMap.inventAccessibilityData",
+        "input": "_",
+        "seed": 0
+    }
+}
