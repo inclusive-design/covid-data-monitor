@@ -1,0 +1,22 @@
+{
+    "sources": {
+        "md": ["src/**/*.md"],
+        "js": ["src/**/*.js", "./*.js"],
+        "json": ["src/**/*.json", "./*.json"],
+        "css": ["src/**/*.css"],
+        "other": ["./.*"]
+    },
+    "eslint": {
+        "js": {
+            "options": {
+            }
+        }
+    },
+    "markdownlint": {
+        "options": {
+            "config": {
+                "single-h1": false
+            }
+        }
+    }
+}

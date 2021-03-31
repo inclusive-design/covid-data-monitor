@@ -1,0 +1,4 @@
+These were produced from "landing" markers by hand-editing them to change
+background to #B9B9B9
+border to #636363
+Inserted classes fl-mapviz-marker-border and fl-mapviz-marker-fill
