@@ -53,7 +53,7 @@ fluid.copyImmutableResource = function (tocopy) {
 };
 
 fluid.covidMap.extractCities = function (rows, field) {
-    var cities = fluid.getMembers(rows, field);
+    var cities = fluid.getMembers(rows, field).map(city => city.trim());
     var cityHash = fluid.arrayToHash(cities);
     return fluid.copyImmutableResource(Object.keys(cityHash).sort());
 };
