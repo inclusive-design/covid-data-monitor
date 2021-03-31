@@ -3,9 +3,8 @@
 This package implements a map and query-based visualisation of data on Ontario COVID-19 assessment centre locations for
 project [We Count](https://wecount.inclusivedesign.ca/).
 
-Tt includes a built-in rather stale copy of the data to visualise at data/assessment_centre_locations.csv but when
-deployed it will source its data from the live and regularly updated repository at
-[here](https://github.com/inclusive-design/covid-assessment-centres).
+It includes a built-in data that merges [the ODS assessment centre locations dataset](https://data.ontario.ca/dataset/covid-19-assessment-centre-locations)
+with a mocked accessibility dataset for these assessment centres to visualize at data/merged/output.csv.
 
 ## Install
 
