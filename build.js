@@ -29,8 +29,8 @@ var buildIndex = {
         src: "src/buildTest/index.html",
         dest: "build/index.html"
     }, {
-        src: "data/assessment_centre_locations.csv",
-        dest: "build/data/assessment_centre_locations.csv"
+        src: "data/merged/output.csv",
+        dest: "build/data/output.csv"
     }]
 };
 

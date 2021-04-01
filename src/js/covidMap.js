@@ -76,7 +76,7 @@ fluid.copyImmutableResource = function (tocopy) {
 };
 
 fluid.covidMap.extractCities = function (rows, field) {
-    var cities = fluid.getMembers(rows, field);
+    var cities = fluid.getMembers(rows, field).map(city => city.trim());
     var cityHash = fluid.arrayToHash(cities);
     return fluid.copyImmutableResource(Object.keys(cityHash).sort());
 };
@@ -96,7 +96,7 @@ fluid.defaults("fluid.covidMap.map", {
     },
     mediaQueryBreakpoint: "screen and (min-width: 1024px)",
     parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
-    smallMarkersBelowZoom: 9,
+    smallMarkersBelowZoom: 11,
     outerBounds: {
         min: [-95.2, 41.6],
         max: [-74.3, 56.9]
@@ -112,23 +112,23 @@ fluid.defaults("fluid.covidMap.map", {
     filters: {
         entrances: {
             selector: ".fl-mapviz-filter-entrances",
-            column: "Wheelchair-accessible entrance"
+            column: "Accessible Entrances"
         },
         washroom: {
             selector: ".fl-mapviz-filter-washrooms",
-            column: "Wheelchair-accessible bathrooms"
+            column: "Accessible Washrooms"
         },
         parking: {
             selector: ".fl-mapviz-filter-parking",
-            column: "Accessible parking"
+            column: "Accessible Parking"
         },
         individual: {
             selector: ".fl-mapviz-filter-individual",
-            column: "Personalized or individual service is offered"
+            column: "Individual Service"
         },
         wait: {
             selector: ".fl-mapviz-filter-wait",
-            column: "Queue accomodations"
+            column: "Wait Accommodations"
         }
     },
     unselectedFilterChecks: "@expand:fluid.covidMap.unselectedChecks({that}.options.filters)",
@@ -142,7 +142,7 @@ fluid.defaults("fluid.covidMap.map", {
         hospitalPanel: ".fl-mapviz-hospital-panel",
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
-        applyButton: ".fl-mapviz-reset-filters",
+        applyButton: ".fl-mapviz-apply-filters",
         filterCountOnDesktop: ".fl-mapviz-filter-count-on-desktop",
         filterCountOnMobile: ".fl-mapviz-filter-count-on-mobile",
         locationButtonOnMobile: ".fl-mapviz-locations-button-on-mobile",
@@ -177,10 +177,12 @@ fluid.defaults("fluid.covidMap.map", {
         query: "",
         activeFilterChecks: "{that}.options.unselectedFilterChecks",
         uiFilterChecks: "{that}.options.unselectedFilterChecks",
+        queryResult: [], // Map of row indices to {match: Boolean, matchFilters: Boolean}
         matchedRows: [], // Map of row indices to boolean
         matchedRowIndices: [], // The indices of the matched rows
         selectedRows: [], // Map of row indices to boolean
         hoveredRows: [], // Map of row indices to boolean
+        activeRows: [], // Map of row indices to boolean
         selectedIndex: null,
         hoveredIndex: null,
         resultsShowing: false,
@@ -216,6 +218,11 @@ fluid.defaults("fluid.covidMap.map", {
             iconSize: [23, 33],
             iconAnchor: [11.5, 33]
         },
+        standardInactive: {
+            symbol: "MarkerInactive",
+            iconSize: [23, 33],
+            iconAnchor: [11.5, 33]
+        },
         standardHover: {
             symbol: "MarkerHover",
             iconSize: [27, 37],
@@ -228,6 +235,11 @@ fluid.defaults("fluid.covidMap.map", {
         },
         small: {
             symbol: "MarkerSmall",
+            iconSize: [9, 13],
+            iconAnchor: [4.5, 13]
+        },
+        smallInactive: {
+            symbol: "MarkerSmallInactive",
             iconSize: [9, 13],
             iconAnchor: [4.5, 13]
         },
@@ -274,10 +286,15 @@ fluid.defaults("fluid.covidMap.map", {
             args: ["{that}.model.rows", "{that}.model.hoveredIndex"],
             func: "fluid.transforms.indexToBooleans"
         },
+        queryResults: {
+            target: "queryResults",
+            func: "fluid.covidMap.doQuery",
+            args: ["{that}.model.rows", "{that}.model.query", "{that}.model.activeFilterChecks", "{that}.options.filters"]
+        },
         matchedRows: {
             target: "matchedRows",
-            func: "fluid.covidMap.doQuery",
-            args: ["{that}.model.rows", "{that}.model.query", "{that}.model.activeChecks", "{that}.options.accessibleChecks"]
+            func: "fluid.getMembers",
+            args: ["{that}.model.queryResults", "match"]
         },
         matchedRowIndices: {
             target: "matchedRowIndices",
@@ -299,7 +316,7 @@ fluid.defaults("fluid.covidMap.map", {
             target: "dom.queryReset.visible",
             func: query => !!query
         },
-        queryResultsShowing: {
+        queryToResultsShowing: {
             source: "query",
             target: "resultsShowing",
             func: query => !!query
@@ -357,9 +374,9 @@ fluid.defaults("fluid.covidMap.map", {
             funcName: "fluid.covidMap.updateMarkers",
             args: ["{that}", "{change}.value", "{change}.oldValue"]
         },
-        // Update all markers if marker size changes
+        // Update all markers if marker size changes or there is a query
         "smallMarkers": { // TODO: modelise marker choices
-            path: "smallMarkers",
+            path: ["smallMarkers", "queryResults"],
             excludeSource: "init",
             func: function (that) {
                 that.rowMarkers.forEach(function (row, index) {
@@ -370,7 +387,7 @@ fluid.defaults("fluid.covidMap.map", {
         },
         // Marker visibility
         "markerVisibility": {
-            path: "matchedRows",
+            path: "queryResults",
             excludeSource: "init",
             funcName: "fluid.covidMap.updateMarkerVisibility",
             args: ["{that}", "{change}.value"]
@@ -428,7 +445,16 @@ fluid.defaults("fluid.covidMap.map", {
         },
         applyButton: {
             type: "fluid.button",
-            container: "{that}.dom.applyButton"
+            container: "{that}.dom.applyButton",
+            options: {
+                modelListeners: {
+                    applyFilters: {
+                        path: "activate",
+                        changePath: "{map}.model.activeFilterChecks",
+                        value: "{map}.model.uiFilterChecks"
+                    }
+                }
+            }
         },
         resetQueryButton: {
             type: "fluid.button",
@@ -1033,32 +1059,52 @@ fluid.covidMap.isPostcodeStart = function (query) {
     return query.match(/[a-z][0-9]/i);
 };
 
-fluid.covidMap.doQuery = function (rows, query, activeChecks, checks) {
+/** Perform the query, producing a set of matched rows
+ * @param {Object[]} rows - The data rows as loaded from CSV
+ * @param {String} query - The user's query string as present in the search box or imputed from the city selection
+ * @param {Boolean[]} activeChecks - The state of currently active accessibility filter checks
+ * @param {Object<String, Object>} filters - The filter check configuration structure, mapping keys to records encoding column
+ * @return {MatchElement[]} An array of match elements, containing booleans {match, matchQuery, matchFilters} indicating which part of the query state has matched
+ */
+fluid.covidMap.doQuery = function (rows, query, activeChecks, filters) {
     var normalised = query.trim();
     var isPostcodeQuery = fluid.covidMap.isPostcodeStart(normalised);
-    var noChecks = fluid.hashToArray(activeChecks).every(a => !a);
-    // var checksActive = activeChecks.some(a => a) && activeChecks.some(a => !a);
     var anyMatched = false;
     var matched = rows.map(function (row) {
         var matchQuery = (isPostcodeQuery ? row.postal_code : row.city).startsWith(query);
-        var checkMatches = fluid.transform(checks, function (record, key) {
+        var filterMatches = fluid.transform(filters, function (record, key) {
             var value = row[record.column];
-            return !activeChecks[key] || value.contains("Yes");
+            return !activeChecks[key] || value.includes("Yes");
         });
-        var matchChecks = noChecks || fluid.hashToArray(checkMatches).every(a => a);
-        var match = matchQuery && matchChecks;
+        var matchFilters = fluid.hashToArray(filterMatches).every(a => a);
+        var match = matchQuery && matchFilters;
         anyMatched = anyMatched || match;
-        return match;
+        return {
+            match: match,
+            matchQuery: matchQuery,
+            matchFilters: matchFilters // Note that this field is not currently read by anything
+        };
     });
     if (!anyMatched) {
-        matched = fluid.generate(rows.length, true);
+        matched = fluid.generate(rows.length, {
+            match: true,
+            matchQuery: true,
+            matchFilters: true
+        });
     }
     return matched;
 };
 
+/** Update the map marker for a single row
+ * @param {fluid.covidMap.map} that - The map instance
+ * @param {Integer} index - The index of the row whose map marker is to be updated to be shown, referred to the total array of rows
+ */
 fluid.covidMap.updateMarker = function (that, index) {
     if (Number.isInteger(index)) {
-        var markerSuffix = that.model.selectedRows[index] ? "Selected" : (that.model.hoveredRows[index] ? "Hover" : "");
+        var isInactive = !that.model.queryResults[index].match;
+        var markerSuffix = isInactive ? "Inactive" :
+            that.model.selectedRows[index] ? "Selected" :
+                that.model.hoveredRows[index] ? "Hover" : "";
         var markerPrefix = that.model.smallMarkers ? "small" : "standard";
         var markerKey = markerPrefix + markerSuffix;
         var markerIcon = that.markers[markerKey];
@@ -1066,7 +1112,8 @@ fluid.covidMap.updateMarker = function (that, index) {
         if (marker) { // Row with invalid coordinates doesn't get marker
             marker.setIcon(markerIcon);
             marker._icon.removeAttribute("tabindex");
-            $(marker._icon).toggleClass("visually-hidden", !that.model.matchedRows[index]);
+            // Duplicate with logic in fluid.covidMap.updateMarkerVisibility
+            $(marker._icon).toggle(that.model.queryResults[index].matchQuery);
         }
     }
 };
@@ -1076,10 +1123,10 @@ fluid.covidMap.updateMarkers = function (that, index1, index2) {
     fluid.covidMap.updateMarker(that, index2);
 };
 
-fluid.covidMap.computeBounds = function (rows, matched, buffer) {
+fluid.covidMap.computeBounds = function (rows, queryResults, buffer) {
     var bounds = fluid.geom.emptyBounds();
     rows.forEach(function (row, index) {
-        if (matched[index]) {
+        if (queryResults[index].match && row.longitude && row.latitude) {
             fluid.geom.updateBounds(bounds, row.longitude, row.latitude);
         }
     });
@@ -1089,24 +1136,25 @@ fluid.covidMap.computeBounds = function (rows, matched, buffer) {
     return bounds;
 };
 
-fluid.covidMap.updateMarkerVisibility = function (that, matchedRows) {
+fluid.covidMap.updateMarkerVisibility = function (that, queryResults) {
     var allMatched = true;
-    matchedRows.forEach(function (matched, index) {
+    queryResults.forEach(function (oneResult, index) {
         var marker = that.rowMarkers[index];
+        var showMarker = oneResult.matchQuery;
         if (marker) { // Some rows may not have valid coordinates and hence no markers
-            $(marker._icon).toggleClass("visually-hidden", !matched);
+            $(marker._icon).toggle(showMarker);
         }
-        allMatched = allMatched && matched;
+        allMatched = allMatched && showMarker;
     });
-    var matchedBounds = fluid.covidMap.computeBounds(that.model.rows, matchedRows, that.options.boundsBuffer);
+    var matchedBounds = fluid.covidMap.computeBounds(that.model.rows, queryResults, that.options.boundsBuffer);
     var bounds = fluid.geom.isEmptyBounds(matchedBounds) || allMatched ? that.options.outerBounds : matchedBounds;
     that.fitBounds(bounds, true);
 };
 
 /** Ensure that the supplied search result at the supplied index is visible
- * @param {fluid.covidMap.
+ * @param {fluid.covidMap.map} that - The map instance
+ * @param {Integer} newIndex - The index of the result to be shown, referred to the total array of rows
  */
-
 fluid.covidMap.showResultIndex = function (that, newIndex) {
     if (Number.isInteger(newIndex)) {
         var visibleIndex = that.model.matchedRowIndices.indexOf(newIndex);
@@ -1115,6 +1163,33 @@ fluid.covidMap.showResultIndex = function (that, newIndex) {
             element[0].scrollIntoView();
         }
     }
+};
+
+/** Bind mouse events to a map marker. One day we will disuse leaflet map markers and render these directly,
+ * but until then, this binding must be done in this literal and inefficient way.
+ * @param {fluid.covidMap.map} that - The map instance
+ * @param {leaflet.Marker} marker - The leaflet Marker object
+ * @param {Integer} index - The index of marker's row
+ */
+fluid.covidMap.bindMarker = function (that, marker, index) {
+    var isActive = function () {
+        return that.model.queryResults[index].match;
+    };
+    marker.on("mouseover", function () {
+        if (isActive()) {
+            that.applier.change("hoveredIndex", index);
+        }
+    });
+    marker.on("mouseout", function () {
+        if (isActive()) {
+            that.applier.change("hoveredIndex", null);
+        }
+    });
+    marker.on("click", function () {
+        if (isActive()) {
+            that.applier.change("selectedIndex", index);
+        }
+    });
 };
 
 fluid.covidMap.addMarkers = function (that) {
@@ -1147,15 +1222,7 @@ fluid.covidMap.addMarkers = function (that) {
             }).addTo(that.map);
             that.rowMarkers[index] = marker;
             fluid.covidMap.updateMarker(that, index);
-            marker.on("mouseover", function () {
-                that.applier.change("hoveredIndex", index);
-            });
-            marker.on("mouseout", function () {
-                that.applier.change("hoveredIndex", null);
-            });
-            marker.on("click", function () {
-                that.applier.change("selectedIndex", index);
-            });
+            fluid.covidMap.bindMarker(that, marker, index);
             return marker;
         }
     });

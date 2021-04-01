@@ -106,7 +106,6 @@ h3,
 
 .fl-mapviz-query-wrapper > svg {
     height: 1.5rem;
-    padding-left: 1rem;
     padding-top: 0.7rem;
     position: absolute;
     width: 1.5rem;
@@ -140,7 +139,7 @@ h3,
 .fl-mapviz-query-reset {
     height: 1rem;
     position: absolute;
-    right: 0.6rem;
+    right: 0.7rem;
     top: 0.5rem;
     z-index: 900;
 }
@@ -149,6 +148,12 @@ h3,
     height: 1rem;
     width: 1rem;
     z-index: 1;
+}
+
+.fl-mapviz-query-label-holder svg {
+    left: 1.2rem;
+    margin-right: -2.5rem;
+    top: 0.15rem;
 }
 
 /******** The accessibility filters panel **********/
