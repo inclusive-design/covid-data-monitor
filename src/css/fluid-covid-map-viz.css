@@ -106,6 +106,7 @@ h3,
 
 .fl-mapviz-query-wrapper > svg {
     height: 1.5rem;
+    padding-left: 1rem;
     padding-top: 0.7rem;
     position: absolute;
     width: 1.5rem;
@@ -139,7 +140,7 @@ h3,
 .fl-mapviz-query-reset {
     height: 1rem;
     position: absolute;
-    right: 0.7rem;
+    right: 0.6rem;
     top: 0.5rem;
     z-index: 900;
 }
@@ -148,12 +149,6 @@ h3,
     height: 1rem;
     width: 1rem;
     z-index: 1;
-}
-
-.fl-mapviz-query-label-holder svg {
-    left: 1.2rem;
-    margin-right: -2.5rem;
-    top: 0.15rem;
 }
 
 /******** The accessibility filters panel **********/
@@ -448,7 +443,7 @@ h3,
     padding: 0.5rem 0.5rem;
 }
 
-.fl-mapviz-search-result .fl-mapviz-hospital-title {
+.fl-mapviz-search-result-hospital-title {
     font-weight: 700;
 }
 
@@ -470,7 +465,7 @@ h3,
     display: none;
 }
 
-.fl-mapviz-hospital-panel .fl-mapviz-hospital-title {
+.fl-mapviz-hospital-title {
     background: #fbdc90;
     margin: 0;
     padding: 0.5rem;
@@ -766,5 +761,14 @@ h3,
     /******** The panel control buttons ********/
     .fl-panel-controls-on-mobile {
         display: none;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    /* A special class defined at the bottom of the css file so that it only available and affect the mobile view.
+    The effect doesn't apply to the desktop view at all. */
+    .fl-mapviz-hidden-on-mobile {
+        /* Use !important to override the inline "display" css applied by javascript */
+        display: none !important;
     }
 }

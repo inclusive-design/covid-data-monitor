@@ -11,10 +11,18 @@ https://github.com/fluid-project/infusion/raw/main/Infusion-LICENSE.txt
 "use strict";
 
 // The expand-collapse button component. This button is only available on the mobile view.
+// This component adds or removes a mobile-view-only visibility css class to a given list of DOM elements
+// based on the expanded state.
 fluid.defaults("fluid.expandButton", {
     gradeNames: "fluid.button",
+    // Supplied by integrators. An array of DOM element to expand or collapse.
+    domElements: [],
+    styles: {
+        hiddenOnMobile: "fl-mapviz-hidden-on-mobile"
+    },
     model: {
-        expanded: true
+        // The initial state of all panels on the mobile view is collapsed.
+        expanded: false
     },
     modelRelay: {
         toggleOnActivate: {
@@ -24,7 +32,21 @@ fluid.defaults("fluid.expandButton", {
         },
         ariaExpanded: {
             source: "expanded",
-            target: "dom.container.attrs.aria-expanded"
+            target: "dom.container.attrs.aria-expanded",
+            func: x => !!x
+        }
+    },
+    modelListeners: {
+        expandContent: {
+            path: "expanded",
+            funcName: "fluid.expandButton.toggleClass",
+            args: ["{that}.options.domElements", "{that}.options.styles.hiddenOnMobile", "{that}.model.expanded"]
         }
     }
 });
+
+fluid.expandButton.toggleClass = function (domElements, style, toggleFlag) {
+    fluid.each(domElements, function (element) {
+        element.toggleClass(style, !toggleFlag);
+    });
+};
