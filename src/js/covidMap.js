@@ -87,7 +87,6 @@ fluid.defaults("fluid.covidMap.map", {
         accessible: "#0f0",
         inaccessible: "#f00"
     },
-    mediaQueryBreakpoint: "screen and (min-width: 1024px)",
     parsedColours: "@expand:hortis.parseColours({that}.options.colours)",
     smallMarkersBelowZoom: 11,
     outerBounds: {
@@ -297,6 +296,11 @@ fluid.defaults("fluid.covidMap.map", {
             target: "matchedRowIndices",
             source: "matchedRows",
             func: "fluid.transforms.setMembershipToArray"
+        },
+        citiesPanelShowing: {
+            source: "resultsShowing",
+            target: "dom.citiesList.visible",
+            func: x => !x
         },
         resultsPanelShowing: {
             source: "resultsShowing",
