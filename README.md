@@ -10,17 +10,28 @@ with a mocked accessibility dataset for these assessment centres to visualize at
 
 After checking out this project, run `npm install`.
 
+## Development
+
+The primary styling of this project is written in [Sass](https://sass-lang.com/). At development, to automatically
+watch changes in Scss files and compile into CSS files, run
+
+    npm run watch:scss
+
+To manually compile Scss files into CSS files, run
+
+    npm run build:scss
+
 ## Build & Run
 
 To quickly see the interface in action, load `index.html` from this directory in your browser from a local static HTTP server.
 
 To produce a rolled-up build suitable for deployment run
 
-    node build.js
+    npm run build
 
 To produce a build omitting the Infusion library, run
 
-    node build.js --no-infusion
+    npm run build:noInfusion
 
 The resulting build artefacts will be generated in directory `build`, together with a self-test for the build in
 `build/index.html`.

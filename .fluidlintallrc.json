@@ -1,10 +1,10 @@
 {
     "sources": {
-        "md": ["src/**/*.md"],
-        "js": ["src/**/*.js", "./*.js"],
-        "json": ["src/**/*.json", "./*.json"],
-        "css": ["src/**/*.css"],
-        "other": ["./.*"]
+        "md": ["./src/**/*.md"],
+        "js": ["./src/**/*.js", "./*.js"],
+        "json": ["./src/**/*.json", "./*.json"],
+        "css": ["./src/css/*.css"],
+        "scss": ["./src/scss/*.scss"]
     },
     "eslint": {
         "js": {
@@ -23,5 +23,8 @@
         "newlines": {
             "excludes": ["tests/**/images/**/*"]
         }
+    },
+    "stylelint": {
+        "excludes": ["./src/css/fluid-covid-map-viz.css"]
     }
 }

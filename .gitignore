@@ -1,3 +1,5 @@
+src/css/fluid-covid-map-viz.css
+src/css/fluid-covid-map-viz.css.map
 build
 node_modules
 .DS_Store

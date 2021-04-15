@@ -4,6 +4,10 @@
     "description": "We Count Data Monitor project visualising Ontario Covid test centre data as accessible map",
     "scripts": {
         "lint": "fluid-lint-all",
+        "build:scss": "sass src/css/scss/fluid-covid-map-viz.scss src/css/fluid-covid-map-viz.css",
+        "watch:scss": "sass --watch src/css/scss/fluid-covid-map-viz.scss src/css/fluid-covid-map-viz.css",
+        "build": "npm run build:scss; node build.js",
+        "build:noInfusion": "npm run build:scss; node build.js --no-infusion",
         "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
         "test": "node node_modules/nyc/bin/nyc.js node tests/all-tests.js"
     },
@@ -24,15 +28,16 @@
         "accessible-autocomplete": "2.0.3"
     },
     "devDependencies": {
-        "node-jqunit": "1.1.8",
-        "eslint": "7.19.0",
+        "node-jqunit": "1.1.9",
+        "eslint": "7.24.0",
         "eslint-config-fluid": "2.0.0",
-        "fluid-lint-all": "1.0.0",
-        "stylelint": "13.9.0",
+        "fluid-lint-all": "1.0.4",
+        "stylelint": "13.12.0",
         "stylelint-config-fluid": "0.1.0",
-        "terser": "5.5.1",
+        "terser": "5.6.1",
         "fs-extra": "9.1.0",
-        "jsdom": "16.4.0",
-        "js-beautify": "1.13.5"
+        "jsdom": "16.5.3",
+        "js-beautify": "1.13.11",
+        "sass": "1.32.8"
     }
 }
