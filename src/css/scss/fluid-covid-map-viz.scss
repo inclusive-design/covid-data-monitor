@@ -618,7 +618,6 @@ h3,
     }
 
     .fl-mapviz-filter-panel {
-        display: block;
         grid-column-end: 4;
         grid-column-start: 3;
         grid-row-end: 3;
@@ -626,6 +625,7 @@ h3,
         height: 43rem;
 
         /* Override the mobile css */
+        max-height: inherit;
         position: inherit;
     }
 
