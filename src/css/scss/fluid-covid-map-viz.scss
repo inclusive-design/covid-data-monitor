@@ -31,7 +31,7 @@ h3,
     align-items: center;
     align-self: center;
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset;
+    box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25)) inset;
     display: flex;
     height: 1.5rem;
     justify-content: center;
@@ -69,7 +69,7 @@ h3,
 
         a:hover,
         a:focus {
-            box-shadow: 0 0 0 1px black inset;
+            box-shadow: 0 0 0 1px var(--fColor, black) inset;
         }
 
         a:active {
@@ -109,8 +109,8 @@ h3,
 
     & > svg {
         height: 1.5rem;
-        padding-left: 1rem;
-        padding-top: 0.7rem;
+        margin-left: 1rem;
+        margin-top: 0.7rem;
         position: absolute;
         width: 1.5rem;
         z-index: 1;
@@ -234,6 +234,7 @@ h3,
     display: inline-block;
     font-stretch: condensed;
     font-style: normal;
+    margin-top: 2px;
     text-transform: uppercase;
     width: 15rem;
 }
@@ -304,7 +305,7 @@ h3,
 
     &:hover .fl-mapviz-icon-shadow,
     &:focus .fl-mapviz-icon-shadow {
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset, 0 0 0 1px black;
+        box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25)) inset, 0 0 0 1px var(--fColor, black);
     }
 }
 
@@ -416,7 +417,7 @@ h3,
 
     &:hover .fl-mapviz-icon-shadow,
     &:focus .fl-mapviz-icon-shadow {
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset, 0 0 0 1px black;
+        box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25)) inset, 0 0 0 1px var(--fColor, black);
     }
 }
 
@@ -478,7 +479,7 @@ h3,
 
 /******** The panel control buttons ********/
 .fl-panel-controls-on-mobile {
-    box-shadow: inset 0 7px 2px -4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 7px 2px -4px var(--fColor, rgba(0, 0, 0, 0.25));
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: 3rem;
@@ -680,8 +681,9 @@ h3,
     }
 
     .fl-mapviz-query-wrapper > svg {
+        margin-left: 0;
         margin-right: -2.5rem;
-        padding-top: 0;
+        margin-top: 0;
         position: relative;
     }
 
@@ -698,7 +700,7 @@ h3,
         align-items: center;
         align-self: center;
         border-radius: 50%;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25));
         display: flex;
         flex-direction: row;
         height: 3.5rem;
@@ -768,4 +770,52 @@ h3,
         /* Use !important to override the inline "display" css applied by javascript */
         display: none !important;
     }
+}
+
+/* Adapt to UIO contrast themes */
+
+// UIO themes
+$UIOThemes:
+	"bw" #000 #fff,
+	"wb" #fff #000,
+	"yb" #ff0 #000,
+	"by" #000 #ff0,
+	"lgdg" #bdbdbb #555,
+	"gd" #888 #222,
+	"gw" #6c6c6c #fff,
+	"bbr" #000 #b96;
+
+@mixin adapt-to-uioThemes($fColor, $bColor) {
+	// Customized colors
+	--currentColor: currentColor;
+	--bColor: #{$bColor};
+	--fColor: #{$fColor};
+    --tooltip-char-color: #{$bColor};
+    --tooltip-bg-color: #{$fColor};
+    --expand-button-color: #{$fColor};
+    --expand-button-stroke-color: #{$fColor};
+
+    .fill-white: {
+        fill: var(--bColor, white);
+    }
+
+    .fill-black: {
+        fill: var(--fColor, black);
+    }
+
+    .stroke-black: {
+        fill: var(--fColor, black);
+    }
+
+    .fl-mapviz-filter,
+    .fl-mapviz-filter-buttons {
+        border-top: solid 1px var(--fColor);
+    }
+}
+
+// To adapt to UIO contrast themes
+@each $theme, $fColor, $bColor in $UIOThemes {
+	.fl-theme-#{$theme}, .gpii-ext-theme-#{$theme} {
+		@include adapt-to-uioThemes($fColor, $bColor);
+	}
 }
