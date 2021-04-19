@@ -4,6 +4,7 @@
     "description": "We Count Data Monitor project visualising Ontario Covid test centre data as accessible map",
     "scripts": {
         "lint": "fluid-lint-all",
+        "build": "node build.js",
         "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
         "test": "node node_modules/nyc/bin/nyc.js node tests/all-tests.js"
     },
