@@ -92,9 +92,8 @@ increases to show the total number of selected filters;
 
 ### Apply filters
 
-This feature is not yet implemented. It will be implemented when the accessibility data for COVID assessment centres
-is ready.
+This feature is currently implemented with respect to [the placeholder data](/data/merged/output.csv).
 
 ## Map zoom in & zoom out
 
-Users can zoom the map by clicking on the zoom in or the zoom out buttons.
+Users can zoom the map by clicking on the zoom in/out buttons or use mouse wheel to zoom in/out.

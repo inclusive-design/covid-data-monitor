@@ -23,7 +23,7 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
             type: "fluid.expandButton",
             container: "{hospitalRenderer}.dom.expandButton",
             options: {
-                domElements: ["{hospitalRenderer}.dom.hospitalTitle", "{hospitalRenderer}.dom.hospitalDescription"]
+                elementsToExpand: ["{hospitalRenderer}.dom.hospitalTitle", "{hospitalRenderer}.dom.hospitalDescription"]
             }
         }
     },
@@ -512,33 +512,32 @@ fluid.defaults("fluid.covidMap.map", {
             container: "{map}.dom.locationButtonOnMobile",
             options: {
                 modelListeners: {
-                    "resetQuery": {
+                    resetQuery: {
                         path: "activate",
                         changePath: "{map}.model.query",
                         value: ""
-                    }
-                },
-                modelRelay: {
+                    },
                     showCitiesList: {
-                        source: "activate",
-                        target: "{map}.model.visiblePanelOnMobileFlags",
-                        func: x => {
-                            if (x > 0) {
-                                return {
-                                    "citiesList": true,
-                                    "resultsPage": false,
-                                    "filterPanel": false,
-                                    "hospitalPanel": false
-                                };
-                            };
-                        }
+                        path: "activate",
+                        changePath: "{map}.model.visiblePanelOnMobileFlags",
+                        value: {
+                            "citiesList": true,
+                            "resultsPage": false,
+                            "filterPanel": false,
+                            "hospitalPanel": false
+                        },
+                        excludeSource: "init"
                     },
                     expandCitiesList: {
+                        path: "activate",
+                        changePath: "{citiesList}.expandButton.model.expanded",
+                        value: true,
+                        excludeSource: "init"
+                    },
+                    debug: {
                         source: "activate",
-                        target: "{citiesList}.expandButton.model.expanded",
-                        func: x => {
-                            if (x > 0) {return !!x;}
-                        }
+                        func: "console.log",
+                        args: ["locationButtonOnMobile, activate: ", "{that}.model.activate"]
                     }
                 }
             }
@@ -547,27 +546,23 @@ fluid.defaults("fluid.covidMap.map", {
             type: "fluid.button",
             container: "{map}.dom.filterButtonOnMobile",
             options: {
-                modelRelay: {
+                modelListeners: {
                     showFilterPanel: {
-                        source: "activate",
-                        target: "{map}.model.visiblePanelOnMobileFlags",
-                        func: x => {
-                            if (x > 0) {
-                                return {
-                                    "citiesList": false,
-                                    "resultsPage": false,
-                                    "filterPanel": true,
-                                    "hospitalPanel": false
-                                };
-                            };
-                        }
+                        path: "activate",
+                        changePath: "{map}.model.visiblePanelOnMobileFlags",
+                        value: {
+                            "citiesList": false,
+                            "resultsPage": false,
+                            "filterPanel": true,
+                            "hospitalPanel": false
+                        },
+                        excludeSource: "init"
                     },
                     expandFilterPanel: {
-                        source: "activate",
-                        target: "{filterPanel}.expandButton.model.expanded",
-                        func: x => {
-                            if (x > 0) {return !!x;}
-                        }
+                        path: "activate",
+                        changePath: "{filterPanel}.expandButton.model.expanded",
+                        value: true,
+                        excludeSource: "init"
                     }
                 }
             }
@@ -657,7 +652,7 @@ fluid.defaults("fluid.covidMap.filterPanel", {
             type: "fluid.expandButton",
             container: "{filterPanel}.dom.expandButton",
             options: {
-                domElements: ["{filterPanel}.dom.title", "{filterPanel}.dom.filters", "{filterPanel}.dom.filterButtons"]
+                elementsToExpand: ["{filterPanel}.dom.title", "{filterPanel}.dom.filters", "{filterPanel}.dom.filterButtons"]
             }
         }
     },
@@ -803,7 +798,7 @@ fluid.defaults("fluid.covidMap.citiesList", {
             type: "fluid.expandButton",
             container: "{citiesList}.dom.expandButton",
             options: {
-                domElements: ["{citiesList}.dom.title", "{citiesList}.dom.cities"]
+                elementsToExpand: ["{citiesList}.dom.title", "{citiesList}.dom.cities"]
             }
         }
     },
@@ -891,7 +886,7 @@ fluid.defaults("fluid.covidMap.resultsPage", {
             type: "fluid.expandButton",
             container: "{resultsPage}.dom.expandButton",
             options: {
-                domElements: ["{resultsPage}.dom.resultsList"]
+                elementsToExpand: ["{resultsPage}.dom.resultsList"]
             }
         }
     },

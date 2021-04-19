@@ -16,7 +16,7 @@ https://github.com/fluid-project/infusion/raw/main/Infusion-LICENSE.txt
 fluid.defaults("fluid.expandButton", {
     gradeNames: "fluid.button",
     // Supplied by integrators. An array of DOM element to expand or collapse.
-    domElements: [],
+    elementsToExpand: [],
     styles: {
         hiddenOnMobile: "fl-mapviz-hidden-on-mobile"
     },
@@ -40,13 +40,13 @@ fluid.defaults("fluid.expandButton", {
         expandContent: {
             path: "expanded",
             funcName: "fluid.expandButton.toggleClass",
-            args: ["{that}.options.domElements", "{that}.options.styles.hiddenOnMobile", "{that}.model.expanded"]
+            args: ["{that}.options.elementsToExpand", "{that}.options.styles.hiddenOnMobile", "{that}.model.expanded"]
         }
     }
 });
 
-fluid.expandButton.toggleClass = function (domElements, style, toggleFlag) {
-    fluid.each(domElements, function (element) {
+fluid.expandButton.toggleClass = function (elementsToExpand, style, toggleFlag) {
+    fluid.each(elementsToExpand, function (element) {
         element.toggleClass(style, !toggleFlag);
     });
 };
