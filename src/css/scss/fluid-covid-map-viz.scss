@@ -811,6 +811,11 @@ $UIOThemes:
     .fl-mapviz-filter-buttons {
         border-top: solid 1px var(--fColor);
     }
+
+    .fl-mapviz-filter-tooltip-icon:active {
+        --tooltip-char-color: #{$fColor};
+        --tooltip-bg-color: #{$bColor};
+    }
 }
 
 // To adapt to UIO contrast themes
