@@ -533,11 +533,6 @@ fluid.defaults("fluid.covidMap.map", {
                         changePath: "{citiesList}.expandButton.model.expanded",
                         value: true,
                         excludeSource: "init"
-                    },
-                    debug: {
-                        source: "activate",
-                        func: "console.log",
-                        args: ["locationButtonOnMobile, activate: ", "{that}.model.activate"]
                     }
                 }
             }
@@ -738,22 +733,6 @@ fluid.defaults("fluid.button", {
 
 fluid.defaults("fluid.backButton", {
     gradeNames: "fluid.button",
-    modelRelay: {
-        showCitiesList: {
-            source: "activate",
-            target: "{map}.model.visiblePanelOnMobileFlags",
-            func: x => {
-                if (x > 0) {
-                    return {
-                        citiesList: true,
-                        resultsList: false,
-                        filterPanel: false,
-                        hospitalPanel: false
-                    };
-                }
-            }
-        }
-    },
     modelListeners: {
         "resetQuery": {
             path: "activate",
@@ -764,6 +743,16 @@ fluid.defaults("fluid.backButton", {
             path: "activate",
             changePath: "{map}.model.selectedIndex",
             value: null
+        },
+        "showCitiesList": {
+            path: "activate",
+            changePath: "{map}.model.visiblePanelOnMobileFlags",
+            value: {
+                citiesList: true,
+                resultsList: false,
+                filterPanel: false,
+                hospitalPanel: false
+            }
         }
     }
 });
