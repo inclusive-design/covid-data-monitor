@@ -18,6 +18,23 @@ h3,
 
 /******** Shared selectors ********/
 
+/* Classes applied in SVGs */
+.fl-mapviz-fill-white {
+    fill: var(--bColor, white);
+}
+
+.fl-mapviz-fill-red {
+    fill: var(--bColor, red);
+}
+
+.fl-mapviz-fill-black {
+    fill: var(--fColor, black);
+}
+
+.fl-mapviz-stroke-black {
+    stroke: var(--fColor, black);
+}
+
 /* For all hoverable elements */
 .fl-mapviz-hoverable-focusable {
     &:focus,
@@ -599,6 +616,9 @@ h3,
         display: grid;
         font-size: 1.125rem;
         grid-template-columns: 1fr 2fr 1fr;
+
+        /* Override the mobile css */
+        height: inherit;
     }
 
     .fl-mapviz-query-wrapper {
@@ -776,36 +796,24 @@ h3,
 
 // UIO themes
 $UIOThemes:
-	"bw" #000 #fff,
-	"wb" #fff #000,
-	"yb" #ff0 #000,
-	"by" #000 #ff0,
-	"lgdg" #bdbdbb #555,
-	"gd" #888 #222,
-	"gw" #6c6c6c #fff,
-	"bbr" #000 #b96;
+    "bw" #000 #fff,
+    "wb" #fff #000,
+    "yb" #ff0 #000,
+    "by" #000 #ff0,
+    "lgdg" #bdbdbb #555,
+    "gd" #888 #222,
+    "gw" #6c6c6c #fff,
+    "bbr" #000 #b96;
 
 @mixin adapt-to-uioThemes($fColor, $bColor) {
-	// Customized colors
-	--currentColor: currentColor;
-	--bColor: #{$bColor};
-	--fColor: #{$fColor};
+    // Customized colors
+    --currentColor: currentColor;
+    --bColor: #{$bColor};
+    --fColor: #{$fColor};
     --tooltip-char-color: #{$bColor};
     --tooltip-bg-color: #{$fColor};
     --expand-button-color: #{$fColor};
     --expand-button-stroke-color: #{$fColor};
-
-    .fill-white: {
-        fill: var(--bColor, white);
-    }
-
-    .fill-black: {
-        fill: var(--fColor, black);
-    }
-
-    .stroke-black: {
-        fill: var(--fColor, black);
-    }
 
     .fl-mapviz-filter,
     .fl-mapviz-filter-buttons {
@@ -816,11 +824,18 @@ $UIOThemes:
         --tooltip-char-color: #{$fColor};
         --tooltip-bg-color: #{$bColor};
     }
+
+    /* Leaflet css */
+    .leaflet-control-container .leaflet-top.leaflet-left,
+    .leaflet-marker-icon.leaflet-interactive,
+    .leaflet-marker-icon.leaflet-interactive svg {
+        background-color: transparent !important;
+    }
 }
 
 // To adapt to UIO contrast themes
 @each $theme, $fColor, $bColor in $UIOThemes {
-	.fl-theme-#{$theme}, .gpii-ext-theme-#{$theme} {
-		@include adapt-to-uioThemes($fColor, $bColor);
-	}
+    .fl-theme-#{$theme}, .gpii-ext-theme-#{$theme} {
+        @include adapt-to-uioThemes($fColor, $bColor);
+    }
 }
