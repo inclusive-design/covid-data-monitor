@@ -248,9 +248,11 @@ h3,
 
 /* The title of each a11y feature */
 .fl-mapviz-filter-title {
-    display: inline-block;
+    align-items: center;
+    display: flex;
     font-stretch: condensed;
     font-style: normal;
+    height: 100%;
     margin-top: 2px;
     text-transform: uppercase;
     width: 15rem;
