@@ -172,6 +172,7 @@ fluid.defaults("fluid.covidMap.map", {
         hoveredRows: [], // Map of row indices to boolean
         activeRows: [], // Map of row indices to boolean
         selectedIndex: null,
+        isHospitalShowing: false,
         hoveredIndex: null,
         resultsShowing: false
 
@@ -248,16 +249,20 @@ fluid.defaults("fluid.covidMap.map", {
             func: "fluid.covidMap.extractPostcodes",
             args: ["{that}.model.rows", "{that}.options.fields.postcode"]
         },
-        isHospitalSelected: {
-            target: "dom.hospitalPanel.visible",
+        isHospitalShowing: {
             source: "selectedIndex",
+            target: "isHospitalShowing",
             func: "fluid.isValue"
         },
+        showHospitalPanel: {
+            source: "isHospitalShowing",
+            target: "dom.hospitalPanel.visible"
+        },
         onlyShowHospitalPanelOnMobile: {
+            source: "isHospitalShowing",
             target: "visiblePanelOnMobileFlags",
-            source: "selectedIndex",
             func: x => {
-                if (!!x) {
+                if (x) {
                     return {
                         citiesList: false,
                         resultsPage: false,
@@ -310,7 +315,7 @@ fluid.defaults("fluid.covidMap.map", {
             source: "resultsShowing",
             target: "visiblePanelOnMobileFlags",
             func: x => {
-                if (!!x) {
+                if (x) {
                     return {
                         citiesList: false,
                         resultsPage: true,
@@ -393,6 +398,11 @@ fluid.defaults("fluid.covidMap.map", {
             priority: "last",
             func: "{query}.accept",
             args: [0]
+        },
+        debug: {
+            path: "resultsShowing",
+            func: "console.log",
+            args: ["resultsShowing: ", "{change}.value"]
         }
     },
     components: {
@@ -752,7 +762,8 @@ fluid.defaults("fluid.backButton", {
                 resultsList: false,
                 filterPanel: false,
                 hospitalPanel: false
-            }
+            },
+            excludeSource: "init"
         }
     }
 });
