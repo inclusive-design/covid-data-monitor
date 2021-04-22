@@ -4,6 +4,7 @@
     "description": "We Count Data Monitor project visualising Ontario Covid test centre data as accessible map",
     "scripts": {
         "lint": "fluid-lint-all",
+        "build": "node build.js",
         "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
         "test": "node node_modules/nyc/bin/nyc.js node tests/all-tests.js"
     },
@@ -16,7 +17,7 @@
         "url": "https://https://issues.fluidproject.org/"
     },
     "dependencies": {
-        "infusion": "3.0.0-dev.20210120T204128Z.6e4be079f.FLUID-6580",
+        "infusion": "3.0.0-dev.20210223T161058Z.1743e0020.FLUID-6580",
         "new-renderer-demo": "amb26/new-renderer-demo#FLUID-5047",
         "minimist": "1.2.5",
         "papaparse": "5.3.0",

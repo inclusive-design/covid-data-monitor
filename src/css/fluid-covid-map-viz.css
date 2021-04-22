@@ -1,10 +1,3 @@
-body {
-    /* Work with other css to display the map in a full screen on the mobile view */
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
 /* Work with other css to display the map in a full screen on the mobile view */
 .fl-mapviz-outer-container {
     flex-grow: 1;
@@ -111,11 +104,13 @@ h3,
     z-index: 999;
 }
 
-.fl-mapviz-query-wrapper svg {
+.fl-mapviz-query-wrapper > svg {
     height: 1.5rem;
+    padding-left: 1rem;
     padding-top: 0.7rem;
     position: absolute;
     width: 1.5rem;
+    z-index: 1;
 }
 
 .fl-mapviz-query-holder {
@@ -123,6 +118,7 @@ h3,
 }
 
 .fl-mapviz-query-holder input {
+    background-color: white;
     border: 1px solid black;
     border-radius: 1.5rem;
     height: 2rem;
@@ -144,7 +140,7 @@ h3,
 .fl-mapviz-query-reset {
     height: 1rem;
     position: absolute;
-    right: 0.7rem;
+    right: 0.6rem;
     top: 0.5rem;
     z-index: 900;
 }
@@ -152,12 +148,7 @@ h3,
 .fl-mapviz-query-reset svg {
     height: 1rem;
     width: 1rem;
-}
-
-.fl-mapviz-query-label-holder svg {
-    left: 1.2rem;
-    margin-right: -2.5rem;
-    top: 0.15rem;
+    z-index: 1;
 }
 
 /******** The accessibility filters panel **********/
@@ -309,11 +300,6 @@ h3,
     width: 1rem;
 }
 
-.fl-mapviz-apply-filters span,
-.fl-mapviz-reset-filters span {
-    display: inline-flex;
-}
-
 .fl-mapviz-apply-filters:hover .fl-mapviz-icon-shadow,
 .fl-mapviz-apply-filters:focus .fl-mapviz-icon-shadow,
 .fl-mapviz-reset-filters:hover .fl-mapviz-icon-shadow,
@@ -329,7 +315,7 @@ h3,
     justify-content: center;
 }
 
-.fl-mapviz-expand-collapse-button-holder {
+.fl-mapviz-expand-collapse-button {
     align-self: center;
     background: none;
     border: none;
@@ -337,7 +323,7 @@ h3,
     width: 4rem;
 }
 
-.fl-mapviz-expand-collapse-button-holder svg {
+.fl-mapviz-expand-collapse-button svg {
     height: 0.7rem;
     width: 1.4rem;
 }
@@ -348,16 +334,15 @@ h3,
     stroke-width: var(--expand-button-stroke-width, 2px);
 }
 
-.fl-mapviz-expand-collapse-button-holder:hover,
-.fl-mapviz-expand-collapse-button-holder:focus {
+.fl-mapviz-expand-collapse-button:hover,
+.fl-mapviz-expand-collapse-button:focus {
     --expand-button-color: black;
     --expand-button-stroke-width: 0;
 }
 
-/* When the city list/search results panel is collapsed, hide all relevant elements */
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="true"] > .fl-mapviz-expand-button,
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] > .fl-mapviz-collapse-button,
-.fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-results-list {
+/* Show/hide the expand or the collapse SVG based on the expanded state */
+.fl-mapviz-expand-collapse-button[aria-expanded="true"] > .fl-mapviz-expand-button,
+.fl-mapviz-expand-collapse-button[aria-expanded="false"] > .fl-mapviz-collapse-button {
     display: none;
 }
 
@@ -388,15 +373,16 @@ h3,
 /******** The search results panel ********/
 .fl-mapviz-search-results,
 .fl-mapviz-filter-panel,
-.fl-mapviz-city-list {
+.fl-mapviz-city-list,
+.fl-mapviz-hospital-panel {
     background-color: white;
     border-radius: 1rem 1rem 0 0;
-    bottom: 3.1rem;
+    bottom: 2.7rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
-    max-height: calc(100% - 16rem);
+    max-height: calc(100% - 17rem);
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -407,7 +393,8 @@ h3,
     background-color: #acdeeb;
 }
 
-.fl-mapviz-back-button {
+.fl-mapviz-search-results-back-button,
+.fl-mapviz-hospital-back-button {
     align-self: center;
     background-color: #acdeeb;
     border: none;
@@ -417,18 +404,22 @@ h3,
     width: 100%;
 }
 
-.fl-mapviz-back-button svg {
+.fl-mapviz-search-results-back-button svg,
+.fl-mapviz-hospital-back-button svg {
     height: 1rem;
     width: 1rem;
 }
 
-.fl-mapviz-back-button h2 {
+.fl-mapviz-search-results-back-button h2,
+.fl-mapviz-hospital-back-button h2 {
     align-self: center;
     margin: 0;
 }
 
-.fl-mapviz-back-button:hover .fl-mapviz-icon-shadow,
-.fl-mapviz-back-button:focus .fl-mapviz-icon-shadow {
+.fl-mapviz-search-results-back-button:hover .fl-mapviz-icon-shadow,
+.fl-mapviz-search-results-back-button:focus .fl-mapviz-icon-shadow,
+.fl-mapviz-hospital-back-button:hover .fl-mapviz-icon-shadow,
+.fl-mapviz-hospital-back-button:focus .fl-mapviz-icon-shadow {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset, 0 0 0 1px black;
 }
 
@@ -448,12 +439,11 @@ h3,
 /* For individual city */
 .fl-mapviz-city {
     border-bottom: 1px solid #c4c4c4;
-    height: 2rem;
     margin-left: 0.5rem;
     padding: 0.5rem 0.5rem;
 }
 
-.fl-mapviz-search-result .fl-mapviz-hospital-title {
+.fl-mapviz-search-result-hospital-title {
     font-weight: 700;
 }
 
@@ -468,21 +458,25 @@ h3,
     background: #fbdc90;
 }
 
-/******** The hosptial description panel ********/
-.fl-mapviz-hospital-panel {
-    /* hide the hospital description panel at the page load */
+/******** The hospital description panel ********/
 
+/* hide the hospital description panel at the page load */
+.fl-mapviz-hospital-panel {
     display: none;
 }
 
-.fl-mapviz-hospital-panel > div {
-    padding: 0.3rem;
+.fl-mapviz-hospital-title {
+    background: #fbdc90;
+    margin: 0;
+    padding: 0.5rem;
 }
 
-.fl-mapviz-hospital-panel .fl-mapviz-hospital-title {
-    background: #fbdc90;
-    font-size: 2.2rem;
-    padding: 0.5rem;
+.fl-mapviz-hospital-panel .fl-mapviz-hospital-description {
+    overflow-y: scroll;
+}
+
+.fl-mapviz-hospital-panel .fl-mapviz-hospital-description > div {
+    padding: 0.3rem;
 }
 
 /******** The panel control buttons ********/
@@ -492,6 +486,7 @@ h3,
     grid-template-columns: 1fr 1fr;
     height: 3rem;
     padding-top: 3px;
+    z-index: 1;
 }
 
 .fl-panel-controls-on-mobile svg {
@@ -499,24 +494,24 @@ h3,
     width: 1rem;
 }
 
-.fl-mapviz-locations-control,
-.fl-mapviz-filter-control-on-mobile {
+.fl-mapviz-locations-button-on-mobile,
+.fl-mapviz-filter-button-on-mobile {
     background-color: white;
     border: none;
 }
 
-.fl-mapviz-filter-control-on-mobile {
+.fl-mapviz-filter-button-on-mobile {
     border-left: 1px solid #c4c4c4;
 }
 
-.fl-mapviz-filter-control-on-mobile .fl-mapviz-filter-control-icon-on-mobile {
+.fl-mapviz-filter-button-on-mobile .fl-mapviz-filter-icon-on-mobile {
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin-bottom: 0.3rem;
 }
 
-.fl-mapviz-filter-control-on-mobile .fl-mapviz-filter-control-icon-on-mobile svg {
+.fl-mapviz-filter-button-on-mobile .fl-mapviz-filter-icon-on-mobile svg {
     margin-right: 0.5rem;
 }
 
@@ -606,7 +601,6 @@ h3,
         display: grid;
         font-size: 1.125rem;
         grid-template-columns: 1fr 2fr 1fr;
-        height: 42rem;
     }
 
     .fl-mapviz-query-wrapper {
@@ -618,7 +612,7 @@ h3,
         grid-column-start: 1;
         grid-row-end: 2;
         grid-row-start: 1;
-        height: 3rem;
+        height: 5rem;
         padding: 0.5rem 0;
 
         /* Override the mobile css */
@@ -627,13 +621,14 @@ h3,
     }
 
     .fl-mapviz-filter-panel {
-        display: block;
         grid-column-end: 4;
         grid-column-start: 3;
         grid-row-end: 3;
         grid-row-start: 2;
+        height: 43rem;
 
         /* Override the mobile css */
+        max-height: inherit;
         position: inherit;
     }
 
@@ -644,7 +639,7 @@ h3,
         grid-column-start: 1;
         grid-row-end: 3;
         grid-row-start: 2;
-        height: 40rem;
+        height: 43rem;
 
         /* Override the mobile css */
         max-height: inherit;
@@ -658,7 +653,7 @@ h3,
         grid-row-start: 2;
 
         /* Override the mobile css */
-        height: 40rem;
+        height: 43rem;
     }
 
     .fl-mapviz-hospital-panel {
@@ -666,10 +661,18 @@ h3,
         grid-column-start: 1;
         grid-row-end: 4;
         grid-row-start: 3;
-        margin-top: 0.3rem;
+
+        /* Override the mobile css */
+        max-height: inherit;
+        position: inherit;
     }
 
     /* End: arrange positions of sub containers */
+
+    /******** Expand/collapse buttons ********/
+    .fl-mapviz-expand-collapse-button-wrapper {
+        display: none;
+    }
 
     /******** The panel with the query label, the query input box **********/
 
@@ -679,7 +682,8 @@ h3,
         margin: 0 1rem;
     }
 
-    .fl-mapviz-query-wrapper svg {
+    .fl-mapviz-query-wrapper > svg {
+        margin-right: -2.5rem;
         padding-top: 0;
         position: relative;
     }
@@ -730,15 +734,6 @@ h3,
         margin: 0.5rem;
     }
 
-    /******** Expand/collapse button for the city list and the search results panels ********/
-    .fl-mapviz-expand-collapse-button-holder {
-        display: none;
-    }
-
-    .fl-mapviz-expand-collapse-button-holder[aria-expanded="false"] ~ .fl-mapviz-search-results-list {
-        display: block;
-    }
-
     /******** The city list panel ********/
     .fl-mapviz-city-list-title {
         justify-content: space-between;
@@ -750,16 +745,30 @@ h3,
 
     /******** The search results panel ********/
     .fl-mapviz-search-results {
-        height: 40rem;
         margin-right: 1rem;
     }
 
-    .fl-mapviz-back-button {
+    .fl-mapviz-search-results-back-button,
+    .fl-mapviz-hospital-back-button {
         justify-content: left;
+    }
+
+    /******** The hospital description panel ********/
+    .fl-mapviz-hospital-panel .fl-mapviz-back-button-wrapper {
+        display: none;
     }
 
     /******** The panel control buttons ********/
     .fl-panel-controls-on-mobile {
         display: none;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    /* A special class defined at the bottom of the css file so that it only available and affect the mobile view.
+    The effect doesn't apply to the desktop view at all. */
+    .fl-mapviz-hidden-on-mobile {
+        /* Use !important to override the inline "display" css applied by javascript */
+        display: none !important;
     }
 }

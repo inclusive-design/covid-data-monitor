@@ -17,9 +17,9 @@
     </div>
 
     <!-- A11y filter panel -->
-    <div class="fl-mapviz-filter-panel">
+    <div class="fl-mapviz-filter-panel fl-mapviz-hidden-on-mobile">
         <div class="fl-mapviz-expand-collapse-button-wrapper">
-            <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
+            <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="accessibility filter">
                 <svg class="fl-mapviz-collapse-button">
                     <use xlink:href="#ArrowDown"></use>
                 </svg>
@@ -172,7 +172,7 @@
     <!-- The city list panel -->
     <div class="fl-mapviz-city-list">
         <div class="fl-mapviz-expand-collapse-button-wrapper">
-            <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
+            <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="city list">
                 <svg class="fl-mapviz-collapse-button">
                     <use xlink:href="#ArrowDown"></use>
                 </svg>
@@ -181,8 +181,7 @@
                 </svg>
             </button>
         </div>
-        <!-- Toggle headings when the render toggles between the city list and search results -->
-        <div class="fl-mapviz-city-list-title">
+        <div class="fl-mapviz-city-list-title fl-mapviz-hidden-on-mobile">
             <h2>Locations</h2>
             <svg>
                 <use xlink:href="#Locations"></use>
@@ -193,9 +192,9 @@
     </div>
 
     <!-- The search result panel -->
-    <div class="fl-mapviz-search-results">
+    <div class="fl-mapviz-search-results fl-mapviz-hidden-on-mobile">
         <div class="fl-mapviz-expand-collapse-button-wrapper">
-            <button type="button" class="fl-mapviz-expand-collapse-button-holder" aria-expanded="true" aria-label="collapse">
+            <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="search results">
                 <svg class="fl-mapviz-collapse-button">
                     <use xlink:href="#ArrowDown"></use>
                 </svg>
@@ -205,7 +204,7 @@
             </button>
         </div>
         <div class="fl-mapviz-back-button-wrapper">
-            <button class="fl-mapviz-back-button" type="button">
+            <button class="fl-mapviz-search-results-back-button" type="button">
                 <div class="fl-mapviz-icon-shadow">
                     <svg>
                         <use xlink:href="#Back"></use>
@@ -216,11 +215,11 @@
         </div>
         <div class="fl-mapviz-search-results-list">
             <!-- <div class="fl-mapviz-search-result">
-                                                                                                        <div class="fl-mapviz-hospital-title">Hospital 8</div>
-                                                                                                        <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
-                                                                                                        <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-                                                                                                        <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
-                                                                                                    </div> -->
+                                                                                                <div class="fl-mapviz-search-result-hospital-title">Hospital 8</div>
+                                                                                                <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
+                                                                                                <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                                                                                                <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
+                                                                                            </div> -->
         </div>
     </div>
 
@@ -229,27 +228,49 @@
 
     <!-- The hospital description panel -->
     <div class="fl-mapviz-hospital-panel">
-        <div class="fl-mapviz-hospital-title">
+        <div class="fl-mapviz-expand-collapse-button-wrapper">
+            <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="hospital panel">
+                <svg class="fl-mapviz-collapse-button">
+                    <use xlink:href="#ArrowDown"></use>
+                </svg>
+                <svg class="fl-mapviz-expand-button">
+                    <use xlink:href="#ArrowUp"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="fl-mapviz-back-button-wrapper">
+            <button class="fl-mapviz-hospital-back-button" type="button">
+                <div class="fl-mapviz-icon-shadow">
+                    <svg>
+                        <use xlink:href="#Back"></use>
+                    </svg>
+                </div>
+                <h2 class="h3">Back to locations</h2>
+            </button>
+        </div>
+        <h2 class="fl-mapviz-hospital-title">
             Hospital 2
+        </h2>
+        <div class="fl-mapviz-hospital-description">
+            <div><b>Hours:</b> <span class="fl-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span>
+            </div>
+            <div><b>Location</b></div>
+            <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON M5G 1X5</div>
+            <div class="fl-mapviz-hospital-phone">+1 416-586-5054</div>
+            <div class="fl-mapviz-hospital-website">www.mountsinai.on.ca</div>
         </div>
-        <div><b>Hours:</b> <span class="fl-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span>
-        </div>
-        <div><b>Location</b></div>
-        <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON M5G 1X5</div>
-        <div class="fl-mapviz-hospital-phone">+1 416-586-5054</div>
-        <div class="fl-mapviz-hospital-website">www.mountsinai.on.ca</div>
     </div>
 
     <!-- The mobile-design-only panel with "Locations" and "Accessibility Filters"-->
     <div class="fl-panel-controls-on-mobile">
-        <button class="fl-mapviz-locations-control">
+        <button class="fl-mapviz-locations-button-on-mobile">
             <svg>
                 <use xlink:href="#Locations"></use>
             </svg>
             <div>Locations</div>
         </button>
-        <button class="fl-mapviz-filter-control-on-mobile">
-            <div class="fl-mapviz-filter-control-icon-on-mobile">
+        <button class="fl-mapviz-filter-button-on-mobile">
+            <div class="fl-mapviz-filter-icon-on-mobile">
                 <svg>
                     <use xlink:href="#FilterControl"></use>
                 </svg>

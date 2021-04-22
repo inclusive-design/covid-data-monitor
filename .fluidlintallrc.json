@@ -18,5 +18,10 @@
                 "single-h1": false
             }
         }
+    },
+    "lintspaces": {
+        "newlines": {
+            "excludes": ["tests/**/images/**/*"]
+        }
     }
 }
