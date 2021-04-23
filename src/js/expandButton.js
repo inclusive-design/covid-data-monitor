@@ -39,6 +39,8 @@ fluid.defaults("fluid.expandButton", {
     modelListeners: {
         expandContent: {
             path: "expanded",
+            // Note that this unintegral style of toggling the class is undesirable, and the framework design issue
+            // has been written up at https://issues.fluidproject.org/browse/FLUID-6613
             funcName: "fluid.expandButton.toggleClass",
             args: ["{that}.options.elementsToExpand", "{that}.options.styles.hiddenOnMobile", "{that}.model.expanded"]
         }
