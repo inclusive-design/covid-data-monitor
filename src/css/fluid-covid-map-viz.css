@@ -16,6 +16,11 @@ h3,
     line-height: 1.35rem;
 }
 
+button {
+    font-family: inherit;
+    font-size: 100%;
+}
+
 /******** Shared selectors ********/
 
 /* For all hoverable elements */
