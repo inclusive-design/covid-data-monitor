@@ -111,7 +111,6 @@ button {
 
 .fl-mapviz-query-wrapper > svg {
     height: 1.5rem;
-    padding-left: 1rem;
     padding-top: 0.7rem;
     position: absolute;
     width: 1.5rem;
@@ -143,6 +142,7 @@ button {
 }
 
 .fl-mapviz-query-reset {
+    display: flex;
     height: 1rem;
     position: absolute;
     right: 0.6rem;
