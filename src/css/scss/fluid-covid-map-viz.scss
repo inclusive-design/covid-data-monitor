@@ -31,6 +31,14 @@ h3,
     fill: var(--fColor, black);
 }
 
+.fl-mapviz-fill-636363-inactive {
+    fill: var(--fColorInactive, #636363);
+}
+
+.fl-mapviz-fill-b9b9b9-inactive {
+    fill: var(--bColorInactive, #b9b9b9);
+}
+
 .fl-mapviz-stroke-black {
     stroke: var(--fColor, black);
 }
@@ -798,20 +806,22 @@ h3,
 
 // UIO themes
 $UIOThemes:
-    "bw" #000 #fff,
-    "wb" #fff #000,
-    "yb" #ff0 #000,
-    "by" #000 #ff0,
-    "lgdg" #bdbdbb #555,
-    "gd" #888 #222,
-    "gw" #6c6c6c #fff,
-    "bbr" #000 #b96;
+    "bw" #000 #fff #0000004d #ffffff4d,
+    "wb" #fff #000 #ffffff4d #0000004d,
+    "yb" #ff0 #000 #ffff004d #0000004d,
+    "by" #000 #ff0 #0000004d #ffff004d,
+    "lgdg" #bdbdbb #555 #bdbdbb4d #5555554d,
+    "gd" #888 #222 #8888884d #2222224d,
+    "gw" #6c6c6c #fff #6c6c6c4d #ffffff4d,
+    "bbr" #000 #b96 #0000004d #bb99664d;
 
-@mixin adapt-to-uioThemes($fColor, $bColor) {
+@mixin adapt-to-uioThemes($fColor, $bColor, $fColorInactive, $bColorInactive) {
     // Customized colors
     --currentColor: currentColor;
     --bColor: #{$bColor};
     --fColor: #{$fColor};
+    --bColorInactive: #{$bColorInactive};
+    --fColorInactive: #{$fColorInactive};
     --tooltip-char-color: #{$bColor};
     --tooltip-bg-color: #{$fColor};
     --expand-button-color: #{$fColor};
@@ -836,8 +846,8 @@ $UIOThemes:
 }
 
 // To adapt to UIO contrast themes
-@each $theme, $fColor, $bColor in $UIOThemes {
+@each $theme, $fColor, $bColor, $fColorInactive, $bColorInactive in $UIOThemes {
     .fl-theme-#{$theme}, .gpii-ext-theme-#{$theme} {
-        @include adapt-to-uioThemes($fColor, $bColor);
+        @include adapt-to-uioThemes($fColor, $bColor, $fColorInactive, $bColorInactive);
     }
 }
