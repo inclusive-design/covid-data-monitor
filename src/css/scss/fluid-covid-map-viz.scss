@@ -16,6 +16,11 @@ h3,
     line-height: 1.35rem;
 }
 
+button {
+    font-family: inherit;
+    font-size: 100%;
+}
+
 /******** Shared selectors ********/
 
 /* For all hoverable elements */
@@ -109,8 +114,8 @@ h3,
 
     & > svg {
         height: 1.5rem;
-        padding-left: 1rem;
-        padding-top: 0.7rem;
+        margin-left: 1rem;
+        margin-top: 0.7rem;
         position: absolute;
         width: 1.5rem;
         z-index: 1;
@@ -142,6 +147,7 @@ h3,
 }
 
 .fl-mapviz-query-reset {
+    display: flex;
     height: 1rem;
     position: absolute;
     right: 0.6rem;
@@ -681,7 +687,7 @@ h3,
 
     .fl-mapviz-query-wrapper > svg {
         margin-right: -2.5rem;
-        padding-top: 0;
+        margin-top: 0;
         position: relative;
     }
 
