@@ -398,11 +398,6 @@ fluid.defaults("fluid.covidMap.map", {
             priority: "last",
             func: "{query}.accept",
             args: [0]
-        },
-        debug: {
-            path: "resultsShowing",
-            func: "console.log",
-            args: ["resultsShowing: ", "{change}.value"]
         }
     },
     components: {
@@ -1162,6 +1157,7 @@ fluid.defaults("fluid.covidMap.visiblePanel", {
     },
     model: {
         // Use the initial value "null" to prevent the component applies the value false at the page load
+        // TODO: This framework fault has been written up at https://issues.fluidproject.org/browse/FLUID-6615 and needs to be investigated
         visible: null
     },
     modelRelay: {

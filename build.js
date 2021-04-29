@@ -23,6 +23,9 @@ var buildIndex = {
         src: "src/css/demo.css",
         dest: "build/css/demo.css"
     }, {
+        src: "node_modules/sanitize.css/sanitize.css",
+        dest: "build/css/sanitize.css"
+    }, {
         src: "src/html/searchResultTemplate.html",
         dest: "build/html/searchResultTemplate.html"
     }, {
