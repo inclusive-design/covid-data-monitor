@@ -172,6 +172,7 @@ fluid.defaults("fluid.covidMap.map", {
         hoveredRows: [], // Map of row indices to boolean
         activeRows: [], // Map of row indices to boolean
         selectedIndex: null,
+        isHospitalShowing: false,
         hoveredIndex: null,
         resultsShowing: false
 
@@ -248,16 +249,20 @@ fluid.defaults("fluid.covidMap.map", {
             func: "fluid.covidMap.extractPostcodes",
             args: ["{that}.model.rows", "{that}.options.fields.postcode"]
         },
-        isHospitalSelected: {
-            target: "dom.hospitalPanel.visible",
+        isHospitalShowing: {
             source: "selectedIndex",
+            target: "isHospitalShowing",
             func: "fluid.isValue"
         },
+        showHospitalPanel: {
+            source: "isHospitalShowing",
+            target: "dom.hospitalPanel.visible"
+        },
         onlyShowHospitalPanelOnMobile: {
+            source: "isHospitalShowing",
             target: "visiblePanelOnMobileFlags",
-            source: "selectedIndex",
             func: x => {
-                if (!!x) {
+                if (x) {
                     return {
                         citiesList: false,
                         resultsPage: false,
@@ -310,7 +315,7 @@ fluid.defaults("fluid.covidMap.map", {
             source: "resultsShowing",
             target: "visiblePanelOnMobileFlags",
             func: x => {
-                if (!!x) {
+                if (x) {
                     return {
                         citiesList: false,
                         resultsPage: true,
@@ -752,7 +757,8 @@ fluid.defaults("fluid.backButton", {
                 resultsList: false,
                 filterPanel: false,
                 hospitalPanel: false
-            }
+            },
+            excludeSource: "init"
         }
     }
 });
@@ -1151,6 +1157,7 @@ fluid.defaults("fluid.covidMap.visiblePanel", {
     },
     model: {
         // Use the initial value "null" to prevent the component applies the value false at the page load
+        // TODO: This framework fault has been written up at https://issues.fluidproject.org/browse/FLUID-6615 and needs to be investigated
         visible: null
     },
     modelRelay: {

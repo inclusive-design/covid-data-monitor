@@ -16,6 +16,11 @@ h3,
     line-height: 1.35rem;
 }
 
+button {
+    font-family: inherit;
+    font-size: 100%;
+}
+
 /******** Shared selectors ********/
 
 /* Classes applied in SVGs */
@@ -167,6 +172,7 @@ h3,
 }
 
 .fl-mapviz-query-reset {
+    display: flex;
     height: 1rem;
     position: absolute;
     right: 0.6rem;
