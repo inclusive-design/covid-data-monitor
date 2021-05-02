@@ -23,6 +23,31 @@ button {
 
 /******** Shared selectors ********/
 
+/* Classes applied in SVGs */
+.fl-mapviz-fill-white {
+    fill: var(--bColor, white);
+}
+
+.fl-mapviz-fill-red {
+    fill: var(--bColor, red);
+}
+
+.fl-mapviz-fill-black {
+    fill: var(--fColor, black);
+}
+
+.fl-mapviz-fill-636363-inactive {
+    fill: var(--fColorInactive, #636363);
+}
+
+.fl-mapviz-fill-b9b9b9-inactive {
+    fill: var(--bColorInactive, #b9b9b9);
+}
+
+.fl-mapviz-stroke-black {
+    stroke: var(--fColor, black);
+}
+
 /* For all hoverable elements */
 .fl-mapviz-hoverable-focusable {
     &:focus,
@@ -36,7 +61,7 @@ button {
     align-items: center;
     align-self: center;
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset;
+    box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25)) inset;
     display: flex;
     height: 1.5rem;
     justify-content: center;
@@ -74,7 +99,7 @@ button {
 
         a:hover,
         a:focus {
-            box-shadow: 0 0 0 1px black inset;
+            box-shadow: 0 0 0 1px var(--fColor, black) inset;
         }
 
         a:active {
@@ -237,9 +262,12 @@ button {
 
 /* The title of each a11y feature */
 .fl-mapviz-filter-title {
-    display: inline-block;
+    align-items: center;
+    display: flex;
     font-stretch: condensed;
     font-style: normal;
+    height: 100%;
+    margin-top: 2px;
     text-transform: uppercase;
     width: 15rem;
 }
@@ -310,7 +338,7 @@ button {
 
     &:hover .fl-mapviz-icon-shadow,
     &:focus .fl-mapviz-icon-shadow {
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset, 0 0 0 1px black;
+        box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25)) inset, 0 0 0 1px var(--fColor, black);
     }
 }
 
@@ -422,7 +450,7 @@ button {
 
     &:hover .fl-mapviz-icon-shadow,
     &:focus .fl-mapviz-icon-shadow {
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25) inset, 0 0 0 1px black;
+        box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25)) inset, 0 0 0 1px var(--fColor, black);
     }
 }
 
@@ -484,7 +512,7 @@ button {
 
 /******** The panel control buttons ********/
 .fl-panel-controls-on-mobile {
-    box-shadow: inset 0 7px 2px -4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 7px 2px -4px var(--fColor, rgba(0, 0, 0, 0.25));
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: 3rem;
@@ -604,6 +632,9 @@ button {
         display: grid;
         font-size: 1.125rem;
         grid-template-columns: 1fr 2fr 1fr;
+
+        /* Override the mobile css */
+        height: inherit;
     }
 
     .fl-mapviz-query-wrapper {
@@ -686,6 +717,7 @@ button {
     }
 
     .fl-mapviz-query-wrapper > svg {
+        margin-left: 0;
         margin-right: -2.5rem;
         margin-top: 0;
         position: relative;
@@ -704,7 +736,7 @@ button {
         align-items: center;
         align-self: center;
         border-radius: 50%;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 0 4px var(--fColor, rgba(0, 0, 0, 0.25));
         display: flex;
         flex-direction: row;
         height: 3.5rem;
@@ -773,5 +805,55 @@ button {
     .fl-mapviz-hidden-on-mobile {
         /* Use !important to override the inline "display" css applied by javascript */
         display: none !important;
+    }
+}
+
+/* Adapt to UIO contrast themes */
+
+// UIO themes
+$UIOThemes:
+    "bw" #000 #fff #0000004d #ffffff4d,
+    "wb" #fff #000 #ffffff4d #0000004d,
+    "yb" #ff0 #000 #ffff004d #0000004d,
+    "by" #000 #ff0 #0000004d #ffff004d,
+    "lgdg" #bdbdbb #555 #bdbdbb4d #5555554d,
+    "gd" #888 #222 #8888884d #2222224d,
+    "gw" #6c6c6c #fff #6c6c6c4d #ffffff4d,
+    "bbr" #000 #b96 #0000004d #bb99664d;
+
+@mixin adapt-to-uioThemes($fColor, $bColor, $fColorInactive, $bColorInactive) {
+    // Customized colors
+    --currentColor: currentColor;
+    --bColor: #{$bColor};
+    --fColor: #{$fColor};
+    --bColorInactive: #{$bColorInactive};
+    --fColorInactive: #{$fColorInactive};
+    --tooltip-char-color: #{$bColor};
+    --tooltip-bg-color: #{$fColor};
+    --expand-button-color: #{$fColor};
+    --expand-button-stroke-color: #{$fColor};
+
+    .fl-mapviz-filter,
+    .fl-mapviz-filter-buttons {
+        border-top: solid 1px var(--fColor);
+    }
+
+    .fl-mapviz-filter-tooltip-icon:active {
+        --tooltip-char-color: #{$fColor};
+        --tooltip-bg-color: #{$bColor};
+    }
+
+    /* Leaflet css */
+    .leaflet-control-container .leaflet-top.leaflet-left,
+    .leaflet-marker-icon.leaflet-interactive,
+    .leaflet-marker-icon.leaflet-interactive svg {
+        background-color: transparent !important;
+    }
+}
+
+// To adapt to UIO contrast themes
+@each $theme, $fColor, $bColor, $fColorInactive, $bColorInactive in $UIOThemes {
+    .fl-theme-#{$theme}, .gpii-ext-theme-#{$theme} {
+        @include adapt-to-uioThemes($fColor, $bColor, $fColorInactive, $bColorInactive);
     }
 }
