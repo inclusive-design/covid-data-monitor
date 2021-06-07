@@ -3,7 +3,8 @@
 
 var readline = require("readline"),
     minimist = require("minimist"),
-    fs = require("fs-extra");
+    fs = require("fs-extra"),
+    resolve = require("resolve");
 
 var fluid = require("infusion");
 var terser = require("terser");
@@ -37,7 +38,7 @@ var buildIndex = {
     }]
 };
 
-var infusion_prefix = "node_modules/infusion";
+var infusion_prefix = "%infusion";
 
 var parsedArgs = minimist(process.argv.slice(2));
 
@@ -64,17 +65,21 @@ var readLines = function (filename) {
     return togo;
 };
 
+/**
+ * Resolve a templated module file to a file with an absolute path.
+ * @param {String} file - A file path. The path can contain or not contain a template string starting with "%".
+ * @return {String} The actual file location with an absolute path
+ */
+var fileResolver = function (file) {
+    return file.startsWith("%") ? resolve.sync(file.replace(/^%/, "")) : file;
+};
+
 var filesToContentHash = function (allFiles, extension) {
     var extFiles = allFiles.filter(function (file) {
         return file.endsWith(extension);
     });
     var hash = fluid.transform(fluid.arrayToHash(extFiles), function (troo, filename) {
-        // When the "inclusive-design/wecount.inclusivedesign.ca" repo installs this project as a dependency and
-        // runs this build script in the subshell (see [npm-explore](https://docs.npmjs.com/cli/v7/commands/npm-explore)),
-        // files in node_modules directory are two levels up in the parent project. These file paths need to be adjusted
-        // to point to the parent node_modules directory.
-        filename = fs.existsSync(filename) ? filename : "../../" + filename;
-        return fs.readFileSync(filename, "utf8");
+        return fs.readFileSync(fileResolver(filename), "utf8");
     });
     return hash;
 };
@@ -121,12 +126,7 @@ var buildFromFiles = function (buildIndex, nodeFiles) {
         fs.ensureDirSync("build/css");
         fs.writeFileSync("build/css/covid-data-monitor-all.css", cssConcat);
         buildIndex.copy.forEach(function (oneCopy) {
-            // When the "inclusive-design/wecount.inclusivedesign.ca" repo installs this project as a dependency and
-            // runs this build script in the subshell (see [npm-explore](https://docs.npmjs.com/cli/v7/commands/npm-explore)),
-            // files in node_modules directory are two levels up in the parent project. These file paths need to be adjusted
-            // to point to the parent node_modules directory.
-            var sourceFile = fs.existsSync(oneCopy.src) ? oneCopy.src : "../../" + oneCopy.src;
-            fs.copySync(sourceFile, oneCopy.dest);
+            fs.copySync(fileResolver(oneCopy.src), oneCopy.dest);
         });
         fluid.log("Copied " + (buildIndex.copy.length + 3) + " files to " + fs.realpathSync("build"));
     });
