@@ -23,7 +23,7 @@ var buildIndex = {
         src: "src/css/demo.css",
         dest: "build/css/demo.css"
     }, {
-        src: "node_modules/sanitize.css/sanitize.css",
+        src: "%sanitize.css/sanitize.css",
         dest: "build/css/sanitize.css"
     }, {
         src: "src/html/searchResultTemplate.html",
@@ -37,7 +37,7 @@ var buildIndex = {
     }]
 };
 
-var infusion_prefix = "node_modules/infusion";
+var infusion_prefix = "%infusion";
 
 var parsedArgs = minimist(process.argv.slice(2));
 
@@ -64,12 +64,21 @@ var readLines = function (filename) {
     return togo;
 };
 
+/**
+ * Resolve a templated module file to a file with an absolute path.
+ * @param {String} file - A file path. The path can contain or not contain a template string starting with "%".
+ * @return {String} The actual file location with an absolute path
+ */
+var moduleFileResolver = function (file) {
+    return file.startsWith("%") ? require.resolve(file.replace(/^%/, "")) : file;
+};
+
 var filesToContentHash = function (allFiles, extension) {
     var extFiles = allFiles.filter(function (file) {
         return file.endsWith(extension);
     });
     var hash = fluid.transform(fluid.arrayToHash(extFiles), function (troo, filename) {
-        return fs.readFileSync(filename, "utf8");
+        return fs.readFileSync(moduleFileResolver(filename), "utf8");
     });
     return hash;
 };
@@ -116,7 +125,7 @@ var buildFromFiles = function (buildIndex, nodeFiles) {
         fs.ensureDirSync("build/css");
         fs.writeFileSync("build/css/covid-data-monitor-all.css", cssConcat);
         buildIndex.copy.forEach(function (oneCopy) {
-            fs.copySync(oneCopy.src, oneCopy.dest);
+            fs.copySync(moduleFileResolver(oneCopy.src), oneCopy.dest);
         });
         fluid.log("Copied " + (buildIndex.copy.length + 3) + " files to " + fs.realpathSync("build"));
     });
