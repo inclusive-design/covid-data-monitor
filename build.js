@@ -3,8 +3,7 @@
 
 var readline = require("readline"),
     minimist = require("minimist"),
-    fs = require("fs-extra"),
-    resolve = require("resolve");
+    fs = require("fs-extra");
 
 var fluid = require("infusion");
 var terser = require("terser");
@@ -70,8 +69,8 @@ var readLines = function (filename) {
  * @param {String} file - A file path. The path can contain or not contain a template string starting with "%".
  * @return {String} The actual file location with an absolute path
  */
-var fileResolver = function (file) {
-    return file.startsWith("%") ? resolve.sync(file.replace(/^%/, "")) : file;
+var moduleFileResolver = function (file) {
+    return file.startsWith("%") ? require.resolve(file.replace(/^%/, "")) : file;
 };
 
 var filesToContentHash = function (allFiles, extension) {
@@ -79,7 +78,7 @@ var filesToContentHash = function (allFiles, extension) {
         return file.endsWith(extension);
     });
     var hash = fluid.transform(fluid.arrayToHash(extFiles), function (troo, filename) {
-        return fs.readFileSync(fileResolver(filename), "utf8");
+        return fs.readFileSync(moduleFileResolver(filename), "utf8");
     });
     return hash;
 };
@@ -126,7 +125,7 @@ var buildFromFiles = function (buildIndex, nodeFiles) {
         fs.ensureDirSync("build/css");
         fs.writeFileSync("build/css/covid-data-monitor-all.css", cssConcat);
         buildIndex.copy.forEach(function (oneCopy) {
-            fs.copySync(fileResolver(oneCopy.src), oneCopy.dest);
+            fs.copySync(moduleFileResolver(oneCopy.src), oneCopy.dest);
         });
         fluid.log("Copied " + (buildIndex.copy.length + 3) + " files to " + fs.realpathSync("build"));
     });
