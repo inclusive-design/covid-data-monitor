@@ -1,6 +1,8 @@
 /* Work with other css to display the map in a full screen on the mobile view */
 .fl-mapviz-outer-container {
-    flex-grow: 1;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 }
 
 /******** Base styles ********/
@@ -113,6 +115,14 @@ button {
 .fl-mapviz-query-holder input.autocomplete__input--focused {
     box-shadow: none;
     outline: none;
+}
+
+/******** The disclaimer **********/
+#fl-mapviz-disclaimer {
+    background-color: #ffcb70;
+    font-size: 0.55rem;
+    padding: 3px 5px;
+    width: 100%;
 }
 
 /******** The main panel **********/
@@ -417,7 +427,7 @@ button {
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
-    max-height: calc(100% - 17rem);
+    max-height: calc(100% - 21rem);
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -569,7 +579,7 @@ button {
 
 /******** The map panel ********/
 .fl-mapviz-map {
-    height: 100%;
+    flex: 1;
     width: 100%;
 }
 
@@ -623,6 +633,12 @@ button {
     /** Override the leaflet.css so that the zoom buttons shows below the search box on the mobile design **/
     .leaflet-control-container .leaflet-control-zoom {
         margin-top: 1rem;
+    }
+
+    /******** The disclaimer **********/
+    #fl-mapviz-disclaimer {
+        font-size: 1.125rem;
+        padding: 1rem;
     }
 
     /******** The main container holding all 3 panels: map, a11y feature list and search results ********/
