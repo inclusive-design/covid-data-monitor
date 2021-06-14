@@ -126,6 +126,14 @@ button {
     width: 100%;
 }
 
+/******** The disclaimer **********/
+#fl-mapviz-disclaimer {
+    background-color: #ffcb70;
+    font-size: 0.55rem;
+    padding: 0 5px;
+    width: 100%;
+}
+
 /******** The panel with the query label, the query input **********/
 .fl-mapviz-query-label {
     display: none;
@@ -133,6 +141,7 @@ button {
 
 /* Contains both the search label and the filter control div */
 .fl-mapviz-query-wrapper {
+    padding-top: 3.2rem;
     position: absolute;
     width: 100%;
     z-index: 999;
@@ -417,7 +426,7 @@ button {
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
-    max-height: calc(100% - 17rem);
+    max-height: calc(100% - 21rem);
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -637,6 +646,16 @@ button {
         height: inherit;
     }
 
+    /******** The disclaimer **********/
+    #fl-mapviz-disclaimer {
+        font-size: 1.125rem;
+        grid-column-end: 4;
+        grid-column-start: 1;
+        grid-row-end: 2;
+        grid-row-start: 1;
+        padding: 0 1rem;
+    }
+
     .fl-mapviz-query-wrapper {
         align-items: center;
         border-bottom: 1px solid #e5e5e5;
@@ -644,8 +663,8 @@ button {
         flex-direction: row;
         grid-column-end: 4;
         grid-column-start: 1;
-        grid-row-end: 2;
-        grid-row-start: 1;
+        grid-row-end: 3;
+        grid-row-start: 2;
         height: 5rem;
         padding: 0.5rem 0;
 
@@ -657,8 +676,8 @@ button {
     .fl-mapviz-filter-panel {
         grid-column-end: 4;
         grid-column-start: 3;
-        grid-row-end: 3;
-        grid-row-start: 2;
+        grid-row-end: 4;
+        grid-row-start: 3;
         height: 43rem;
 
         /* Override the mobile css */
@@ -671,8 +690,8 @@ button {
         border-radius: 0;
         grid-column-end: 2;
         grid-column-start: 1;
-        grid-row-end: 3;
-        grid-row-start: 2;
+        grid-row-end: 4;
+        grid-row-start: 3;
         height: 43rem;
 
         /* Override the mobile css */
@@ -683,8 +702,8 @@ button {
     .fl-mapviz-map {
         grid-column-end: 3;
         grid-column-start: 2;
-        grid-row-end: 3;
-        grid-row-start: 2;
+        grid-row-end: 4;
+        grid-row-start: 3;
 
         /* Override the mobile css */
         height: 43rem;
@@ -693,8 +712,8 @@ button {
     .fl-mapviz-hospital-panel {
         grid-column-end: 4;
         grid-column-start: 1;
-        grid-row-end: 4;
-        grid-row-start: 3;
+        grid-row-end: 5;
+        grid-row-start: 4;
 
         /* Override the mobile css */
         max-height: inherit;
