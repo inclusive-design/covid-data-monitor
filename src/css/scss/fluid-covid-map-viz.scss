@@ -130,7 +130,7 @@ button {
 #fl-mapviz-disclaimer {
     background-color: #ffcb70;
     font-size: 0.55rem;
-    padding: 0 5px;
+    padding: 3px 5px;
     width: 100%;
 }
 
@@ -141,7 +141,7 @@ button {
 
 /* Contains both the search label and the filter control div */
 .fl-mapviz-query-wrapper {
-    padding-top: 3.2rem;
+    padding-top: 3.7rem;
     position: absolute;
     width: 100%;
     z-index: 999;
@@ -653,7 +653,8 @@ button {
         grid-column-start: 1;
         grid-row-end: 2;
         grid-row-start: 1;
-        padding: 0 1rem;
+        margin-top: -2px;
+        padding: 1rem;
     }
 
     .fl-mapviz-query-wrapper {
