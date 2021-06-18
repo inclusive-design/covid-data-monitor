@@ -517,26 +517,10 @@ fluid.defaults("fluid.covidMap.map", {
             container: "{map}.dom.locationButtonOnMobile",
             options: {
                 modelListeners: {
-                    resetQuery: {
+                    activate: {
                         path: "activate",
-                        changePath: "{map}.model.query",
-                        value: ""
-                    },
-                    showCitiesList: {
-                        path: "activate",
-                        changePath: "{map}.model.visiblePanelOnMobileFlags",
-                        value: {
-                            "citiesList": true,
-                            "resultsPage": false,
-                            "filterPanel": false,
-                            "hospitalPanel": false
-                        },
-                        excludeSource: "init"
-                    },
-                    expandCitiesList: {
-                        path: "activate",
-                        changePath: "{citiesList}.expandButton.model.expanded",
-                        value: true,
+                        funcName: "fluid.covidMap.map.locationButtonOnMobileActivate",
+                        args: ["{map}", "{citiesList}"],
                         excludeSource: "init"
                     }
                 }
@@ -547,21 +531,10 @@ fluid.defaults("fluid.covidMap.map", {
             container: "{map}.dom.filterButtonOnMobile",
             options: {
                 modelListeners: {
-                    showFilterPanel: {
+                    activate: {
                         path: "activate",
-                        changePath: "{map}.model.visiblePanelOnMobileFlags",
-                        value: {
-                            "citiesList": false,
-                            "resultsPage": false,
-                            "filterPanel": true,
-                            "hospitalPanel": false
-                        },
-                        excludeSource: "init"
-                    },
-                    expandFilterPanel: {
-                        path: "activate",
-                        changePath: "{filterPanel}.expandButton.model.expanded",
-                        value: true,
+                        funcName: "fluid.covidMap.map.filterButtonOnMobileActivate",
+                        args: ["{map}", "{filterPanel}"],
                         excludeSource: "init"
                     }
                 }
@@ -584,6 +557,37 @@ fluid.defaults("fluid.covidMap.map", {
         }
     }
 });
+
+// When the location button on the mobile view is activated.
+fluid.covidMap.map.locationButtonOnMobileActivate = function (map, citiesList) {
+    if (citiesList.expandButton.model.expanded) {
+        citiesList.expandButton.applier.change("expanded", false);
+    } else {
+        citiesList.expandButton.applier.change("expanded", true);
+        map.applier.change("query", "");
+        map.applier.change("visiblePanelOnMobileFlags", {
+            "citiesList": true,
+            "resultsPage": false,
+            "filterPanel": false,
+            "hospitalPanel": false
+        });
+    }
+};
+
+// When the filter button on the mobile view is activated.
+fluid.covidMap.map.filterButtonOnMobileActivate = function (map, filterPanel) {
+    if (filterPanel.expandButton.model.expanded) {
+        filterPanel.expandButton.applier.change("expanded", false);
+    } else {
+        filterPanel.expandButton.applier.change("expanded", true);
+        map.applier.change("visiblePanelOnMobileFlags", {
+            "citiesList": false,
+            "resultsPage": false,
+            "filterPanel": true,
+            "hospitalPanel": false
+        });
+    }
+};
 
 fluid.defaults("fluid.covidMap.filterCheckboxInMap", {
     modelRelay: {
