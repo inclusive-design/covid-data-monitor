@@ -822,6 +822,20 @@ button {
         /* Use !important to override the inline "display" css applied by javascript */
         display: none !important;
     }
+
+    // Hide an element visually without hiding it from screen readers
+    // Reference: https://tailwindcss.com/docs/screen-readers/#app
+    .fl-mapviz-screen-reader-only {
+    	border-width: 0;
+    	clip: rect(0, 0, 0, 0);
+    	height: rem(1);
+    	margin: rem(-1);
+    	overflow: hidden;
+    	padding: 0;
+    	position: absolute;
+    	white-space: nowrap;
+    	width: rem(1);
+    }
 }
 
 /* Adapt to UIO contrast themes */
