@@ -516,12 +516,16 @@ fluid.defaults("fluid.covidMap.map", {
             type: "fluid.button",
             container: "{map}.dom.locationButtonOnMobile",
             options: {
+                modelRelay: {
+                    source: "activate",
+                    target: "{citiesList}.expandButton.model.expanded",
+                    singleTransform: "fluid.transforms.toggle"
+                },
                 modelListeners: {
-                    activate: {
-                        path: "activate",
-                        funcName: "fluid.covidMap.map.locationButtonOnMobileActivate",
-                        args: ["{map}", "{citiesList}"],
-                        excludeSource: "init"
+                    showFilterPanel: {
+                        path: "{citiesList}.expandButton.model.expanded",
+                        listener: "fluid.covidMap.map.citiesListOnMobileShow",
+                        args: ["{change}.value", "{map}"]
                     }
                 }
             }
@@ -530,12 +534,16 @@ fluid.defaults("fluid.covidMap.map", {
             type: "fluid.button",
             container: "{map}.dom.filterButtonOnMobile",
             options: {
+                modelRelay: {
+                    source: "activate",
+                    target: "{filterPanel}.expandButton.model.expanded",
+                    singleTransform: "fluid.transforms.toggle"
+                },
                 modelListeners: {
-                    activate: {
-                        path: "activate",
-                        funcName: "fluid.covidMap.map.filterButtonOnMobileActivate",
-                        args: ["{map}", "{filterPanel}"],
-                        excludeSource: "init"
+                    showFilterPanel: {
+                        path: "{filterPanel}.expandButton.model.expanded",
+                        listener: "fluid.covidMap.map.filterPanelOnMobileShow",
+                        args: ["{change}.value", "{map}"]
                     }
                 }
             }
@@ -559,11 +567,8 @@ fluid.defaults("fluid.covidMap.map", {
 });
 
 // When the location button on the mobile view is activated.
-fluid.covidMap.map.locationButtonOnMobileActivate = function (map, citiesList) {
-    if (citiesList.expandButton.model.expanded) {
-        citiesList.expandButton.applier.change("expanded", false);
-    } else {
-        citiesList.expandButton.applier.change("expanded", true);
+fluid.covidMap.map.citiesListOnMobileShow = function (show, map) {
+    if (show) {
         map.applier.change("query", "");
         map.applier.change("visiblePanelOnMobileFlags", {
             "citiesList": true,
@@ -575,11 +580,8 @@ fluid.covidMap.map.locationButtonOnMobileActivate = function (map, citiesList) {
 };
 
 // When the filter button on the mobile view is activated.
-fluid.covidMap.map.filterButtonOnMobileActivate = function (map, filterPanel) {
-    if (filterPanel.expandButton.model.expanded) {
-        filterPanel.expandButton.applier.change("expanded", false);
-    } else {
-        filterPanel.expandButton.applier.change("expanded", true);
+fluid.covidMap.map.filterPanelOnMobileShow = function (show, map) {
+    if (show) {
         map.applier.change("visiblePanelOnMobileFlags", {
             "citiesList": false,
             "resultsPage": false,
