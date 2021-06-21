@@ -799,12 +799,28 @@ fluid.defaults("fluid.covidMap.citiesList", {
     },
     invokers: {
         renderMarkup: "fluid.covidMap.citiesList.renderMarkup({that})",
-        elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)"
+        elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)",
+        queryMap: {
+            changePath: "{map}.model.query",
+            value: "{arguments}.0"
+        }
     },
     listeners: {
-        "onCreate.bindCitiesListEvents": "fluid.covidMap.citiesList.bindEvents({that}, {map})"
+        "onCreate.bindCitiesListEvents": "fluid.covidMap.citiesList.bindEvents({that})",
+        "onCreate.makeSelectable": "fluid.covidMap.citiesList.makeSelectable({that})"
     }
 });
+
+fluid.covidMap.citiesList.makeSelectable = function (that) {
+    fluid.tabbable(that.container);
+    fluid.selectable(that.container, {
+        selectableSelector: that.options.selectors.element,
+        rememberSelectionState: false
+    });
+    fluid.activatable(that.locate("element"), function (event) {
+        that.queryMap(event.target.innerText);
+    });
+};
 
 fluid.covidMap.citiesList.renderMarkup = function (that) {
     var template = that.options.markup.cityTemplate;
@@ -821,11 +837,11 @@ fluid.covidMap.citiesList.renderMarkup = function (that) {
     cities[0].appendChild(fragment);
 };
 
-fluid.covidMap.citiesList.bindEvents = function (that, map) {
+fluid.covidMap.citiesList.bindEvents = function (that) {
     that.container.click(function (event) {
         var index = that.elementToIndex(event.target);
         var city = that.model.cities[index];
-        map.applier.change("query", city);
+        that.queryMap(city);
     });
 };
 
@@ -890,7 +906,8 @@ fluid.defaults("fluid.covidMap.resultsPage", {
     },
     invokers: {
         renderMarkup: "fluid.covidMap.resultsPage.renderMarkup({that}, {map})",
-        elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)"
+        elementToIndex: "fluid.covidMap.elementToIndex({that}, {arguments}.0)",
+        makeSelectable: "fluid.covidMap.resultsPage.makeSelectable({that}, {map})"
     }
 });
 
@@ -933,6 +950,24 @@ fluid.covidMap.rowToTerms = function (map, row) {
     };
 };
 
+fluid.covidMap.resultsPage.makeSelectable = function (that, map) {
+    const resultsList = that.locate("resultsList");
+    fluid.tabbable(resultsList);
+    fluid.selectable(resultsList, {
+        selectableSelector: that.options.selectors.element,
+        rememberSelectionState: false,
+        onSelect: function (target) {
+            target.classList.add(that.options.styles.hover);
+        },
+        onUnselect: function (target) {
+            target.classList.remove(that.options.styles.hover);
+        }
+    });
+    fluid.activatable(that.locate("element"), function (event) {
+        fluid.covidMap.resultsPage.transduceTarget(that, map, event.target, "selectedIndex");
+    });
+};
+
 fluid.covidMap.resultsPage.renderMarkup = function (that, map) {
     var template = that.resources.resultTemplate.parsed;
     var indexToElement = [];
@@ -952,6 +987,7 @@ fluid.covidMap.resultsPage.renderMarkup = function (that, map) {
     var resultsList = that.locate("resultsList");
     resultsList.empty();
     resultsList[0].appendChild(fragment);
+    that.makeSelectable();
 };
 
 
