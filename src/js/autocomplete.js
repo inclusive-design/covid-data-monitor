@@ -91,6 +91,5 @@ hortis.autocomplete.render = function (that, container, id, widgetOptions) {
     var togo = accessibleAutocomplete(mergedWidgetOptions);
     // TODO: another one for the bestiary of reuse failures
     $("input", container).attr("spellcheck", false);
-    $("input", container).attr("placeholder", "Search by postal code or city");
     return togo;
 };
