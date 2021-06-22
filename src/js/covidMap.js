@@ -516,28 +516,16 @@ fluid.defaults("fluid.covidMap.map", {
             type: "fluid.button",
             container: "{map}.dom.locationButtonOnMobile",
             options: {
+                modelRelay: {
+                    source: "activate",
+                    target: "{citiesList}.expandButton.model.expanded",
+                    singleTransform: "fluid.transforms.toggle"
+                },
                 modelListeners: {
-                    resetQuery: {
-                        path: "activate",
-                        changePath: "{map}.model.query",
-                        value: ""
-                    },
-                    showCitiesList: {
-                        path: "activate",
-                        changePath: "{map}.model.visiblePanelOnMobileFlags",
-                        value: {
-                            "citiesList": true,
-                            "resultsPage": false,
-                            "filterPanel": false,
-                            "hospitalPanel": false
-                        },
-                        excludeSource: "init"
-                    },
-                    expandCitiesList: {
-                        path: "activate",
-                        changePath: "{citiesList}.expandButton.model.expanded",
-                        value: true,
-                        excludeSource: "init"
+                    showFilterPanel: {
+                        path: "{citiesList}.expandButton.model.expanded",
+                        listener: "fluid.covidMap.map.citiesListOnMobileShow",
+                        args: ["{change}.value", "{map}"]
                     }
                 }
             }
@@ -546,23 +534,16 @@ fluid.defaults("fluid.covidMap.map", {
             type: "fluid.button",
             container: "{map}.dom.filterButtonOnMobile",
             options: {
+                modelRelay: {
+                    source: "activate",
+                    target: "{filterPanel}.expandButton.model.expanded",
+                    singleTransform: "fluid.transforms.toggle"
+                },
                 modelListeners: {
                     showFilterPanel: {
-                        path: "activate",
-                        changePath: "{map}.model.visiblePanelOnMobileFlags",
-                        value: {
-                            "citiesList": false,
-                            "resultsPage": false,
-                            "filterPanel": true,
-                            "hospitalPanel": false
-                        },
-                        excludeSource: "init"
-                    },
-                    expandFilterPanel: {
-                        path: "activate",
-                        changePath: "{filterPanel}.expandButton.model.expanded",
-                        value: true,
-                        excludeSource: "init"
+                        path: "{filterPanel}.expandButton.model.expanded",
+                        listener: "fluid.covidMap.map.filterPanelOnMobileShow",
+                        args: ["{change}.value", "{map}"]
                     }
                 }
             }
@@ -584,6 +565,32 @@ fluid.defaults("fluid.covidMap.map", {
         }
     }
 });
+
+// TODO: These two functions can be eliminated when https://issues.fluidproject.org/browse/FLUID-6393 is implemented
+// When the location button on the mobile view is activated.
+fluid.covidMap.map.citiesListOnMobileShow = function (show, map) {
+    if (show) {
+        map.applier.change("query", "");
+        map.applier.change("visiblePanelOnMobileFlags", {
+            "citiesList": true,
+            "resultsPage": false,
+            "filterPanel": false,
+            "hospitalPanel": false
+        });
+    }
+};
+
+// When the filter button on the mobile view is activated.
+fluid.covidMap.map.filterPanelOnMobileShow = function (show, map) {
+    if (show) {
+        map.applier.change("visiblePanelOnMobileFlags", {
+            "citiesList": false,
+            "resultsPage": false,
+            "filterPanel": true,
+            "hospitalPanel": false
+        });
+    }
+};
 
 fluid.defaults("fluid.covidMap.filterCheckboxInMap", {
     modelRelay: {
