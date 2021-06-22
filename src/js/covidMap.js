@@ -566,6 +566,7 @@ fluid.defaults("fluid.covidMap.map", {
     }
 });
 
+// TODO: These two functions can be eliminated when https://issues.fluidproject.org/browse/FLUID-6393 is implemented
 // When the location button on the mobile view is activated.
 fluid.covidMap.map.citiesListOnMobileShow = function (show, map) {
     if (show) {
