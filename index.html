@@ -69,7 +69,7 @@
                 <div class="fl-mapviz-query-holder">
                     <div class="fl-mapviz-query-reset-holder">
                         <div class="fl-mapviz-query-reset fl-mapviz-hoverable-focusable" style="display: none" tabindex="0" aria-role="button" aria-expanded="true" aria-label="Reset the query">
-                            <svg>
+                            <svg role="presentation">
                                 <use xlink:href="#QueryReset"></use>
                             </svg>
                         </div>
@@ -79,11 +79,11 @@
 
             <!-- A11y filter panel -->
             <div class="fl-mapviz-filter-panel fl-mapviz-hidden-on-mobile">
-                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="accessibility filter">
-                    <svg class="fl-mapviz-collapse-button">
+                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="accessibility filter" aria-controls="fl-mapviz-filter-content">
+                    <svg role="presentation" class="fl-mapviz-collapse-button">
                         <use xlink:href="#ArrowDown"></use>
                     </svg>
-                    <svg class="fl-mapviz-expand-button">
+                    <svg role="presentation" class="fl-mapviz-expand-button">
                         <use xlink:href="#ArrowUp"></use>
                     </svg>
                 </button>
@@ -96,13 +96,13 @@
                         <div class="fl-mapviz-filter-count-on-desktop">0</div>
                     </div>
                 </div>
-                <ul class="fl-mapviz-filters">
+                <ul class="fl-mapviz-filters" id="fl-mapviz-filter-content">
                     <li class="fl-mapviz-filter fl-mapviz-filter-entrances">
                         <svg role="presentation" class="fl-mapviz-filter-icon">
                             <use xlink:href="#Entrances"></use>
                         </svg>
                         <a class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable-focusable" href="#">
-                            <svg>
+                            <svg role="presentation">
                                 <use xlink:href="#Tooltip"></use>
                             </svg>
                         </a>
@@ -124,7 +124,7 @@
                             <use xlink:href="#Washrooms"></use>
                         </svg>
                         <a class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable-focusable" href="#">
-                            <svg>
+                            <svg role="presentation">
                                 <use xlink:href="#Tooltip"></use>
                             </svg>
                         </a>
@@ -146,7 +146,7 @@
                             <use xlink:href="#Parking"></use>
                         </svg>
                         <a class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable-focusable" href="#">
-                            <svg>
+                            <svg role="presentation">
                                 <use xlink:href="#Tooltip"></use>
                             </svg>
                         </a>
@@ -168,7 +168,7 @@
                             <use xlink:href="#Individual"></use>
                         </svg>
                         <a class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable-focusable" href="#">
-                            <svg>
+                            <svg role="presentation">
                                 <use xlink:href="#Tooltip"></use>
                             </svg>
                         </a>
@@ -190,7 +190,7 @@
                             <use xlink:href="#Wait"></use>
                         </svg>
                         <a class="fl-mapviz-filter-tooltip-icon fl-mapviz-hoverable-focusable" href="#">
-                            <svg>
+                            <svg role="presentation">
                                 <use xlink:href="#Tooltip"></use>
                             </svg>
                         </a>
@@ -230,11 +230,11 @@
 
             <!-- The city list panel -->
             <div class="fl-mapviz-city-list">
-                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="location list">
-                    <svg class="fl-mapviz-collapse-button">
+                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="location list" aria-controls="fl-mapviz-cities-content">
+                    <svg role="presentation" class="fl-mapviz-collapse-button">
                         <use xlink:href="#ArrowDown"></use>
                     </svg>
-                    <svg class="fl-mapviz-expand-button">
+                    <svg role="presentation" class="fl-mapviz-expand-button">
                         <use xlink:href="#ArrowUp"></use>
                     </svg>
                 </button>
@@ -244,17 +244,17 @@
                         <use xlink:href="#Locations"></use>
                     </svg>
                 </div>
-                <div class="fl-mapviz-cities">
+                <div class="fl-mapviz-cities" id="fl-mapviz-cities-content">
                 </div>
             </div>
 
             <!-- The search result panel -->
             <div class="fl-mapviz-search-results fl-mapviz-hidden-on-mobile">
-                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="search results">
-                    <svg class="fl-mapviz-collapse-button">
+                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="search results" aria-controls="fl-mapviz-search-results-content">
+                    <svg role="presentation" class="fl-mapviz-collapse-button">
                         <use xlink:href="#ArrowDown"></use>
                     </svg>
-                    <svg class="fl-mapviz-expand-button">
+                    <svg role="presentation" class="fl-mapviz-expand-button">
                         <use xlink:href="#ArrowUp"></use>
                     </svg>
                 </button>
@@ -268,7 +268,7 @@
                         <h2 class="h3">Back to locations</h2>
                     </button>
                 </div>
-                <div class="fl-mapviz-search-results-list">
+                <div class="fl-mapviz-search-results-list" id="fl-mapviz-search-results-content">
                     <!-- <div class="fl-mapviz-search-result">
                                                                                                         <div class="fl-mapviz-search-result-hospital-title">Hospital 8</div>
                                                                                                         <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
@@ -283,11 +283,11 @@
 
             <!-- The hospital description panel -->
             <div class="fl-mapviz-hospital-panel" role="region" aria-live="polite">
-                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="hospital panel">
-                    <svg class="fl-mapviz-collapse-button">
+                <button type="button" class="fl-mapviz-expand-collapse-button" aria-expanded="true" aria-label="hospital panel" aria-controls="fl-mapviz-hospital-content">
+                    <svg role="presentation" class="fl-mapviz-collapse-button">
                         <use xlink:href="#ArrowDown"></use>
                     </svg>
-                    <svg class="fl-mapviz-expand-button">
+                    <svg role="presentation" class="fl-mapviz-expand-button">
                         <use xlink:href="#ArrowUp"></use>
                     </svg>
                 </button>
@@ -304,7 +304,7 @@
                 <h2 class="fl-mapviz-hospital-title">
                     Hospital 2
                 </h2>
-                <div class="fl-mapviz-hospital-description">
+                <div class="fl-mapviz-hospital-description" id="fl-mapviz-hospital-content">
                     <div><b>Hours:</b> <span class="fl-mapviz-hospital-hours">8:00 am to 12:00 pm, from Monday to Friday.</span>
                     </div>
                     <div><b>Location</b></div>
