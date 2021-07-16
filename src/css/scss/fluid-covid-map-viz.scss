@@ -100,7 +100,7 @@ button {
 
         a:hover,
         a:focus {
-            box-shadow: 0 0 0 1px var(--fColor, black) inset;
+            box-shadow: 0 0 0 3px var(--fColor, black) inset;
         }
 
         a:active {
@@ -354,13 +354,6 @@ button {
 }
 
 /******** Expand/collapse button for the city list panel, the search results panel and the a11y filter panel ********/
-.fl-mapviz-expand-collapse-button-wrapper {
-    background-color: #c4c4c4;
-    border-radius: 1rem 1rem 0 0;
-    display: flex;
-    justify-content: center;
-}
-
 .expand-collapse-svg-internal-class {
     fill: var(--expand-button-color, none);
     stroke: var(--expand-button-stroke-color, black);
@@ -368,11 +361,12 @@ button {
 }
 
 .fl-mapviz-expand-collapse-button {
+    background-color: #c4c4c4;
+    border-radius: 1rem 1rem 0 0;
     align-self: center;
-    background: none;
     border: none;
-    margin: 0.5rem 0 0.5rem 0;
-    width: 4rem;
+    padding: 0.5rem 0 0.7rem 0;
+    width: 100%;
 
     svg {
         height: 0.7rem;
@@ -717,7 +711,7 @@ button {
     /* End: arrange positions of sub containers */
 
     /******** Expand/collapse buttons ********/
-    .fl-mapviz-expand-collapse-button-wrapper {
+    .fl-mapviz-expand-collapse-button {
         display: none;
     }
 
