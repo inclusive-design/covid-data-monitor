@@ -33,7 +33,8 @@ fluid.removeChildren = function (node) {
 fluid.nodeToText = function (node, indentLevel) {
     var text = node.outerHTML;
     var formatted = jsBeautify.html(text, {
-        indent_level: indentLevel || 0
+        indent_level: indentLevel || 0,
+        end_with_newline: true
     });
     return formatted;
 };
