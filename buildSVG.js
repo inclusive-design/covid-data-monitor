@@ -34,7 +34,6 @@ fluid.nodeToText = function (node, indentLevel) {
     var text = node.outerHTML;
     var formatted = jsBeautify.html(text, {
         indent_level: indentLevel || 0,
-        preserve_newlines: false,
         end_with_newline: true
     });
     return formatted;
