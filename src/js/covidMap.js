@@ -628,6 +628,12 @@ fluid.defaults("fluid.covidMap.map", {
                         listener: "fluid.covidMap.map.filterPanelOnMobileShow",
                         args: ["{change}.value", "{map}"]
                     }
+                },
+                listeners: {
+                    "onCreate.tabOrder": {
+                        funcName: "fluid.covidMap.map.setTabOrderForFilterOnMobile",
+                        args: ["{that}", "{filterPanel}"]
+                    }
                 }
             }
         }
@@ -673,6 +679,31 @@ fluid.covidMap.map.filterPanelOnMobileShow = function (show, map) {
             "hospitalPanel": false
         });
     }
+};
+
+// On the mobile view, when the focus is on the "ACCESSIBILITY FILTERS" button and the filters drawer is expanded,
+// SHIFT+TAB should go to the expand/collapse button, allowing users to TAB forward through the filters list from
+// the top. But, if the filters drawer is collapsed when the focus is on the "ACCESSIBILITY FILTERS" button,
+// SHIFT+TAB moves focus to the "LOCATIONS" button.
+fluid.covidMap.map.setTabOrderForFilterOnMobile = function (filterOnMobileButton, filterPanel) {
+    const filterButton = filterOnMobileButton.container[0];
+    const expandButton = filterPanel.locate("expandButton");
+    let shiftTabClicked = false;
+
+    // Keep track of the press of shift + tab buttons in a boolean variable "shiftTabClicked"
+    filterButton.addEventListener("keydown", function (evt) {
+        if (evt.shiftKey && evt.keyCode === 9 ) {
+            shiftTabClicked = true;
+        }
+    });
+
+    filterButton.addEventListener("focusout", function () {
+        // When shift + tab is pressed and the filter panel is open, the next focus is the expand/collapse button
+        if (shiftTabClicked && filterPanel.expandButton.model.expanded) {
+            expandButton[0].focus();
+            shiftTabClicked = false;
+        }
+    });
 };
 
 fluid.defaults("fluid.covidMap.filterCheckboxInMap", {

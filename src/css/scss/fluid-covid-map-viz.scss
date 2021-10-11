@@ -96,12 +96,11 @@ button {
     }
 
     .leaflet-control-zoom {
-        margin-top: 3rem;
         z-index: 0;
 
         a:hover,
         a:focus {
-            box-shadow: 0 0 0 1px var(--fColor, black) inset;
+            box-shadow: 0 0 0 3px var(--fColor, black) inset;
         }
 
         a:active {
@@ -140,34 +139,36 @@ button {
 }
 
 /******** The panel with the query label, the query input **********/
-.fl-mapviz-query-label {
-    display: none;
-}
-
 /* Contains both the search label and the filter control div */
 .fl-mapviz-query-wrapper {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 3.3rem;
+    padding-top: 0.3rem;
     width: 100%;
-    z-index: 999;
 
     & > svg {
         height: 1.5rem;
         margin-left: 1rem;
-        margin-top: 0.7rem;
-        position: absolute;
+        padding-top: 0.5rem;
         width: 1.5rem;
         z-index: 1;
     }
 }
 
+.fl-mapviz-query-label {
+    font-size: 0.55rem;
+    margin-left: 1rem;
+}
+
 .fl-mapviz-query-holder {
-    margin: 0.5rem;
+    margin: -1.2rem 0.5rem 0.5rem 0.5rem;
 
     input {
         background-color: white;
         border: 1px solid black;
         border-radius: 1.5rem;
-        height: 2rem;
+        height: 1.5rem;
         padding-left: 2.5rem;
         width: 100%;
     }
@@ -189,8 +190,8 @@ button {
     height: 1rem;
     position: absolute;
     right: 0.6rem;
-    top: 0.5rem;
-    z-index: 900;
+    top: 0.3rem;
+    z-index: 1;
 
     svg {
         height: 1rem;
@@ -356,13 +357,6 @@ button {
 }
 
 /******** Expand/collapse button for the city list panel, the search results panel and the a11y filter panel ********/
-.fl-mapviz-expand-collapse-button-wrapper {
-    background-color: #c4c4c4;
-    border-radius: 1rem 1rem 0 0;
-    display: flex;
-    justify-content: center;
-}
-
 .expand-collapse-svg-internal-class {
     fill: var(--expand-button-color, none);
     stroke: var(--expand-button-stroke-color, black);
@@ -370,11 +364,12 @@ button {
 }
 
 .fl-mapviz-expand-collapse-button {
+    background-color: #c4c4c4;
+    border-radius: 1rem 1rem 0 0;
     align-self: center;
-    background: none;
     border: none;
-    margin: 0.5rem 0 0.5rem 0;
-    width: 4rem;
+    padding: 0.5rem 0 0.7rem 0;
+    width: 100%;
 
     svg {
         height: 0.7rem;
@@ -667,10 +662,6 @@ button {
         grid-row-start: 1;
         height: 5rem;
         padding: 0.5rem 0;
-
-        /* Override the mobile css */
-        position: relative;
-        width: 100%;
     }
 
     .fl-mapviz-filter-panel {
@@ -723,7 +714,7 @@ button {
     /* End: arrange positions of sub containers */
 
     /******** Expand/collapse buttons ********/
-    .fl-mapviz-expand-collapse-button-wrapper {
+    .fl-mapviz-expand-collapse-button {
         display: none;
     }
 
@@ -732,6 +723,7 @@ button {
     /* The query label */
     .fl-mapviz-query-label {
         display: block;
+        font-size: 1rem;
         margin: 0 1rem;
     }
 
@@ -739,13 +731,21 @@ button {
         margin-left: 0;
         margin-right: -2.5rem;
         margin-top: 0;
-        position: relative;
+        padding-top: 0;
     }
 
     /* The query input box */
     .fl-mapviz-query-holder {
         flex-grow: 2;
-        margin-right: 2rem;
+        margin: 0 0.5rem;
+
+        input {
+            height: 2rem;
+        }
+    }
+
+    .fl-mapviz-query-reset {
+        top: 0.5rem;
     }
 
     /******** The accessibility filters panel **********/
