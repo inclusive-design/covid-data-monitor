@@ -117,12 +117,15 @@ button {
     outline: none;
 }
 
-/******** The disclaimer **********/
-#fl-mapviz-disclaimer {
+/******** The provenance info **********/
+#fl-mapviz-provenance {
     background-color: #ffcb70;
-    font-size: 0.55rem;
+    font-size: 0.8rem;
     padding: 3px 5px;
     width: 100%;
+    ul {
+        margin: 0px
+    }
 }
 
 /******** The main panel **********/

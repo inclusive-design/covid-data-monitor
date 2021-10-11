@@ -7,9 +7,7 @@
         "build:scss": "sass src/css/scss/fluid-covid-map-viz.scss src/css/fluid-covid-map-viz.css",
         "watch:scss": "sass --watch src/css/scss/fluid-covid-map-viz.scss src/css/fluid-covid-map-viz.css",
         "build": "npm run build:scss && node build.js",
-        "build:noInfusion": "npm run build:scss && node build.js --no-infusion",
-        "pretest": "node node_modules/rimraf/bin.js coverage/* reports/* instrumented/*",
-        "test": "node node_modules/nyc/bin/nyc.js node tests/all-tests.js"
+        "build:noInfusion": "npm run build:scss && node build.js --no-infusion"
     },
     "repository": {
         "type": "git",

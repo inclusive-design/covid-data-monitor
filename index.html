@@ -55,6 +55,17 @@
 <body>
     <h1>Accessibility Map for COVID-19 assessment centres</h1>
     <div class="fl-mapviz-outer-container">
+<div id="fl-mapviz-provenance">
+    The data in this map is a synthesis of three sources - 
+    <ul><li>Live data from the Ontario Data Catalogue, most recently fetched from URL
+    <a class="fl-mapviz-odc-url" href="https://data.ontario.ca/dataset/8ba078b2-ca9b-44c1-b5db-9674d85421f9/resource/c60993bb-3988-4648-9be9-398dee480514/download/assessment_centre_locations.csv">https//data.ontario.ca/dataset/84ba...locations.csv</a>,
+    on <a class="fl-mapviz-odc-date">07/10/2021</a>,</li>
+    <li>Accessibility data collected by the WeCount project most recently on 2nd September 2020</li>
+    <li>Synthetic accessibility data generated at random for live testing centres not covered by the WeCount collection</li>
+    </ul>
+    This map is produced only for demonstration of the WeCount data architecture, to learn about the location
+    of COVID-19 test centres in Ontario, please visit the <a href="https://covid-19.ontario.ca/assessment-centre-locations">Government of Ontario's live site</a>. 
+</div>
         <div class="fl-mapviz-container">
             <!-- The panel containing the search label & the search box -->
             <div class="fl-mapviz-query-wrapper">
@@ -272,11 +283,11 @@
                 </div>
                 <div class="fl-mapviz-search-results-list">
                     <!-- <div class="fl-mapviz-search-result">
-                                                                                                        <div class="fl-mapviz-search-result-hospital-title">Hospital 8</div>
-                                                                                                        <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
-                                                                                                        <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
-                                                                                                        <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
-                                                                                                    </div> -->
+                        <div class="fl-mapviz-search-result-hospital-title">Hospital 8</div>
+                        <div class="fl-mapviz-hospital-hours">Opens at 8:00 am</div>
+                        <div class="fl-mapviz-hospital-address">600 University Ave, Toronto, ON MSG 1XS</div>
+                        <div class="fl-mapviz-hospital-phone">+1-416-586-5054</div>
+                    </div> -->
                 </div>
             </div>
 
@@ -456,7 +467,8 @@
 
     <script>
         fluid.covidMap.map(".fl-mapviz-outer-container", {
-            dataUrl: "data/merged/output.csv",
+            gradeNames: "fluid.covidMap.latestFetcher",
+            // dataUrl: "data/merged/output.csv", // swap with previous line to test with internal data
             iconPrefix: "src/",
             searchResultTemplateUrl: "src/html/searchResultTemplate.html"
         });

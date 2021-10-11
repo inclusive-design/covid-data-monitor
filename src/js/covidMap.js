@@ -80,6 +80,89 @@ fluid.covidMap.extractPostcodes = function (rows, field) {
     return postcodeHash;
 };
 
+fluid.covidMap.relativePath = function (basePath, relativePath) {
+    var lastSlash = basePath.lastIndexOf("/");
+    return basePath.substring(0, lastSlash + 1) + relativePath;
+};
+
+fluid.covidMap.fileToRelative = function (fileName, suffix) {
+    var lastdotpos = fileName.lastIndexOf(".");
+    return fileName.substring(0, lastdotpos) + suffix;
+};
+
+/** Shorten some text if its length is excessive by replacing the portion between a prefix and suffix point with "..."
+ * @param {String} text - The text to be shortened
+ * @param {Integer} prefix - The prefix length of the text to be retained
+ * @param {Integer} suffix - The suffix length of the text to be retained
+ * @return {String} A shortened version of the supplied text
+ */
+fluid.covidMap.shortenText = function (text, prefix, suffix) {
+    return text.length > prefix + suffix + 3 ?
+        text.substr(0, prefix) + "..." + text.substr(-suffix) : text;
+};
+
+/** Fetch a file relative to the one provided in "latest.json". Don't we wish we had i) general asynchrony, ii)
+ * Edwardian "multiple returns".
+ * @param {String} latestUrl - A url to a "latest.json" file in the format produced e.g. in covid-assessment-centres.
+ * @param {String} [suffix] - optional - if provided, replace the suffix of the file found within "latest" with this one
+ * @return {Promise<Object>} A promise for the JSON contents of the fetched file
+ */
+fluid.covidMap.fetchLatestRelative = function (latestUrl, suffix) {
+    var togo = fluid.promise();
+    fetch(latestUrl).then(function (response) {
+        response.json().then(function (data) {
+            console.log("Got data ", data);
+            var relative = fluid.covidMap.relativePath(latestUrl, data.fileName);
+            var toFetch = suffix ? fluid.covidMap.fileToRelative(relative, suffix) : relative;
+            fetch(toFetch).then(function (response2) {
+                fluid.promise.follow(response2.text(), togo);
+            }, function (error) {
+                togo.reject(error);
+            });
+        });
+    });
+    return togo;
+};
+
+fluid.defaults("fluid.covidMap.latestFetcher", {
+    gradeNames: "fluid.resourceLoader",
+    latestUrl: "https://raw.githubusercontent.com/inclusive-design/covid-assessment-centres/main/merged/latest.json",
+    resources: {
+        data: {
+            promiseFunc: "fluid.covidMap.fetchLatestRelative",
+            promiseArgs: ["{that}.options.latestUrl"]
+        },
+        provenance: {
+            promiseFunc: "fluid.covidMap.fetchLatestRelative",
+            promiseArgs: ["{that}.options.latestUrl", "-provenanceMap.json"],
+            dataType: "json"
+        }
+    },
+    model: {
+        odcProvenance: "{that}.resources.provenance.parsed.ODC"
+    },
+    selectors: {
+        odcUrl: ".fl-mapviz-odc-url",
+        odcDate: ".fl-mapviz-odc-date"
+    },
+    modelRelay: {
+        odcUrl: {
+            target: "dom.odcUrl.attrs.href",
+            source: "odcProvenance.url"
+        },
+        odcUrlText: {
+            target: "dom.odcUrl.text",
+            source: "odcProvenance.url",
+            func: text => fluid.covidMap.shortenText(text, 35, 13)
+        },
+        odcDate: {
+            target: "dom.odcDate.text",
+            source: "odcProvenance.fetchedAt",
+            func: text => new Date(text).toLocaleString()
+        }
+    }
+});
+
 fluid.defaults("fluid.covidMap.map", {
     gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
     // Colours currently unused, may be again when we inline SVG markers
