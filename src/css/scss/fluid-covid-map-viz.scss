@@ -819,6 +819,11 @@ button {
 }
 
 @media screen and (max-width: 1024px) {
+    #fl-mapviz-provenance {
+        height: 3.5em;
+        overflow-y: scroll;
+    }
+
     /* A special class defined at the bottom of the css file so that it only available and affect the mobile view.
     The effect doesn't apply to the desktop view at all. */
     .fl-mapviz-hidden-on-mobile {
