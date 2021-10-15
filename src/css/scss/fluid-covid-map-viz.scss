@@ -116,12 +116,15 @@ button {
     outline: none;
 }
 
-/******** The disclaimer **********/
-#fl-mapviz-disclaimer {
+/******** The provenance info **********/
+#fl-mapviz-provenance {
     background-color: #ffcb70;
-    font-size: 0.55rem;
+    font-size: 0.8rem;
     padding: 3px 5px;
     width: 100%;
+    ul {
+        margin: 0px
+    }
 }
 
 /******** The main panel **********/
@@ -631,7 +634,7 @@ button {
     }
 
     /******** The disclaimer **********/
-    #fl-mapviz-disclaimer {
+    #fl-mapviz-provenance {
         font-size: 1.125rem;
         padding: 1rem;
     }
@@ -816,6 +819,11 @@ button {
 }
 
 @media screen and (max-width: 1024px) {
+    #fl-mapviz-provenance {
+        height: 3rem;
+        overflow-y: scroll;
+    }
+
     /* A special class defined at the bottom of the css file so that it only available and affect the mobile view.
     The effect doesn't apply to the desktop view at all. */
     .fl-mapviz-hidden-on-mobile {

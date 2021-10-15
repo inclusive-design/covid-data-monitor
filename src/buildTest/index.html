@@ -18,7 +18,8 @@
     </body>
     <script>
         fluid.covidMap.map(".fl-mapviz-outer-container", {
-            dataUrl: "data/output.csv",
+            gradeNames: "fluid.covidMap.latestFetcher",
+            // dataUrl: "data/output.csv", // swap with previous line to test with internal data
             templateUrl: "html/template.html",
             searchResultTemplateUrl: "html/searchResultTemplate.html"
         });

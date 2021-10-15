@@ -193,5 +193,5 @@ hortis.quickDistance = function (c1, c2) {
     var baselat = c1[0];
     var latd = (c1[0] - c2[0]) * hortis.latitudeLength(baselat);
     var longd = (c1[1] - c2[1]) * hortis.longitudeLength(baselat);
-    return Math.sqrt(latd * latd + longd + longd);
+    return Math.sqrt(latd * latd + longd * longd);
 };
