@@ -48,7 +48,8 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
             source: {
                 segs: ["mwp", "{map}.options.fields.phone"]
             },
-            target: "dom.hospitalPhone.text"
+            target: "dom.hospitalPhone.text",
+            func: x => x || ""
         },
         visiblePanel: {
             source: "{map}.model.visiblePanelOnMobileFlags.hospitalPanel",
@@ -57,6 +58,77 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
         }
     }
 });
+
+fluid.defaults("fluid.covidMap.provenanceRenderer", {
+    gradeNames: "fluid.viewComponent",
+    selectors: {
+        symbol: "use",
+        message: "span"
+    },
+    model: {
+        symbol: null,
+        message: ""
+    },
+    modelRelay: {
+        symbol: {
+            target: "dom.symbol.attrs.href",
+            source: "symbol",
+            func: x => "#" + x
+        },
+        message: {
+            target: "dom.message.text",
+            source: "message"
+        }
+    }
+});
+
+fluid.covidMap.hospitalToFeatures = function (hospital, filters) {
+    var togo = fluid.transform(filters, function (filter) {
+        var value = hospital[filter.column];
+        return value === "Yes" ? { // TODO: In future, we might display a variant/partial value as a tooltip
+            symbol: filter.symbol,
+            label: filter.column
+        } : fluid.NO_VALUE;
+    });
+    return Object.values(togo);
+};
+
+fluid.defaults("fluid.covidMap.hospitalFeatures", {
+    gradeNames: "fluid.viewComponent",
+    selectors: {
+        features: ".fl-mapviz-hospital-feature-list"
+    },
+    markup: {
+        feature: "<div class=\"fl-mapviz-hospital-feature\"><svg role=\"presentation\" class=\"fl-mapviz-filter-icon\">" +
+                    "<use xlink:href=\"#%symbol\"></use></svg><div>%label</div></div>"
+    },
+    model: {
+        features: []
+    },
+    modelRelay: {
+        features: {
+            target: "features",
+            args: ["{that}.model.selectedHospital", "{that}.options.filters"],
+            func: "fluid.covidMap.hospitalToFeatures"
+        }
+    },
+    modelListeners: {
+        features: {
+            listener: "fluid.covidMap.renderFeatures",
+            args: ["{that}", "{change}.value"]
+        }
+    }
+});
+
+// Poor man's rendering model since we can't be bothered to reintroduce new-renderer-demo into this project with
+// all it's fragility
+fluid.covidMap.renderFeatures = function (that, features) {
+    var container = that.locate("features");
+    var markup = features.map(function (feature) {
+        return fluid.stringTemplate(that.options.markup.feature, feature);
+    }).join("\n");
+    container[0].innerHTML = markup;
+};
 
 // TODO: Needs to be be copied back into framework
 fluid.copyImmutableResource = function (tocopy) {
@@ -125,7 +197,7 @@ fluid.covidMap.fetchLatestRelative = function (latestUrl, suffix) {
 };
 
 fluid.defaults("fluid.covidMap.latestFetcher", {
-    gradeNames: "fluid.resourceLoader",
+    gradeNames: "hortis.ProvenancedCSVResourceLoader",
     latestUrl: "https://raw.githubusercontent.com/inclusive-design/covid-assessment-centres/main/merged/latest.json",
     resources: {
         data: {
@@ -134,12 +206,15 @@ fluid.defaults("fluid.covidMap.latestFetcher", {
         },
         provenance: {
             promiseFunc: "fluid.covidMap.fetchLatestRelative",
-            promiseArgs: ["{that}.options.latestUrl", "-provenanceMap.json"],
-            dataType: "json"
+            promiseArgs: ["{that}.options.latestUrl", "-provenance.csv"]
+        },
+        provenanceMap: {
+            promiseFunc: "fluid.covidMap.fetchLatestRelative",
+            promiseArgs: ["{that}.options.latestUrl", "-provenanceMap.json"]
         }
     },
     model: {
-        odcProvenance: "{that}.resources.provenance.parsed.ODC"
+        odcProvenance: "{that}.resources.provenanceMap.parsed.ODC"
     },
     selectors: {
         odcUrl: ".fl-mapviz-odc-url",
@@ -164,7 +239,7 @@ fluid.defaults("fluid.covidMap.latestFetcher", {
 });
 
 fluid.defaults("fluid.covidMap.map", {
-    gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.CSVLeafletMap", "hortis.conditionalTemplateRenderer"],
+    gradeNames: ["hortis.leafletMap", "hortis.streetmapTiles", "hortis.ProvenancedCSVResourceLoader", "hortis.conditionalTemplateRenderer"],
     // Colours currently unused, may be again when we inline SVG markers
     colours: {
         accessible: "#0f0",
@@ -187,22 +262,27 @@ fluid.defaults("fluid.covidMap.map", {
     filters: {
         entrances: {
             selector: ".fl-mapviz-filter-entrances",
+            symbol: "Entrances",
             column: "Accessible Entrances"
         },
         washroom: {
             selector: ".fl-mapviz-filter-washrooms",
+            symbol: "Washrooms",
             column: "Accessible Washrooms"
         },
         parking: {
             selector: ".fl-mapviz-filter-parking",
+            symbol: "Parking",
             column: "Accessible Parking"
         },
         individual: {
             selector: ".fl-mapviz-filter-individual",
+            symbol: "Individual",
             column: "Individual Service"
         },
         wait: {
             selector: ".fl-mapviz-filter-wait",
+            symbol: "Wait",
             column: "Wait Accommodations"
         }
     },
@@ -215,6 +295,9 @@ fluid.defaults("fluid.covidMap.map", {
         searchResultsBackButton: ".fl-mapviz-search-results-back-button",
         hospitalBackButton: ".fl-mapviz-hospital-back-button",
         hospitalPanel: ".fl-mapviz-hospital-panel",
+        hospitalProvenance: ".fl-mapviz-hospital-description-prov",
+        hospitalFeatures: ".fl-mapviz-hospital-features-content",
+        hospitalFeaturesProvenance: ".fl-mapviz-hospital-features-prov",
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
         applyButton: ".fl-mapviz-apply-filters",
@@ -320,6 +403,20 @@ fluid.defaults("fluid.covidMap.map", {
             iconAnchor: [9.75, 17]
         }
     },
+    provenances: {
+        verified: {
+            symbol: "DataVerified",
+            message: "UI elements are sourced from verified data"
+        },
+        synthetic: {
+            symbol: "DataSynthetic",
+            message: "UI elements are sourced from synthetic data"
+        },
+        stale: {
+            symbol: "DataStale",
+            message: "UI elements are sourced from 2020 verified data"
+        }
+    },
     modelRelay: {
         // Data mapping:
         cities: {
@@ -358,6 +455,11 @@ fluid.defaults("fluid.covidMap.map", {
         selectedHospital: {
             target: "selectedHospital",
             args: ["{that}.model.selectedIndex", "{that}.model.rows"],
+            func: (index, rows) => rows[index]
+        },
+        selectedHospitalProvenance: {
+            target: "selectedHospitalProvenance",
+            args: ["{that}.model.selectedIndex", "{that}.model.provenance"],
             func: (index, rows) => rows[index]
         },
         selectedRows: {
@@ -522,7 +624,53 @@ fluid.defaults("fluid.covidMap.map", {
                         source: {
                             segs: ["row", "{map}.options.fields.website"]
                         },
+                        target: "hospitalWebsite"
+                    },
+                    websiteText: {
+                        source: "hospitalWebsite",
                         target: "dom.hospitalWebsite.text"
+                    },
+                    websiteUrl: {
+                        source: "hospitalWebsite",
+                        target: "dom.hospitalWebsite.attrs.href"
+                    }
+                }
+            }
+        },
+        hospitalProvenance: {
+            type: "fluid.covidMap.provenanceRenderer",
+            container: "{that}.dom.hospitalProvenance",
+            options: {
+                modelRelay: {
+                    prov: {
+                        target: "",
+                        args: ["{map}.model.selectedHospitalProvenance", "{map}.options.provenances"],
+                        func: (prov, provs) => provs.verified // hospital data is always verified
+                    }
+                }
+            }
+        },
+        hospitalFeatures: {
+            type: "fluid.covidMap.hospitalFeatures",
+            container: "{that}.dom.hospitalFeatures",
+            options: {
+                filters: "{map}.options.filters",
+                model: {
+                    selectedHospital: "{map}.model.selectedHospital"
+                }
+            }
+        },
+        hospitalFeaturesProvenance: {
+            type: "fluid.covidMap.provenanceRenderer",
+            container: "{that}.dom.hospitalFeaturesProvenance",
+            options: {
+                modelRelay: {
+                    prov: {
+                        target: "",
+                        args: ["{map}.model.selectedHospitalProvenance", "{map}.options.provenances"],
+                        func: function (prov, provs) {
+                            return provs[prov && prov["Accessible Entrances"] === "WeCount" ? "stale" : "synthetic"];
+                        }
                     }
                 }
             }

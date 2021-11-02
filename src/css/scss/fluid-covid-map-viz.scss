@@ -503,11 +503,11 @@ button {
 .fl-mapviz-hospital-panel {
     display: none;
 
-    .fl-mapviz-hospital-description {
-        overflow-y: scroll;
+    .fl-mapviz-hospital-description, .fl-mapviz-hospital-features {
+        overflow-y: auto;
 
         & > div {
-            padding: 0.3rem;
+            padding: 1rem;
         }
     }
 }
@@ -516,6 +516,47 @@ button {
     background: #fbdc90;
     margin: 0;
     padding: 0.5rem;
+}
+
+.fl-mapviz-hospital-description {
+    flex-basis: 70%;
+    border-right: 4px solid #ACACAC;
+}
+
+.fl-mapviz-hospital-description-prov {
+    @extend .fl-mapviz-hospital-prov;
+}
+
+.fl-mapviz-hospital-features {
+    flex-basis: 30%;
+}
+
+.fl-mapviz-hospital-feature {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    svg {
+        flex-basis: 15%
+    }
+}
+
+.fl-mapviz-hospital-prov {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background: #E7E7E7;
+    height: 4rem;
+}
+
+
+.fl-mapviz-hospital-features-prov {
+    @extend .fl-mapviz-hospital-prov;
+}
+
+.fl-mapviz-hospital-overall {
+    flex-direction: row;
+    display: flex;
 }
 
 /******** The panel control buttons ********/
@@ -822,6 +863,21 @@ button {
     #fl-mapviz-provenance {
         height: 3rem;
         overflow-y: scroll;
+    }
+
+    .fl-mapviz-hospital-panel {
+
+        .fl-mapviz-hospital-description, .fl-mapviz-hospital-features {
+            overflow-y: scroll;
+        }
+    }
+
+    .fl-mapviz-hospital-description {
+        flex-basis: 50%;
+    }
+
+    .fl-mapviz-hospital-features {
+        flex-basis: 50%;
     }
 
     /* A special class defined at the bottom of the css file so that it only available and affect the mobile view.

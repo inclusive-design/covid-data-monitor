@@ -3,8 +3,8 @@
 This package implements a map and query-based visualisation of data on Ontario COVID-19 assessment centre locations for
 project [We Count](https://wecount.inclusivedesign.ca/).
 
-It includes a built-in data that merges [the ODS assessment centre locations dataset](https://data.ontario.ca/dataset/covid-19-assessment-centre-locations)
-with a mocked accessibility dataset for these assessment centres to visualize at data/merged/output.csv.
+It includes built-in data that merges [the ODS assessment centre locations dataset](https://data.ontario.ca/dataset/covid-19-assessment-centre-locations)
+with a mocked accessibility dataset for these assessment centres to visualize at [data/merged/output.csv].
 
 ## Install
 
@@ -21,9 +21,20 @@ To manually compile Scss files into CSS files, run
 
     npm run build:scss
 
-## Build & Run
+## Testing
 
 To quickly see the interface in action, load `index.html` from this directory in your browser from a local static HTTP server.
+This index sources live data from GitHub from the [covid-assessment-centres](https://github.com/inclusive-design/covid-assessment-centres) repository.
+
+This repository is a demonstration of Project WeCount's pluralistic data infrastructure, whose implementation and
+description can be seen at [forgiving-data](https://github.com/inclusive-design/forgiving-data). This infrastructure
+allows data to be aggregated and merged from a variety of sources whilst tracking provenance. In order to test the
+provenance display of this interface (at the time of writing), you can scroll to "North York" in the list of cities
+in the left panel, and then select from the first couple of hospitals shown - the first hospital in the list,
+"North York General Hospital - Branson" should show up with stale (2020 provenance in the bottom right display
+pane, and others should show up with synthetic provenance.
+
+## Building
 
 To produce a rolled-up build suitable for deployment run
 
@@ -49,6 +60,6 @@ bundled template in `src/html/template.html`.
 
 The project files may be linted by running `npm run lint`.
 
-This work is at a relatively early design and implementation stage - live designs may be seen at
-[here](https://www.figma.com/file/0lcLol3X5MmOXackT2YbHJ/WeCount-website?node-id=2291%3A0).
-Various courtesies such as test cases and fully accessible markup will shortly arise.
+## Design 
+Live designs for this work may be seen in 
+[Figma](https://www.figma.com/file/0lcLol3X5MmOXackT2YbHJ/WeCount-website?node-id=2291%3A0).
