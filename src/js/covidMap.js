@@ -296,7 +296,7 @@ fluid.defaults("fluid.covidMap.map", {
         hospitalBackButton: ".fl-mapviz-hospital-back-button",
         hospitalPanel: ".fl-mapviz-hospital-panel",
         hospitalProvenance: ".fl-mapviz-hospital-description-prov",
-        hospitalFeatures: ".fl-mapviz-hospital-features-content",
+        hospitalFeatures: ".fl-mapviz-hospital-features",
         hospitalFeaturesProvenance: ".fl-mapviz-hospital-features-prov",
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
@@ -310,7 +310,8 @@ fluid.defaults("fluid.covidMap.map", {
         query: "#fl-search-query"
     },
     styles: {
-        marker: "fl-mapviz-marker"
+        marker: "fl-mapviz-marker",
+        hideHospitalPanel: "fl-mapviz-hospital-panel-hidden"
     },
     markup: {
         marker: "<svg height=\"%height\" width=\"%width\"><use xlink:href=\"#%marker\" /></svg>"
@@ -433,10 +434,6 @@ fluid.defaults("fluid.covidMap.map", {
             source: "selectedIndex",
             target: "isHospitalShowing",
             func: "fluid.isValue"
-        },
-        showHospitalPanel: {
-            source: "isHospitalShowing",
-            target: "dom.hospitalPanel.visible"
         },
         onlyShowHospitalPanelOnMobile: {
             source: "isHospitalShowing",
@@ -583,6 +580,13 @@ fluid.defaults("fluid.covidMap.map", {
             priority: "last",
             func: "{query}.accept",
             args: [0]
+        },
+        "showHospitalPanel": {
+            path: "isHospitalShowing",
+            func: function (element, className, toggleFlag) {
+                element.toggleClass(className, !toggleFlag);
+            },
+            args: ["{that}.dom.hospitalPanel", "{that}.options.styles.hideHospitalPanel", "{change}.value"]
         }
     },
     components: {

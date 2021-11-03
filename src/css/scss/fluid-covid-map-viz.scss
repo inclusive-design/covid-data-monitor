@@ -120,6 +120,8 @@ button {
 #fl-mapviz-provenance {
     background-color: #ffcb70;
     font-size: 0.8rem;
+    height: 3rem;
+    overflow-y: scroll;
     padding: 3px 5px;
     width: 100%;
     ul {
@@ -500,16 +502,8 @@ button {
 /******** The hospital description panel ********/
 
 /* hide the hospital description panel at the page load */
-.fl-mapviz-hospital-panel {
+.fl-mapviz-hospital-panel-hidden {
     display: none;
-
-    .fl-mapviz-hospital-description, .fl-mapviz-hospital-features {
-        overflow-y: auto;
-
-        & > div {
-            padding: 1rem;
-        }
-    }
 }
 
 .fl-mapviz-hospital-title {
@@ -518,45 +512,37 @@ button {
     padding: 0.5rem;
 }
 
-.fl-mapviz-hospital-description {
-    flex-basis: 70%;
-    border-right: 4px solid #ACACAC;
-}
+.fl-mapviz-hospital {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    overflow-y: scroll;
 
-.fl-mapviz-hospital-description-prov {
-    @extend .fl-mapviz-hospital-prov;
-}
-
-.fl-mapviz-hospital-features {
-    flex-basis: 30%;
-}
-
-.fl-mapviz-hospital-feature {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    
-    svg {
-        flex-basis: 15%
+    .fl-mapviz-hospital-description-prov,
+    .fl-mapviz-hospital-description {
+        border-right: 4px solid #ACACAC;
     }
-}
 
-.fl-mapviz-hospital-prov {
-    flex-direction: row;
-    display: flex;
-    align-items: center;
-    background: #E7E7E7;
-    height: 4rem;
-}
+    .fl-mapviz-hospital-description-prov,
+    .fl-mapviz-hospital-features-prov {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        background: #E7E7E7;
+        padding: 0.5rem 0;
+    }
 
+    .fl-mapviz-hospital-features {
+        h3 {
+            padding-left: 1rem;
+        }
 
-.fl-mapviz-hospital-features-prov {
-    @extend .fl-mapviz-hospital-prov;
-}
-
-.fl-mapviz-hospital-overall {
-    flex-direction: row;
-    display: flex;
+        .fl-mapviz-hospital-feature {
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            padding-left: 1rem;
+        }
+    }
 }
 
 /******** The panel control buttons ********/
@@ -677,6 +663,8 @@ button {
     /******** The disclaimer **********/
     #fl-mapviz-provenance {
         font-size: 1.125rem;
+        height: auto;
+        overflow-y: none;
         padding: 1rem;
     }
 
@@ -860,26 +848,6 @@ button {
 }
 
 @media screen and (max-width: 1024px) {
-    #fl-mapviz-provenance {
-        height: 3rem;
-        overflow-y: scroll;
-    }
-
-    .fl-mapviz-hospital-panel {
-
-        .fl-mapviz-hospital-description, .fl-mapviz-hospital-features {
-            overflow-y: scroll;
-        }
-    }
-
-    .fl-mapviz-hospital-description {
-        flex-basis: 50%;
-    }
-
-    .fl-mapviz-hospital-features {
-        flex-basis: 50%;
-    }
-
     /* A special class defined at the bottom of the css file so that it only available and affect the mobile view.
     The effect doesn't apply to the desktop view at all. */
     .fl-mapviz-hidden-on-mobile {
