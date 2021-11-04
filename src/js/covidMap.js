@@ -435,6 +435,13 @@ fluid.defaults("fluid.covidMap.map", {
             target: "isHospitalShowing",
             func: "fluid.isValue"
         },
+        toggleHospitalShowingClass: {
+            source: "isHospitalShowing",
+            target: {
+                segs: ["dom", "hospitalPanel", "class", "{that}.options.styles.hideHospitalPanel"]
+            },
+            func: x => !x
+        },
         onlyShowHospitalPanelOnMobile: {
             source: "isHospitalShowing",
             target: "visiblePanelOnMobileFlags",
@@ -580,13 +587,6 @@ fluid.defaults("fluid.covidMap.map", {
             priority: "last",
             func: "{query}.accept",
             args: [0]
-        },
-        "showHospitalPanel": {
-            path: "isHospitalShowing",
-            func: function (element, className, toggleFlag) {
-                element.toggleClass(className, !toggleFlag);
-            },
-            args: ["{that}.dom.hospitalPanel", "{that}.options.styles.hideHospitalPanel", "{change}.value"]
         }
     },
     components: {
