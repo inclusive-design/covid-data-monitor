@@ -12,7 +12,7 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
     gradeNames: ["fluid.modelComponent", "fluid.covidMap.visiblePanel"],
     selectors: {
         hospitalTitle: ".fl-mapviz-hospital-title",
-        hospitalDescription: ".fl-mapviz-hospital-description",
+        hospitalInfoPane: ".fl-mapviz-hospital",
         hospitalHours: ".fl-mapviz-hospital-hours",
         hospitalAddress: ".fl-mapviz-hospital-address",
         hospitalPhone:  ".fl-mapviz-hospital-phone",
@@ -23,7 +23,7 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
             type: "fluid.expandButton",
             container: "{hospitalRenderer}.dom.expandButton",
             options: {
-                elementsToExpand: ["{hospitalRenderer}.dom.hospitalTitle", "{hospitalRenderer}.dom.hospitalDescription"]
+                elementsToExpand: ["{hospitalRenderer}.dom.hospitalTitle", "{hospitalRenderer}.dom.hospitalInfoPane"]
             }
         }
     },
