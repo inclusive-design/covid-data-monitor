@@ -12,7 +12,7 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
     gradeNames: ["fluid.modelComponent", "fluid.covidMap.visiblePanel"],
     selectors: {
         hospitalTitle: ".fl-mapviz-hospital-title",
-        hospitalDescription: ".fl-mapviz-hospital-description",
+        hospitalInfoPane: ".fl-mapviz-hospital",
         hospitalHours: ".fl-mapviz-hospital-hours",
         hospitalAddress: ".fl-mapviz-hospital-address",
         hospitalPhone:  ".fl-mapviz-hospital-phone",
@@ -23,7 +23,7 @@ fluid.defaults("fluid.covidMap.hospitalRenderer", {
             type: "fluid.expandButton",
             container: "{hospitalRenderer}.dom.expandButton",
             options: {
-                elementsToExpand: ["{hospitalRenderer}.dom.hospitalTitle", "{hospitalRenderer}.dom.hospitalDescription"]
+                elementsToExpand: ["{hospitalRenderer}.dom.hospitalTitle", "{hospitalRenderer}.dom.hospitalInfoPane"]
             }
         }
     },
@@ -296,7 +296,7 @@ fluid.defaults("fluid.covidMap.map", {
         hospitalBackButton: ".fl-mapviz-hospital-back-button",
         hospitalPanel: ".fl-mapviz-hospital-panel",
         hospitalProvenance: ".fl-mapviz-hospital-description-prov",
-        hospitalFeatures: ".fl-mapviz-hospital-features-content",
+        hospitalFeatures: ".fl-mapviz-hospital-features",
         hospitalFeaturesProvenance: ".fl-mapviz-hospital-features-prov",
         attribution: ".leaflet-control-attribution",
         resetButton: ".fl-mapviz-reset-filters",
@@ -310,7 +310,8 @@ fluid.defaults("fluid.covidMap.map", {
         query: "#fl-search-query"
     },
     styles: {
-        marker: "fl-mapviz-marker"
+        marker: "fl-mapviz-marker",
+        hideHospitalPanel: "fl-mapviz-hospital-panel-hidden"
     },
     markup: {
         marker: "<svg height=\"%height\" width=\"%width\"><use xlink:href=\"#%marker\" /></svg>"
@@ -434,9 +435,12 @@ fluid.defaults("fluid.covidMap.map", {
             target: "isHospitalShowing",
             func: "fluid.isValue"
         },
-        showHospitalPanel: {
+        toggleHospitalShowingClass: {
             source: "isHospitalShowing",
-            target: "dom.hospitalPanel.visible"
+            target: {
+                segs: ["dom", "hospitalPanel", "class", "{that}.options.styles.hideHospitalPanel"]
+            },
+            func: x => !x
         },
         onlyShowHospitalPanelOnMobile: {
             source: "isHospitalShowing",
