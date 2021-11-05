@@ -24,7 +24,7 @@ To manually compile Scss files into CSS files, run
 ## Testing
 
 To quickly see the interface in action, load `index.html` from this directory in your browser from a local static HTTP server.
-This index sources live data from GitHub from the [covid-assessment-centres](https://github.com/inclusive-design/covid-assessment-centres) repository.
+This index sources live data from the GitHub [covid-assessment-centres](https://github.com/inclusive-design/covid-assessment-centres) repository.
 
 This repository is a demonstration of Project WeCount's pluralistic data infrastructure, whose implementation and
 description can be seen at [forgiving-data](https://github.com/inclusive-design/forgiving-data). This infrastructure
