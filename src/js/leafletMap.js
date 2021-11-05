@@ -4,7 +4,7 @@
 
 var hortis = fluid.registerNamespace("hortis");
 
-// Adapted from https://github.com/amb26/bagatelle/blob/master/src/client/js/leafletMap.js
+// Adapted from https://github.com/IMERSS/imerss-bioinfo/blob/master/src/client/js/leafletMap.js
 // Needs to be consolidated to produce a core implementation
 
 fluid.defaults("hortis.leafletMap", {
@@ -96,25 +96,6 @@ hortis.leafletMap.createTooltip = function (that, markup) {
     that.map.createPane("hortis-tooltip", tooltip[0]);
 };
 
-
-fluid.defaults("hortis.CSVLeafletMap", {
-    gradeNames: ["hortis.leafletMap", "fluid.resourceLoader"],
-    dataUrl: "http://thing",
-    resources: {
-        data: {
-            url: "{that}.options.dataUrl",
-            dataType: "csv",
-            immutableModelResource: true
-        }
-    },
-    model: {
-        rows: []
-    },
-    modelRelay: {
-        source: "{that}.resources.data.parsed.data",
-        target: "rows"
-    }
-});
 
 fluid.defaults("hortis.streetmapTiles", {
     tileOptions: {

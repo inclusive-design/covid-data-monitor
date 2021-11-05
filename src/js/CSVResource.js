@@ -23,3 +23,43 @@ fluid.resourceLoader.parsers.csv = function (resourceText, options) {
     }
     return togo;
 };
+
+fluid.defaults("hortis.CSVResourceLoader", {
+    gradeNames: ["fluid.resourceLoader"],
+    dataUrl: "http://thing",
+    resources: {
+        data: {
+            url: "{that}.options.dataUrl",
+            dataType: "csv",
+            immutableModelResource: true
+        }
+    },
+    model: {
+        rows: []
+    },
+    modelRelay: {
+        source: "{that}.resources.data.parsed.data",
+        target: "rows"
+    }
+});
+
+fluid.defaults("hortis.ProvenancedCSVResourceLoader", {
+    gradeNames: ["hortis.CSVResourceLoader"],
+    resources: {
+        provenance: {
+            // url or promise
+            dataType: "csv",
+            immutableModelResource: true
+        },
+        provenanceMap: {
+            dataType: "json"
+        }
+    },
+    model: {
+        provenance: []
+    },
+    modelRelay: {
+        source: "{that}.resources.provenance.parsed.data",
+        target: "provenance"
+    }
+});
