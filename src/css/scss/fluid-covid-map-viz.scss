@@ -230,7 +230,6 @@ button {
     flex-direction: column;
     list-style-type: none;
     margin: 0;
-    overflow-y: scroll;
     padding: 0;
 }
 
@@ -853,6 +852,10 @@ button {
     .fl-mapviz-hidden-on-mobile {
         /* Use !important to override the inline "display" css applied by javascript */
         display: none !important;
+    }
+    /* All a11y feature list */
+    .fl-mapviz-filters {
+        overflow-y: scroll;
     }
 }
 
