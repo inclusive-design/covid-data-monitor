@@ -4,7 +4,7 @@ This package implements a map and query-based visualisation of data on Ontario C
 project [We Count](https://wecount.inclusivedesign.ca/).
 
 It includes built-in data that merges [the ODS assessment centre locations dataset](https://data.ontario.ca/dataset/covid-19-assessment-centre-locations)
-with a mocked accessibility dataset for these assessment centres to visualize at [data/merged/output.csv].
+with a mocked accessibility dataset for these assessment centres to visualize at [data/merged/output.csv](data/merged.output.csv).
 
 ## Install
 
@@ -31,7 +31,7 @@ description can be seen at [forgiving-data](https://github.com/inclusive-design/
 allows data to be aggregated and merged from a variety of sources whilst tracking provenance. In order to test the
 provenance display of this interface (at the time of writing), you can scroll to "North York" in the list of cities
 in the left panel, and then select from the first couple of hospitals shown - the first hospital in the list,
-"North York General Hospital - Branson" should show up with stale (2020 provenance in the bottom right display
+"North York General Hospital - Branson" should show up with stale (2020 provenance) in the bottom right display
 pane, and others should show up with synthetic provenance.
 
 ## Building
